@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "Puerta de Juanito",
+        "rooms": [2]
+    },
+    {
+        "id": 1,
+        "name": "Puerta de Sotano",
+        "rooms": []
+    }
+]
