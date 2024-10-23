@@ -1,0 +1,5 @@
+# To set up, create a copy with actual user, dbname and port parameters
+# Copy name should be .pgass and
+# export full file path $PATH/.../.pg_service.conf 
+
+localhost:PORT:DATABASE:USERNAME:PASSWORD
