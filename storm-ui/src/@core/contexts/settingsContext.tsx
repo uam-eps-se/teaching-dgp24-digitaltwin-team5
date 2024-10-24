@@ -50,7 +50,8 @@ export const SettingsProvider = (props: Props) => {
 
   const updatedInitialSettings = {
     ...initialSettings,
-    mode: props.mode || themeConfig.mode
+    mode: props.mode || themeConfig.mode,
+    sameSite: 'none',
   }
 
   // Cookies

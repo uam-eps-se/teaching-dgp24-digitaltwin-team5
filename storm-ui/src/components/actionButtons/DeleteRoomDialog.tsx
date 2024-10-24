@@ -6,7 +6,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@mui/material';
 
 import { mdiTrashCan } from '@mdi/js';
@@ -20,7 +21,9 @@ export default function DeleteRoomModal(props: { roomId: number, roomName: strin
 
   return (
     <div>
-      <IconButton color='error' onClick={handleOpen}><Icon path={mdiTrashCan} size={1} /></IconButton>
+      <Tooltip title={`Delete ${props.roomName}`}>
+        <IconButton color='error' onClick={handleOpen}><Icon path={mdiTrashCan} size={1} /></IconButton>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}

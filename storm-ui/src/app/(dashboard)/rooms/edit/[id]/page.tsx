@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { id: string } }) {
   // Fetch room data and pre-populate Form component
   return (
     <div>
-      <h2 className='mb-10'>Edit Room</h2>
+      <h2 className='mb-5'>Edit Room</h2>
       ID: {params.id}
     </div>
   )

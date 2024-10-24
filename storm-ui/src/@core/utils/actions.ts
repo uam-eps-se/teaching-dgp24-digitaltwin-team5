@@ -119,7 +119,9 @@ export async function deleteRoom(roomId: number) {
 
 export async function importRooms(formData: FormData) {
   try {
-    console.log(`placeholder: ${formData.get('import-file')}`)
+    const file: File = formData.get('file') as File;
+
+    console.log(`placeholder: ${file.name}`)
     revalidatePath('/rooms');
     // return { message: 'Rooms Imported Successfully.' };
   } catch (error) {

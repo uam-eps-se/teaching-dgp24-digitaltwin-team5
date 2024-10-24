@@ -1,9 +1,9 @@
 'use client'
 
-import { DataGrid, GridCellParams, GridColDef, GridEventListener } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridColDef, GridEventListener, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { RoomSummaryRow } from '@core/types';
-import { IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import DeleteRoomModal from '@/components/actionButtons/DeleteRoomDialog';
 import Link from 'next/link';
 import { mdiPencil } from '@mdi/js';
@@ -12,24 +12,22 @@ import { useRouter } from 'next/navigation';
 
 const colHeader = (name: string, subtitle: string) => {
   return (
-    <div className="flex flex-col justify-center h-screen font-medium">
-      <Tooltip title={name} placement='bottom'>
-      <div className="flex flex-col justify-center truncate">
-        <p>{name}</p>
-        <p>({subtitle})</p>
+    <Tooltip title={`${name} (${subtitle})`} placement='bottom'>
+      <div className="flex flex-col truncate font-medium">
+        <p className='truncate'>{name}</p>
+        <p className='truncate self-center'>({subtitle})</p>
       </div>
-      </Tooltip>
-    </div>
+    </Tooltip>
   )
 }
 
 const columns: GridColDef[] = [
-  { 
+  {
     field: 'name',
     headerName: 'Room',
     flex: 0.12
   },
-  { 
+  {
     field: 'doors',
     headerAlign: 'center',
     headerName: 'Doors',
@@ -39,7 +37,7 @@ const columns: GridColDef[] = [
     valueGetter: (value, row) => row.devices.doors.open,
     valueFormatter: (value, row) => `${value}/${row.devices.doors.total}`,
   },
-  { 
+  {
     field: 'windows',
     headerAlign: 'center',
     headerName: 'Windows',
@@ -59,7 +57,7 @@ const columns: GridColDef[] = [
     valueGetter: (value, row) => row.devices.lights.on,
     valueFormatter: (value, row) => `${value}/${row.devices.lights.total}`,
   },
-  { 
+  {
     field: 'ventilator',
     headerAlign: 'center',
     headerName: 'Cooling Devices',
@@ -69,7 +67,7 @@ const columns: GridColDef[] = [
     valueGetter: (value, row) => row.devices.ventilator.on,
     valueFormatter: (value, row) => `${value}/${row.devices.ventilator.total}`,
   },
-  { 
+  {
     field: 'people',
     headerAlign: 'center',
     headerName: 'Nº of People',
@@ -78,7 +76,7 @@ const columns: GridColDef[] = [
     type: 'number',
     valueGetter: (value, row) => row.metrics.people
   },
-  { 
+  {
     field: 'co2',
     headerAlign: 'center',
     headerName: 'CO₂ (ppm)',
@@ -87,7 +85,7 @@ const columns: GridColDef[] = [
     type: 'number',
     valueGetter: (value, row) => row.metrics.co2
   },
-  { 
+  {
     field: 'temperature',
     headerAlign: 'center',
     headerName: 'Temperature (Cº)',
@@ -107,9 +105,12 @@ const columns: GridColDef[] = [
     renderCell: (params) => {
       return (
         <Link href={`/rooms/edit/${params.row.id}`}>
-          <IconButton color='info'><Icon path={mdiPencil} size={1} /></IconButton>
+          <Tooltip title={`Edit ${params.row.name}`}>
+            <IconButton color='info'><Icon path={mdiPencil} size={1} /></IconButton>
+          </Tooltip>
         </Link>
-      )}
+      )
+    }
   },
   {
     field: 'delete',
@@ -123,10 +124,25 @@ const columns: GridColDef[] = [
   }
 ];
 
+function QuickSearchToolbar() {
+  return (
+    <Box
+      sx={{
+        p: 1,
+        pt: 2,
+        px: 3,
+      }}
+    >
+      <GridToolbarQuickFilter sx={{
+        width: '100%'
+      }} />
+    </Box>
+  );
+}
+
 const paginationModel = { page: 0, pageSize: 10 };
 
-
-export default function DataTable(props: {rooms: RoomSummaryRow[]}) {
+export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
   const rooms = props.rooms;
 
   const router = useRouter();
@@ -145,6 +161,8 @@ export default function DataTable(props: {rooms: RoomSummaryRow[]}) {
         sx={{ border: 0 }}
         rowSelection={false}
         onCellClick={handleCellClick}
+        disableColumnMenu
+        slots={{ toolbar: QuickSearchToolbar }}
       />
     </Paper>
   );

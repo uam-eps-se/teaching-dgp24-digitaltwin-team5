@@ -23,6 +23,8 @@ import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 import { RoomSummaryRow } from '@core/types'
 import { fetchRooms } from '@core/utils/data'
 import { useEffect, useState } from 'react'
+import Icon from '@mdi/react'
+import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -56,13 +58,13 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
     <ScrollWrapper
       {...(isBreakpointReached
         ? {
-            className: 'bs-full overflow-y-auto overflow-x-hidden',
-            onScroll: container => scrollMenu(container, false)
-          }
+          className: 'bs-full overflow-y-auto overflow-x-hidden',
+          onScroll: container => scrollMenu(container, false)
+        }
         : {
-            options: { wheelPropagation: false, suppressScrollX: true },
-            onScrollY: container => scrollMenu(container, true)
-          })}
+          options: { wheelPropagation: false, suppressScrollX: true },
+          onScrollY: container => scrollMenu(container, true)
+        })}
     >
       {/* Vertical Menu */}
       <Menu
@@ -73,25 +75,34 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
       >
         <MenuSection label='Rooms' />
         <MenuItem
-            href={`/rooms`}
-            // suffix={<Chip label='Pro' size='small' color='primary' variant='tonal' />}
-          >
+          href={`/rooms`}
+        // suffix={<Chip label='Pro' size='small' color='primary' variant='tonal' />}
+        >
           Rooms Summary
         </MenuItem>
         <SubMenu
           label='My Rooms'
           icon={<i className='ri-home-smile-line' />}
           defaultOpen
-          suffix={rooms.length > 0 && <Chip label={rooms.length} size='small' color='primary' variant='tonal' />}
+          suffix={
+            rooms.length > 0 &&
+            <Chip label={rooms.length} size='small' color='primary' variant='tonal' />
+          }
         >
           {
-            rooms.map((room) => (
+            rooms.toSorted((a, b) => a.id - b.id).slice(0, 10).map((room) => (
               <MenuItem key={room.id} href={`/rooms/${room.id}`}>{room.name}</MenuItem>
             ))
           }
+          {
+            rooms.length > 10 &&
+            <MenuItem disabled>
+              <Icon path={mdiDotsHorizontal} size={1} />
+            </MenuItem>
+          }
         </SubMenu>
         <MenuSection label='Actions' />
-        <MenuItem href='/rooms/create'>
+        <MenuItem href='/rooms/create' prefix={<Icon path={mdiHomePlus} size={1} />}>
           Create Room
         </MenuItem>
       </Menu>

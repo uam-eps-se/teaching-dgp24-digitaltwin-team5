@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, createRef, FormEvent, useState } from 'react'
 
 import {
   Button,
@@ -32,6 +32,7 @@ const RoomSummaryActions = () => {
   const [open, setOpen] = useState(false);
   const [importFile, setImportFile] = useState<File>()
   const router = useRouter();
+  const importFileRef = createRef<HTMLInputElement>();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,6 +40,7 @@ const RoomSummaryActions = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setImportFile(undefined);
   };
 
   const handleActionClick = (action: any) => {
@@ -56,13 +58,54 @@ const RoomSummaryActions = () => {
       setImportFile(undefined);
   }
 
+  /* TODO */
+  /* Sustituir por API descarga Excel */
+  const handleDownloadCSV = () => {
+    fetch('https://jsonplaceholder.typicode.com/posts/1/comments', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        // Create blob link to download
+        const url = window.URL.createObjectURL(
+          new Blob([blob]),
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+          'download',
+          `Rooms_${new Date().toLocaleString('ES').replace(', ', '-')}.json`,
+        );
+
+        // Append to html link element page
+        document.body.appendChild(link);
+
+        // Start download
+        link.click();
+
+        // Clean up and remove the link
+        link.parentNode && link.parentNode.removeChild(link);
+      });
+  }
+
   return (
     <div>
       <Box
-        sx={{ position: 'fixed', bottom: '50px', right: '50px', display: 'flex', gap: '25px', alignItems: 'flex-end' }}
+        sx={{
+          position: 'fixed',
+          bottom: '50px',
+          right: '50px',
+          display: 'flex',
+          gap: '25px',
+          alignItems: 'flex-end',
+          maxHeight: '56px'
+        }}
       >
         <Tooltip title='Export Rooms to CSV' placement='top'>
-          <Fab color="primary">
+          <Fab color="primary" onClick={handleDownloadCSV}>
             <Icon path={mdiFileExport} size={1} />
           </Fab>
         </Tooltip>
@@ -92,13 +135,16 @@ const RoomSummaryActions = () => {
         onClose={handleClose}
         PaperProps={{
           component: 'form',
-          onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+          onSubmit: async (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            for (var [key, value] of formData.entries()) { 
-              console.log(key, value);
-          }
-            await importRooms(formData);
+            const files = importFileRef.current?.files;
+
+            if (files) {
+              const formData = new FormData();
+
+              formData.append('file', files[0])
+              await importRooms(formData);
+            }
             handleClose();
           },
         }}
@@ -111,26 +157,39 @@ const RoomSummaryActions = () => {
           <input
             id="import-file"
             type="file"
+            ref={importFileRef}
             hidden
             required
             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .desktop"
             onChange={handleImportInputChanged}
           />
           <label htmlFor="import-file">
-            <Button color='primary' variant="contained" component="span" className='mr-5'>
+            <Button
+              color='primary'
+              variant="contained"
+              component="span"
+              className='mr-5'
+            >
               Upload
             </Button>
           </label>
-          <Button color='secondary' onClick={() => setImportFile(undefined)} variant="contained" component="span">
+          <Button
+            color='secondary'
+            onClick={() => setImportFile(undefined)}
+            variant="contained"
+            component="span"
+            disabled={!importFile}
+          >
             Clear
           </Button>
           <TextField
             id="import-file-field"
-            disabled
             aria-readonly
             value={importFile?.name || 'No File Selected'}
             fullWidth
             margin='normal'
+            inputProps={{ readOnly: 'readonly' }}
+            onClick={() => importFileRef.current?.click()}
           />
         </DialogContent>
         <DialogActions>
