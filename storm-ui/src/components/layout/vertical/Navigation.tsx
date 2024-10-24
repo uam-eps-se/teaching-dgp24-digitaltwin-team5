@@ -65,7 +65,7 @@ const Navigation = () => {
     <VerticalNav customStyles={navigationCustomStyles(theme)}>
       {/* Nav Header including Logo & nav toggle icons  */}
       <NavHeader>
-        <Link href='/'>
+        <Link href='/rooms'>
           <Logo />
         </Link>
         {isBreakpointReached && <i className='ri-close-line text-xl' onClick={() => toggleVerticalNav(false)} />}

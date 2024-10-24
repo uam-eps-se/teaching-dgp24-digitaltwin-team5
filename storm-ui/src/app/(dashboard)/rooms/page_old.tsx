@@ -11,9 +11,9 @@ import DistributedColumnChart from '@views/dashboard/DistributedColumnChart'
 import DepositWithdraw from '@views/dashboard/DepositWithdraw'
 import SalesByCountries from '@views/dashboard/SalesByCountries'
 import CardStatVertical from '@components/card-statistics/Vertical'
-import Table from '@views/dashboard/Table'
+import Table from '@/views/dashboard/RoomsTable'
 
-const DashboardAnalytics = () => {
+const RoomSummary = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12} md={4}>
@@ -73,4 +73,4 @@ const DashboardAnalytics = () => {
   )
 }
 
-export default DashboardAnalytics
+export default RoomSummary

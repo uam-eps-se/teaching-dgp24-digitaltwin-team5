@@ -10,10 +10,15 @@ import '@/app/globals.css'
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
 
-export const metadata = {
-  title: 'Demo: Materio - NextJS Dashboard Free',
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | STORM',
+    default: 'STORM: Smart Tracking & Optimization for Room Monitoring'
+  },
   description:
-    'Develop next-level web apps with Materio Dashboard Free - NextJS. Now, updated with lightning-fast routing powered by MUI and App router.'
+    'User Interface for STORM: Smart Tracking & Optimization for Room Monitoring'
 }
 
 const RootLayout = ({ children }: ChildrenType) => {

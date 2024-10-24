@@ -12,7 +12,7 @@ const navigationCustomStyles = (theme: Theme) => {
       backgroundColor: 'var(--mui-palette-background-default)'
     },
     [`& .${verticalNavClasses.header}`]: {
-      paddingBlock: theme.spacing(5),
+      paddingBlock: theme.spacing(2),
       paddingInline: theme.spacing(5.5, 4)
     },
     [`& .${verticalNavClasses.container}`]: {

@@ -58,7 +58,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/components/RoomDetails.tsx"  ],
   "exclude": [
     "node_modules"
   ]
