@@ -54,7 +54,7 @@ class PeopleInRoom(TimescaleModel):
 
 class TemperatureInRoom(TimescaleModel):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    temp = models.IntegerField(default=0)
+    temp = models.DecimalField(default=0, max_digits=5, decimal_places=2)
 
 class Co2InRoom(TimescaleModel):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
