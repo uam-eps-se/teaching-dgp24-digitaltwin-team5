@@ -7,10 +7,17 @@ import random
 from django.utils import timezone
 import pytz
 
+
 class RealTimeModelUpdater(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.stopped = Event()
+
+    def run(self):
+        while not self.stopped.wait(5):
+            self.update_people()
+            self.update_co2()
+            self.update_temperature()
 
     def update_people(self):
         from api.models import PeopleInRoom, Room
@@ -111,12 +118,6 @@ class RealTimeModelUpdater(Thread):
                     tmp = TemperatureInRoom(
                         room=r, time=timezone.now(), temp=tmp_val)
             tmp.save()
-
-    def run(self):
-        while not self.stopped.wait(5):
-            self.update_people()
-            self.update_co2()
-            self.update_temperature()
 
 
 class ApiConfig(AppConfig):
