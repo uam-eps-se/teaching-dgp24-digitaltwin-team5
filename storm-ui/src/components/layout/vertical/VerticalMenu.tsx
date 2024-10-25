@@ -20,11 +20,11 @@ import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNav
 // Style Imports
 import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
-import { RoomSummaryRow } from '@core/types'
-import { fetchRooms } from '@core/utils/data'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import Icon from '@mdi/react'
 import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
+import { RoomsContext } from '@core/contexts/roomsContext'
+import { fetchRooms } from '@core/utils/data'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -44,13 +44,12 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
-  const [rooms, setRooms] = useState<RoomSummaryRow[]>([]);
+  const { rooms, setRooms } = useContext(RoomsContext)
 
-  // Change with event subscription OR setInterval
   useEffect(() => {
     fetchRooms().then(rs => {
-      setRooms(rs);
-    })
+      if (rs) setRooms({ data: rs, fetched: true });
+    });
   }, []);
 
   return (
@@ -76,7 +75,6 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
         <MenuSection label='Rooms' />
         <MenuItem
           href={`/rooms`}
-        // suffix={<Chip label='Pro' size='small' color='primary' variant='tonal' />}
         >
           Rooms Summary
         </MenuItem>
@@ -85,17 +83,17 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
           icon={<i className='ri-home-smile-line' />}
           defaultOpen
           suffix={
-            rooms.length > 0 &&
-            <Chip label={rooms.length} size='small' color='primary' variant='tonal' />
+            rooms.data.length > 0 &&
+            <Chip label={rooms.data.length} size='small' color='primary' variant='tonal' />
           }
         >
           {
-            rooms.toSorted((a, b) => a.id - b.id).slice(0, 10).map((room) => (
+            rooms.data.toSorted((a, b) => a.id - b.id).slice(0, 10).map((room) => (
               <MenuItem key={room.id} href={`/rooms/${room.id}`}>{room.name}</MenuItem>
             ))
           }
           {
-            rooms.length > 10 &&
+            rooms.data.length > 10 &&
             <MenuItem disabled>
               <Icon path={mdiDotsHorizontal} size={1} />
             </MenuItem>

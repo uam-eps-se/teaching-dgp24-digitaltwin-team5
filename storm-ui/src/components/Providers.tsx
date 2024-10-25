@@ -4,6 +4,7 @@ import type { ChildrenType, Direction } from '@core/types'
 // Context Imports
 import { VerticalNavProvider } from '@menu/contexts/verticalNavContext'
 import { SettingsProvider } from '@core/contexts/settingsContext'
+import { RoomsProvider } from '@core/contexts/roomsContext'
 import ThemeProvider from '@components/theme'
 
 // Util Imports
@@ -25,7 +26,9 @@ const Providers = (props: Props) => {
     <VerticalNavProvider>
       <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
         <ThemeProvider direction={direction}>
-          {children}
+          <RoomsProvider>
+            {children}
+          </RoomsProvider>
         </ThemeProvider>
       </SettingsProvider>
     </VerticalNavProvider>

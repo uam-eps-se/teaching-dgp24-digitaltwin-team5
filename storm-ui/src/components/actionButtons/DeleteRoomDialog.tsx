@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import {
   Button,
   Dialog,
@@ -15,7 +15,7 @@ import Icon from '@mdi/react';
 import { deleteRoom } from '@core/utils/actions';
 
 export default function DeleteRoomModal(props: { roomId: number, roomName: string }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -40,11 +40,18 @@ export default function DeleteRoomModal(props: { roomId: number, roomName: strin
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color='secondary' onClick={handleClose}>Cancel</Button>
-          <Button color='error' onClick={() => {
+          <Button
+            color='secondary'
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            color='error'
+            onClick={() => {
               deleteRoom(props.roomId);
               handleClose()
-            }} 
+            }}
             autoFocus>
             Delete
           </Button>

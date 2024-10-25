@@ -58,14 +58,14 @@ const columns: GridColDef[] = [
     valueFormatter: (value, row) => `${value}/${row.devices.lights.total}`,
   },
   {
-    field: 'ventilator',
+    field: 'ventilators',
     headerAlign: 'center',
     headerName: 'Cooling Devices',
     align: 'center',
     flex: 0.1,
     renderHeader: () => colHeader('Cooling Devices', 'on'),
-    valueGetter: (value, row) => row.devices.ventilator.on,
-    valueFormatter: (value, row) => `${value}/${row.devices.ventilator.total}`,
+    valueGetter: (value, row) => row.devices.ventilators.on,
+    valueFormatter: (value, row) => `${value}/${row.devices.ventilators.total}`,
   },
   {
     field: 'people',

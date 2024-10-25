@@ -32,7 +32,7 @@ export type RoomSummaryRow = {
       on: number,
       total: number
     },
-    ventilator: {
+    ventilators: {
       on: number,
       total: number
     }

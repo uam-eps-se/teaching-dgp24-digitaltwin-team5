@@ -97,24 +97,21 @@ export async function updateInvoice(
   redirect('/dashboard/invoices');
 }
 
-export async function deleteInvoice(id: string) {
-  try {
-    ////////////////
-    revalidatePath('/dashboard/invoices');
-    return { message: 'Deleted Invoice.' };
-  } catch (error) {
-    return { message: 'Database Error: Failed to Delete Invoice.' };
-  }
-}
-
 export async function deleteRoom(roomId: number) {
-  try {
-    console.log(`placeholder: Room with id ${roomId} DELETED`)
-    revalidatePath('/rooms');
-    return { message: 'Deleted Room.' };
-  } catch (error) {
-    return { message: 'Database Error: Failed to Delete Room.' };
-  }
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: roomId,
+    })
+  };
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`, requestOptions)
+    .then(async () => {
+      return { message: 'Deleted Room.' };
+    }).catch(err => {
+      return { message: 'Database Error: Failed to Delete Room.', error: err };
+    })
 }
 
 export async function importRooms(formData: FormData) {

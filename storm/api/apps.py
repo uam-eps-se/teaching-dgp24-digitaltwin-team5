@@ -1,3 +1,4 @@
+import decimal
 from django.apps import AppConfig
 import signal
 import sys
@@ -93,10 +94,10 @@ class RealTimeModelUpdater(Thread):
                 )
             else:
                 # Update value randomly
-                tmp_val = random.choices(
+                tmp_val = decimal.Decimal(random.choices(
                     population=[-0.7, -0.3, -0.1, 0, 0.1, 0.3, 0.7],
                     weights=[1, 2, 3, 5, 3, 2, 1]
-                )[0]
+                )[0])
                 tmp_val += _.temp
 
                 # Update values "realistically"

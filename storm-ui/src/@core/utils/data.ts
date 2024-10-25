@@ -1,15 +1,14 @@
-'use server'
-
-import fs from 'fs/promises';
+'use client'
 
 export async function fetchRooms() {
-  try {
-    const roomsJson = await fs.readFile('src/testdata/rooms/rooms-get.json');
-    const rooms = JSON.parse(roomsJson.toString('utf-8'));
-    return rooms;
-  }
-  catch (error) {
-    console.error('Database Error: Failed to Get Rooms.');
-    throw error
-  }
+  const requestOptions = {
+    method: "GET",
+  };
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`, requestOptions)
+    .then(async (res) => res.json())
+    .catch(err => {
+      console.error('Database Error: Failed to Get Rooms.');
+      console.error(err)
+    })
 }

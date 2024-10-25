@@ -7,26 +7,32 @@ import Grid from '@mui/material/Grid'
 import RoomsTable from '@/views/dashboard/RoomsTable'
 
 import { fetchRooms } from '@core/utils/data'
-import { useEffect, useState } from 'react'
-import { RoomSummaryRow } from '@core/types'
+import { useContext } from 'react'
 
 import RoomSummaryButtons from './actionButtons/RoomSummaryButtons';
+import { useInterval } from 'react-use'
+import { Typography } from '@mui/material'
+import { RoomsContext } from '@core/contexts/roomsContext'
 
 const RoomSummary = () => {
-  const [rooms, setRooms] = useState<RoomSummaryRow[]>([]);
+  const { rooms, setRooms } = useContext(RoomsContext);
+  const intervalDelay = process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000;
 
-  // Change with event subscription OR setInterval
-  useEffect(() => {
-    fetchRooms().then(rs => {
-      setRooms(rs);
-    })
-  }, []);
+  useInterval(
+    () => fetchRooms().then(rs => {
+      if (rs) setRooms({ data: rs, fetched: true });
+    }),
+    intervalDelay as number,
+  )
 
   return (
     <div>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <RoomsTable rooms={rooms} />
+          {
+            rooms.data.length ? <RoomsTable rooms={rooms.data} />
+              : rooms.fetched && <Typography className='text-lg'>No rooms available</Typography>
+          }
         </Grid>
       </Grid>
       <RoomSummaryButtons />
