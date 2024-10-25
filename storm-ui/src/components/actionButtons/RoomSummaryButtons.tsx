@@ -61,10 +61,10 @@ const RoomSummaryActions = () => {
   /* TODO */
   /* Sustituir por API descarga Excel */
   const handleDownloadCSV = () => {
-    fetch('https://jsonplaceholder.typicode.com/posts/1/comments', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/data`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/vnd.ms-excel',
       },
     })
       .then((response) => response.blob())
@@ -77,7 +77,7 @@ const RoomSummaryActions = () => {
         link.href = url;
         link.setAttribute(
           'download',
-          `Rooms_${new Date().toLocaleString('ES').replace(', ', '-')}.json`,
+          `Rooms_${new Date().toLocaleString('ES').replace(', ', '-')}.xlsx`,
         );
 
         // Append to html link element page
@@ -142,8 +142,12 @@ const RoomSummaryActions = () => {
             if (files) {
               const formData = new FormData();
 
-              formData.append('file', files[0])
-              await importRooms(formData);
+              formData.append('database', files[0])
+
+              const res = await importRooms(formData)
+
+              if ('error' in res)
+                console.error(res)
             }
             handleClose();
           },
@@ -160,7 +164,7 @@ const RoomSummaryActions = () => {
             ref={importFileRef}
             hidden
             required
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .desktop"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             onChange={handleImportInputChanged}
           />
           <label htmlFor="import-file">

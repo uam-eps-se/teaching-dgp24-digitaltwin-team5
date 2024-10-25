@@ -115,30 +115,17 @@ export async function deleteRoom(roomId: number) {
 }
 
 export async function importRooms(formData: FormData) {
-  try {
-    const file: File = formData.get('file') as File;
-  
-    console.log(`placeholder: ${file.name}`)
-    revalidatePath('/rooms');
-    
-    // Create a new FormData object and append the file
-    const formDataToSend = new FormData();
-    formDataToSend.append('database', file);
+  // Define the request options with method and body as FormData
+  const requestOptions = {
+    method: 'POST',
+    body: formData
+  };
 
-    // Define the request options with method and body as FormData
-    const requestOptions = {
-      method: 'POST',
-      body: formDataToSend
-    };
-
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/data`, requestOptions)
-      .then(async (res) => res.json())
-      .catch(err => {
-        console.error('Database Error: Failed to Get Rooms.');
-        console.error(err)
-      })
-    // return { message: 'Rooms Imported Successfully.' };
-  } catch (error) {
-    // return { message: 'Database Error: Failed to Import Rooms.' };
-  }
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/data`, requestOptions)
+    .then(async (res) => {
+      return { message: res.json() };
+    })
+    .catch(err => {
+      return { message: 'Database Error: Failed to Import Rooms.', error: err };
+    });
 }

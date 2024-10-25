@@ -114,7 +114,7 @@ const RoomSummaryActions = () => {
             type="file"
             hidden
             required
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .desktop"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             onChange={handleImportInputChanged}
           />
           <label htmlFor="import-file">

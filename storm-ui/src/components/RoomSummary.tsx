@@ -15,14 +15,14 @@ import { Typography } from '@mui/material'
 import { RoomsContext } from '@core/contexts/roomsContext'
 
 const RoomSummary = () => {
-  const { rooms, setRooms } = useContext(RoomsContext);
+  const { deleting, rooms, setRooms } = useContext(RoomsContext);
   const intervalDelay = process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000;
 
   useInterval(
-    () => fetchRooms().then(rs => {
-      if (rs) setRooms({ data: rs, fetched: true });
+    () => !deleting && fetchRooms().then(rs => {
+      if (rs && !deleting) setRooms({ data: rs, fetched: true });
     }),
-    intervalDelay as number,
+    intervalDelay as number
   )
 
   return (

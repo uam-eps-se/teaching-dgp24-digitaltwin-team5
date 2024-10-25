@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -13,11 +13,13 @@ import {
 import { mdiTrashCan } from '@mdi/js';
 import Icon from '@mdi/react';
 import { deleteRoom } from '@core/utils/actions';
+import { RoomsContext } from '@core/contexts/roomsContext';
 
 export default function DeleteRoomModal(props: { roomId: number, roomName: string }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { setDeleting, rooms, setRooms } = useContext(RoomsContext);
 
   return (
     <div>
@@ -30,6 +32,7 @@ export default function DeleteRoomModal(props: { roomId: number, roomName: strin
         aria-labelledby="delete-room-title"
         aria-describedby="delete-room-title-description"
         closeAfterTransition
+        disableRestoreFocus
       >
         <DialogTitle id="delete-room-title">
           Delete {props.roomName}
@@ -48,9 +51,22 @@ export default function DeleteRoomModal(props: { roomId: number, roomName: strin
           </Button>
           <Button
             color='error'
-            onClick={() => {
-              deleteRoom(props.roomId);
-              handleClose()
+            onClick={async () => {
+              setDeleting(true);
+              const res = await deleteRoom(props.roomId);
+
+              if (!('error' in res)) {
+                const idx = rooms.data.findIndex(x => x.id == props.roomId);
+                if (idx !== -1)
+                  setRooms({
+                    data: [...rooms.data.slice(0, idx), ...rooms.data.slice(idx + 1)],
+                    fetched: true
+                  });
+              } else {
+                console.error(res); // Show error on UI?
+              }
+              setDeleting(false);
+              handleClose();
             }}
             autoFocus>
             Delete

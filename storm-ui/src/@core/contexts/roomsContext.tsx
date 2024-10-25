@@ -10,7 +10,9 @@ type RoomData = {
 
 interface RoomsContextType {
   rooms: RoomData;
+  deleting: boolean;
   setRooms: React.Dispatch<React.SetStateAction<RoomData>>;
+  setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const RoomsContext = createContext<RoomsContextType>({
@@ -18,7 +20,9 @@ export const RoomsContext = createContext<RoomsContextType>({
     data: [],
     fetched: false
   },
-  setRooms: () => { }
+  deleting: false,
+  setRooms: () => { },
+  setDeleting: () => { }
 });
 
 // RoomsProvider component to provide context
@@ -28,8 +32,10 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
     fetched: false,
   });
 
+  const [deleting, setDeleting] = useState(false);
+
   return (
-    <RoomsContext.Provider value={{ rooms, setRooms }}>
+    <RoomsContext.Provider value={{ rooms, deleting, setRooms, setDeleting }}>
       {children}
     </RoomsContext.Provider>
   );
