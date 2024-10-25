@@ -28,5 +28,6 @@ urlpatterns += [
     path('v1/devices', DevicesAPIView.as_view()),
     path('v1/doors', DoorsAPIView.as_view()),
     path('v1/room/<id>/', RoomDetailAPIView.as_view()),
-    path('v1/rooms', RoomsAPIView.as_view()),    
+    path('v1/rooms', RoomsAPIView.as_view()),
+    path('v1/data', DataAPIView.as_view())  
 ]

@@ -404,7 +404,7 @@ class RoomsAPIView(APIView):
         """
         room = self.get_object(request.data.get("id", None))
         room.delete()
-        return Response(f"Room with id {id} successfully deleted!",status=status.HTTP_204_NO_CONTENT)
+        return Response(f"Room with id {id} successfully deleted!", status=status.HTTP_204_NO_CONTENT)
 
     def _add_doors(self, doors: list[dict], room):
         """
@@ -480,7 +480,7 @@ class RoomsAPIView(APIView):
             # If an id is received, update ownership for an empty ventilator when possible
             else:
                 v_ = Ventilator.objects.filter(id=id).first()
-                
+
                 if v_ is not None:
                     v_.room = room if v_.room is None else v_.room
                     v_.save()
@@ -544,3 +544,11 @@ class RoomDetailAPIView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DataAPIView(APIView):
+    def get(self, request: Request):
+        return Response("To-Do")
+
+    def post(self, request: Request):
+        return Response("To-Do")
