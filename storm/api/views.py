@@ -1,13 +1,16 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.request import Request
 from api.serializers import *
 from api.models import *
+from django.db import models
 from django.db.models import Count
 import pandas as pd
 from datetime import datetime
+from io import BytesIO
+
 
 class DevicesAPIView(APIView):
     allowed_devices = ['GET', 'POST', 'DELETE', 'PUT']
@@ -549,7 +552,34 @@ class RoomDetailAPIView(APIView):
 
 class DataAPIView(APIView):
     def get(self, request: Request):
-        return Response("To-Do")
+        
+        mods : list[models.Model] = [
+            Room, Window, Ventilator, Light, Door, DoorConnectsRoom
+        ]
+        b = BytesIO()
+        writer = pd.ExcelWriter(b)
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment;filename=database.xlsx'
+
+        for model in mods:
+            df = pd.DataFrame(list(model.objects.all().values()))
+            df.to_excel(writer, sheet_name=model.__name__)
+
+        writer.close()
+        response.write(b.getvalue())
+
+        return response
+
+    def post(self, request: Request):
+        file = request.data.get("database", None)
+        xls = pd.ExcelFile(file)
+        room_ids = self.import_rooms(xls)
+        self.import_windows(xls, room_ids)
+        self.import_ventilators(xls, room_ids)
+        self.import_doors(xls, room_ids)
+        self.import_people(xls, room_ids)
+
+        return Response("Import database finished!", status=status.HTTP_202_ACCEPTED)
 
     def import_rooms(self, xls: pd.ExcelFile):
         """
@@ -743,19 +773,9 @@ class DataAPIView(APIView):
         # Add rows to the database
         for _, row in df.iterrows():
             np = PeopleInRoom(
-                time=datetime.strptime(row['Timestamp'], "%Y-%m-%dT%H:%M:%S%z"),
+                time=datetime.strptime(
+                    row['Timestamp'], "%Y-%m-%dT%H:%M:%S%z"),
                 room=room_ids[row['Room_Id'].lower()],
                 no_people_in_room=row['NOPeopleInRoom']
             )
             np.save()
-
-    def post(self, request: Request):
-        file = request.data.get("database", None)
-        xls = pd.ExcelFile(file)
-        room_ids = self.import_rooms(xls)
-        self.import_windows(xls, room_ids)
-        self.import_ventilators(xls, room_ids)
-        self.import_doors(xls, room_ids)
-        self.import_people(xls, room_ids)
-
-        return Response("To-do")
