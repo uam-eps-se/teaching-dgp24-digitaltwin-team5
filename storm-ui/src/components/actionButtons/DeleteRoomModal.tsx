@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import {
   Button,
   Dialog,
@@ -6,28 +6,27 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
-  Tooltip
 } from '@mui/material';
 
-import { mdiTrashCan } from '@mdi/js';
-import Icon from '@mdi/react';
 import { deleteRoom } from '@core/utils/actions';
 import { RoomsContext } from '@core/contexts/roomsContext';
+import { useRouter, usePathname } from 'next/navigation';
 
-export default function DeleteRoomModal(props: { roomId: number, roomName: string }) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export default function DeleteRoomModal(props: {
+  roomId: number,
+  roomName: string,
+  open: boolean,
+  setOpen: Dispatch<SetStateAction<boolean>>
+}) {
+  const handleClose = () => props.setOpen(false);
   const { setDeleting, rooms, setRooms } = useContext(RoomsContext);
+  const router = useRouter();
+  const pathName = usePathname();
 
   return (
     <div>
-      <Tooltip title={`Delete ${props.roomName}`}>
-        <IconButton color='error' onClick={handleOpen}><Icon path={mdiTrashCan} size={1} /></IconButton>
-      </Tooltip>
       <Dialog
-        open={open}
+        open={props.open}
         onClose={handleClose}
         aria-labelledby="delete-room-title"
         aria-describedby="delete-room-title-description"
@@ -38,8 +37,11 @@ export default function DeleteRoomModal(props: { roomId: number, roomName: strin
           Delete {props.roomName}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="delete-room-description">
-            Are you sure you want to delete {props.roomName}?
+          <DialogContentText id="delete-room-description-1">
+            Are you sure you want to delete <b>{props.roomName}</b>?
+          </DialogContentText>
+          <DialogContentText id="delete-room-description-2">
+            Static components will remain available for other rooms.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -66,6 +68,8 @@ export default function DeleteRoomModal(props: { roomId: number, roomName: strin
                 console.error(res); // Show error on UI?
               }
               setDeleting(false);
+              if (pathName !== '/rooms')
+                router.push('/rooms');
               handleClose();
             }}
             autoFocus>

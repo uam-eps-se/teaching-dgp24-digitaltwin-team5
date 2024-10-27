@@ -45,7 +45,7 @@ const RoomSummaryActions = () => {
 
   const handleActionClick = (action: any) => {
     if (action.path) {
-      router.push('/rooms/create');
+      router.push(action.path);
     } else {
       handleClickOpen();
     }

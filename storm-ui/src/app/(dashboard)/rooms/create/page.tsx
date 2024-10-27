@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div>
-      <h2 className='mb-5'>Create Room</h2>
+      <h1 className='mb-5'>Create Room</h1>
     </div>
   )
 }
