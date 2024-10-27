@@ -32,7 +32,9 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
     },
   }));
 
-  const getOptions = (chartId: string, unit: string): ApexOptions => {
+  const getOptions = (chartId: string, unit: string, color?: string): ApexOptions => {
+    var zoom: any[] | undefined = undefined;
+
     return {
       chart: {
         id: chartId,
@@ -44,6 +46,27 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
         },
         zoom: {
           enabled: true,
+        },
+        events: {
+          beforeResetZoom: (chart) => {
+            zoom = undefined;
+            chart.w.globals.lastXAxis.min = undefined;
+            chart.w.globals.lastXAxis.max = undefined;
+            return true;
+          },
+          zoomed: (_, value) => {
+            zoom = [value.xaxis.min, value.xaxis.max];
+          },
+          updated: (chart, options) => {
+            // Make sure its a series update and not config
+            if (zoom &&
+              options.config.xaxis.min !== zoom[0] &&
+              options.config.xaxis.max !== zoom[1]) {
+              chart.updateOptions({ chart: { animations: { dynamicAnimations: { enabled: false } } } });
+              chart.zoomX(zoom[0], zoom[1]);
+              chart.updateOptions({ chart: { animations: { dynamicAnimations: { enabled: true } } } });
+            }
+          }
         },
       },
       tooltip: {
@@ -71,7 +94,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
           bottom: 5
         }
       },
-      colors: ['var(--mui-palette-primary-main)'],
+      colors: [color ? color : 'var(--mui-palette-primary-main)'],
       stroke: {
         width: 3,
         lineCap: 'butt',
@@ -102,8 +125,9 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
       [new Date(metrics.times[idx] * 1000).getTime(), Number(v)]
     ).toSorted((x, y) => x[0] - y[0]);
 
-    if (cutoffTimestamp) {
-      const timeCutoff = Date.now() - cutoffTimestamp;
+    if (cutoffTimestamp && data.length) {
+      const lastTimestamp = data.slice(-1)[0][0];
+      const timeCutoff = lastTimestamp - cutoffTimestamp;
       data = data.filter((metric) =>
         metric[0] >= timeCutoff
       )
@@ -129,10 +153,11 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             <CardContent>
               <Box display="flex" alignItems="center">
                 <StyledBadge
-                  badgeContent={peopleData.data.slice(-1)[0][1] || 0}
+                  badgeContent={peopleData.data.length && peopleData.data.slice(-1)[0][1]}
                   color='primary'
-                  className='mr-7'
+                  className={peopleData.data.length ? 'mr-7' : 'mr-5'}
                   max={99999}
+                  showZero
                 >
                   <Icon path={mdiAccountGroup} size={1} />
                 </StyledBadge>
@@ -148,7 +173,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
                     series={[peopleData]}
                   />
                   :
-                  <Typography variant='h4' className='mt-4'>People data unavailable</Typography>
+                  <Typography variant='h5' className='mt-4'>People data unavailable</Typography>
               }
             </CardContent>
           </Card>
@@ -159,10 +184,11 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             <CardContent>
               <Box display="flex" alignItems="center">
                 <StyledBadge
-                  badgeContent={tempData.data.slice(-1)[0][1] || 0}
-                  color='primary'
-                  className='mr-7'
+                  badgeContent={tempData.data.length && tempData.data.slice(-1)[0][1]}
+                  color='warning'
+                  className={tempData.data.length ? 'mr-7' : 'mr-5'}
                   max={99999}
+                  showZero
                 >
                   <Icon path={mdiThermometer} size={1} />
                 </StyledBadge>
@@ -174,11 +200,11 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
                     type='line'
                     height='140%'
                     width='100%'
-                    options={getOptions('temperature', 'ºC')}
+                    options={getOptions('temperature', 'ºC', 'var(--mui-palette-warning-main)')}
                     series={[tempData]}
                   />
                   :
-                  <Typography variant='h4' className='mt-4'>Temperature data unavailable</Typography>
+                  <Typography variant='h5' className='mt-4'>Temperature data unavailable</Typography>
               }
             </CardContent>
           </Card>
@@ -189,10 +215,11 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             <CardContent>
               <Box display="flex" alignItems="center">
                 <StyledBadge
-                  badgeContent={co2Data.data.slice(-1)[0][1] || 0}
-                  color='primary'
-                  className='mr-7'
+                  badgeContent={co2Data.data.length && co2Data.data.slice(-1)[0][1]}
+                  color='success'
+                  className={co2Data.data.length ? 'mr-7' : 'mr-5'}
                   max={99999}
+                  showZero
                 >
                   <Icon path={mdiMoleculeCo2} size={1} />
                 </StyledBadge>
@@ -204,7 +231,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
                     type='line'
                     height='140%'
                     width='100%'
-                    options={getOptions('co2', 'ppm')}
+                    options={getOptions('co2', 'ppm', 'var(--mui-palette-success-main)')}
                     series={[co2Data]}
                   />
                   :

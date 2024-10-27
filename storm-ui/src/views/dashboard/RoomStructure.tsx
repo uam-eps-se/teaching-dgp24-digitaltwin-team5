@@ -32,6 +32,8 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
   }));
 
   const getOptions = (chartId: string, trueLabel: string = 'Open', falseLabel: string = 'Closed'): ApexOptions => {
+    var zoom: any[] | undefined = undefined;
+
     return {
       chart: {
         id: chartId,
@@ -45,6 +47,27 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
           easing: "easeinout",
           dynamicAnimation: {
             speed: 500
+          }
+        },
+        events: {
+          beforeResetZoom: (chart) => {
+            zoom = undefined;
+            chart.w.globals.lastXAxis.min = undefined;
+            chart.w.globals.lastXAxis.max = undefined;
+            return true;
+          },
+          zoomed: (_, value) => {
+            zoom = [value.xaxis.min, value.xaxis.max];
+          },
+          updated: (chart, options) => {
+            // Make sure its a series update and not config
+            if (zoom &&
+              options.config.xaxis.min !== zoom[0] &&
+              options.config.xaxis.max !== zoom[1]) {
+              chart.updateOptions({ chart: { animations: { dynamicAnimations: { enabled: false } } } });
+              chart.zoomX(zoom[0], zoom[1]);
+              chart.updateOptions({ chart: { animations: { dynamicAnimations: { enabled: true } } } });
+            }
           }
         },
         zoom: {
@@ -142,7 +165,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
                     series={doorData}
                   />
                   :
-                  <Typography variant='h4' className='mt-4'>No doors available</Typography>
+                  <Typography variant='h5' className='mt-4'>No doors available</Typography>
               }
             </CardContent>
           </Card>
@@ -171,7 +194,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
                     series={windowData}
                   />
                   :
-                  <Typography variant='h4' className='mt-4'>No windows available</Typography>
+                  <Typography variant='h5' className='mt-4'>No windows available</Typography>
               }
             </CardContent>
           </Card>
