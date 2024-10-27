@@ -1,8 +1,6 @@
 // React Imports
 import type { SVGAttributes } from 'react'
 import Image from 'next/image';
-import stormLogoLight from "/public/storm-logo-h.svg";
-import stormLogoDark from "/public/storm-logo-h-dark.svg";
 
 const StormLogo = (props: SVGAttributes<SVGElement>) => {
   return (
@@ -11,8 +9,9 @@ const StormLogo = (props: SVGAttributes<SVGElement>) => {
         priority
         width={0}
         height={0}
+        sizes="100vw"
         style={{ width: '100%', height: 'auto' }}
-        src={props.mode === 'light' ? stormLogoLight : stormLogoDark}
+        src={props.mode === 'light' ? '/storm-logo-h.png' : '/storm-logo-h-dark.png'}
         alt="STORM Logo"
       />
     </div>

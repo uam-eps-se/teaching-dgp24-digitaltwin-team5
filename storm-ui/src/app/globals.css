@@ -111,3 +111,13 @@ code {
   background-color: rgb(var(--mui-palette-info-mainChannel) / 0.08);
   border: 0;
 }
+
+.apexcharts-menu {
+  background: var(--mui-palette-background-paper) !important;
+  border-color: var(--mui-palette-text-disabled) !important;
+  color: var(--mui-palette-text-primary) !important;
+}
+
+.apexcharts-menu-item:hover {
+  background: var(--mui-palette-background-default) !important;
+}

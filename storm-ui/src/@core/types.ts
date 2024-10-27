@@ -19,7 +19,7 @@ export type RoomSummaryRow = {
   id: number,
   name: string,
   size: number,
-  devices:{
+  devices: {
     doors: {
       open: number,
       total: number
@@ -44,10 +44,34 @@ export type RoomSummaryRow = {
   }
 }
 
-export type RoomStructureData = {
+export type RoomDevice = {
   id: number,
+  values: Array<boolean>,
+  times: Array<number>
+}
+
+export type RoomMetric = {
+  values: Array<number>,
+  times: Array<number>
+}
+
+export type RoomStructureData = {
+  doors: Record<string, RoomDevice>;
+  windows: Record<string, RoomDevice>;
+  ventilators: Record<string, RoomDevice>;
+  lights: Record<string, RoomDevice>;
 }
 
 export type RoomRealtimeData = {
+  people: RoomMetric,
+  co2: RoomMetric,
+  temperature: RoomMetric
+}
+
+export type RoomDetailData = {
   id: number,
+  name: string,
+  size: number,
+  devices: RoomStructureData
+  metrics: RoomRealtimeData
 }

@@ -3,15 +3,15 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import { RoomSummaryRow } from '../types';
 
-type RoomData = {
+type RoomsData = {
   data: RoomSummaryRow[],
   fetched: boolean
 }
 
 interface RoomsContextType {
-  rooms: RoomData;
+  rooms: RoomsData;
   deleting: boolean;
-  setRooms: React.Dispatch<React.SetStateAction<RoomData>>;
+  setRooms: React.Dispatch<React.SetStateAction<RoomsData>>;
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -27,7 +27,7 @@ export const RoomsContext = createContext<RoomsContextType>({
 
 // RoomsProvider component to provide context
 export const RoomsProvider = ({ children }: { children: ReactNode }) => {
-  const [rooms, setRooms] = useState<RoomData>({
+  const [rooms, setRooms] = useState<RoomsData>({
     data: [],
     fetched: false,
   });
