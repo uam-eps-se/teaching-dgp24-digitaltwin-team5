@@ -10,7 +10,7 @@ from django.db.models import Count
 import pandas as pd
 from datetime import datetime
 from io import BytesIO
-
+import json
 
 class DevicesAPIView(APIView):
     allowed_devices = ['GET', 'POST', 'DELETE', 'PUT']
@@ -393,6 +393,8 @@ class RoomsAPIView(APIView):
         room = Room(name=name, size=size)
         room.save()
 
+        devices = json.loads(devices)
+        
         # Append devices to room
         for key in devices:
             device_manager[key](devices[key], room)
