@@ -1,0 +1,68 @@
+{
+  "id": 1,
+  "name": "Cuarto de Pepe",
+  "size": 15,
+  "devices": {
+    "doors": [
+      {
+        "id": 1,
+        "name": "Puerta 1",
+        "values": [true, true, true, false],
+        "time": [182, 183, 184, 185]
+      },
+      {
+        "id": 2,
+        "name": "Puerta 2",
+        "values": [true, true, false, false],
+        "time": [182, 183, 184, 185]
+      }
+    ],
+    "windows": [
+      {
+        "id": 1,
+        "name": "Ventana 1",
+        "values": [true, true, true, false],
+        "time": [182, 183, 184, 185]
+      },
+      {
+        "id": 2,
+        "name": "Ventana 2",
+        "values": [true, true, false, false],
+        "time": [182, 183, 184, 185]
+      }
+    ],
+    "ventilator": [
+      {
+        "id": 1,
+        "name": "Ventilador 1",
+        "values": [true, true, true, false],
+        "time": [182, 183, 184, 185]
+      },
+      {
+        "id": 2,
+        "name": "Ventilador 2",
+        "values": [true, true, false, false],
+        "time": [182, 183, 184, 185]
+      }
+    ],
+    "lights": [
+      {
+        "id": 1,
+        "name": "Luz 1",
+        "values": [true, true, true, false],
+        "time": [182, 183, 184, 185]
+      },
+      {
+        "id": 2,
+        "name": "Luz 2",
+        "values": [true, true, false, false],
+        "time": [182, 183, 184, 185]
+      }
+    ]
+  },
+  "metrics": {
+    "people": { "values": [1, 3, 2, 0], "time": [180, 190, 191, 197] },
+    "co2": { "values": [100, 300, 200, 600], "time": [180, 190, 191, 197] },
+    "temperature": { "values": [21, 23, 22, 90], "time": [180, 190, 191, 197] }
+  }
+}
