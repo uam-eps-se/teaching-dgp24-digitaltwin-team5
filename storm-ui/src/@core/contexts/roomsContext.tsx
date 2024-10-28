@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, ReactNode } from 'react';
 import { RoomSummaryRow } from '../types';
+import { fetchRooms } from '../utils/data';
 
 type RoomsData = {
   data: RoomSummaryRow[],
@@ -13,6 +14,7 @@ interface RoomsContextType {
   deleting: boolean;
   setRooms: React.Dispatch<React.SetStateAction<RoomsData>>;
   setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+  updateRooms: () => Promise<void>;
 }
 
 export const RoomsContext = createContext<RoomsContextType>({
@@ -22,7 +24,8 @@ export const RoomsContext = createContext<RoomsContextType>({
   },
   deleting: false,
   setRooms: () => { },
-  setDeleting: () => { }
+  setDeleting: () => { },
+  updateRooms: async () => { }
 });
 
 // RoomsProvider component to provide context
@@ -34,8 +37,14 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
 
   const [deleting, setDeleting] = useState(false);
 
+  const updateRooms = async () => {
+    return fetchRooms().then(rs => {
+      if (rs && !deleting) setRooms({ data: rs, fetched: true });
+    })
+  }
+
   return (
-    <RoomsContext.Provider value={{ rooms, deleting, setRooms, setDeleting }}>
+    <RoomsContext.Provider value={{ rooms, deleting, setRooms, setDeleting, updateRooms }}>
       {children}
     </RoomsContext.Provider>
   );

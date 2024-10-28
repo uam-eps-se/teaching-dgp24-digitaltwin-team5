@@ -123,16 +123,27 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
     }
   }
 
-  const getDeviceData = (records: Record<string, RoomDevice>) => {
+  const getDeviceData = (records: Record<string, RoomDevice>, cutoffTimestamp?: number) => {
     return Object.entries(records).map(([r, data]) => {
+      var sortedData = data.values.map((v, idx) =>
+        [new Date(data.times[idx] * 1000).getTime(), Number(v)]
+      ).toSorted((x, y) => x[0] - y[0]);
+
+      if (cutoffTimestamp && sortedData.length) {
+        const lastTimestamp = sortedData.slice(-1)[0][0];
+        const timeCutoff = lastTimestamp - cutoffTimestamp;
+        sortedData = sortedData.filter((metric) =>
+          metric[0] >= timeCutoff
+        )
+      }
       return {
         name: r,
-        data: data.values.map((v, idx) =>
-          [new Date(data.times[idx] * 1000).getTime(), Number(v)]
-        ).toSorted((x, y) => x[0] - y[0]),
+        data: sortedData,
       }
     });
   }
+
+  const cutoff = 3600000;
 
   const doorData = getDeviceData(room.devices.doors);
   const windowData = getDeviceData(room.devices.windows);

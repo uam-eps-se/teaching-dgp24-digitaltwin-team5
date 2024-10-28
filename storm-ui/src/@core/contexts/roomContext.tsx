@@ -3,30 +3,19 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import { RoomDetailData } from '../types';
 
-type RoomData = {
-  data: RoomDetailData | undefined,
-  fetched: boolean
-}
-
 interface RoomContextType {
-  room: RoomData;
-  setRoom: React.Dispatch<React.SetStateAction<RoomData>>;
+  room: RoomDetailData | undefined;
+  setRoom: React.Dispatch<React.SetStateAction<RoomDetailData | undefined>>;
 }
 
 export const RoomContext = createContext<RoomContextType>({
-  room: {
-    data: undefined,
-    fetched: false
-  },
+  room: undefined,
   setRoom: () => { },
 });
 
 // RoomsProvider component to provide context
 export const RoomsProvider = ({ children }: { children: ReactNode }) => {
-  const [room, setRoom] = useState<RoomData>({
-    data: undefined,
-    fetched: false,
-  });
+  const [room, setRoom] = useState<RoomDetailData>();
 
   return (
     <RoomContext.Provider value={{ room, setRoom }}>

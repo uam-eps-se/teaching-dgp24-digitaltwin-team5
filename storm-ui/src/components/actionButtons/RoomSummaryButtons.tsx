@@ -58,8 +58,6 @@ const RoomSummaryActions = () => {
       setImportFile(undefined);
   }
 
-  /* TODO */
-  /* Sustituir por API descarga Excel */
   const handleDownloadCSV = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/data`, {
       method: 'GET',

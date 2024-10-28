@@ -28,7 +28,7 @@ const RoomDetailActions = (props: { room: RoomDetailData }) => {
   return (
     <div>
       <Box
-        sx={{ position: 'fixed', bottom: '50px', right: '50px', display: 'flex', gap: '25px', alignItems: 'flex-end' }}
+        sx={{ position: 'fixed', bottom: '50px', right: '50px', display: 'flex', alignItems: 'flex-end' }}
       >
         {
           room &&
