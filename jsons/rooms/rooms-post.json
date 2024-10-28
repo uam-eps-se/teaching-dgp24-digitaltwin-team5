@@ -1,0 +1,39 @@
+{
+    "name": "Cuarto de pepe",
+    "size": 15,
+    "devices": {
+        "windows": [
+            {
+                "name": "Ventana 1"
+            },
+            {
+                "id": 33
+            }
+        ],
+        "doors": [
+            {
+                "name": "Puerta Comedor"
+            },
+            {
+                "id": 23
+            }
+        ],
+        "ventilators": [
+            {
+                "name": "Ventilador 1"
+            },
+            {
+                "id": 13
+            }
+        ],
+        "lights": [
+            {
+                "name": "Light 1"
+            },
+            {
+                "id": 13
+            }
+        ]
+    }
+
+}
