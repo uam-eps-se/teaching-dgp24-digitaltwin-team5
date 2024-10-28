@@ -53,6 +53,7 @@ export default function DeleteRoomModal(props: {
           </Button>
           <Button
             color='error'
+            variant='contained'
             onClick={async () => {
               setDeleting(true);
               const res = await deleteRoom(props.roomId);

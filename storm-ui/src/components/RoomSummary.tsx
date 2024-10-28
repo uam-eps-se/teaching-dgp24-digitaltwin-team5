@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid'
 // Components Imports
 import RoomsTable from '@/views/dashboard/RoomsTable'
 
-import { fetchRooms } from '@core/utils/data'
 import { useContext } from 'react'
 
 import RoomSummaryButtons from './actionButtons/RoomSummaryButtons';
@@ -15,13 +14,11 @@ import { Typography } from '@mui/material'
 import { RoomsContext } from '@core/contexts/roomsContext'
 
 const RoomSummary = () => {
-  const { deleting, rooms, setRooms } = useContext(RoomsContext);
+  const { deleting, rooms, updateRooms } = useContext(RoomsContext);
   const intervalDelay = process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000;
 
   useInterval(
-    () => !deleting && fetchRooms().then(rs => {
-      if (rs && !deleting) setRooms({ data: rs, fetched: true });
-    }),
+    () => !deleting && updateRooms(),
     intervalDelay as number
   )
 

@@ -1,3 +1,4 @@
+import RoomEdit from '@/components/RoomEdit'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -5,11 +6,9 @@ export const metadata: Metadata = {
 }
 
 export default function Page({ params }: { params: { id: string } }) {
-  // Fetch room data and pre-populate Form component
   return (
     <div>
-      <h1 className='mb-5'>Edit Room</h1>
-      ID: {params.id}
+      <RoomEdit roomId={params.id} />
     </div>
   )
 }

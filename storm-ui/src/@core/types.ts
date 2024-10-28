@@ -15,6 +15,8 @@ export type ChildrenType = {
 
 export type ThemeColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'
 
+/* ROOMS */
+
 export type RoomSummaryRow = {
   id: number,
   name: string,
@@ -43,6 +45,8 @@ export type RoomSummaryRow = {
     temperature: number
   }
 }
+
+/* ROOM DETAIL */
 
 export type RoomDevice = {
   id: number,
@@ -74,4 +78,21 @@ export type RoomDetailData = {
   size: number,
   devices: RoomStructureData
   metrics: RoomRealtimeData
+}
+
+/* DEVICES */
+
+export type Device = {
+  id: number | undefined,
+  name: string
+}
+
+export type Door = Device & {
+  rooms: Array<number>
+}
+
+export type AvailableDevices = {
+  windows: Array<Device>,
+  lights: Array<Device>,
+  ventilators: Array<Device>
 }

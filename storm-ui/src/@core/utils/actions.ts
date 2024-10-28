@@ -110,7 +110,7 @@ export async function deleteRoom(roomId: number) {
     .then(async () => {
       return { message: 'Deleted Room.' };
     }).catch(err => {
-      return { message: 'Database Error: Failed to Delete Room.', error: err };
+      return { message: 'API Error: Failed to Delete Room.', error: err };
     })
 }
 
@@ -126,6 +126,132 @@ export async function importRooms(formData: FormData) {
       return { message: res.json() };
     })
     .catch(err => {
-      return { message: 'Database Error: Failed to Import Rooms.', error: err };
+      return { message: 'API Error: Failed to Import Rooms.', error: err };
     });
+}
+
+async function manageDevice(
+  roomId: number,
+  type: string,
+  deviceId?: number,
+  name?: string,
+  errorMsg?: string
+) {
+  const requestOptions = {
+    method: deviceId ? 'PUT' : 'POST',
+    headers: { "Content-Type": "application/json" },
+  };
+
+  const data: any = {
+    room_id: roomId
+  }
+
+  if (deviceId)
+    data.id = deviceId
+  else if (name)
+    data.name = name
+
+  var endpoint = 'doors';
+
+  if (['window', 'light', 'ventilator'].includes(type)) {
+    endpoint = 'devices';
+    data.type = type;
+  }
+
+  return fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`,
+    { ...requestOptions, body: JSON.stringify(data) }
+  )
+    .then(async (res) => {
+      return { message: res.json() };
+    })
+    .catch(err => {
+      return { message: `API Error: ${errorMsg}`, error: err };
+    });
+}
+
+export async function createDevice(roomId: number, name: string, type: string) {
+  return manageDevice(
+    roomId,
+    type,
+    undefined,
+    name,
+    `Failed to Create Device (${type}).`
+  );
+}
+
+export async function assignDevice(roomId: number, deviceId: number, type: string) {
+  return manageDevice(
+    roomId,
+    type,
+    deviceId,
+    undefined,
+    `Failed to Assign Device (${type}: ${deviceId}).`
+  );
+}
+
+export async function createRoom(formData: FormData) {
+  const requestOptions = {
+    method: 'POST',
+    body: formData
+  };
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/rooms`, requestOptions)
+    .then(async (res) => {
+      return { message: res.json() };
+    })
+    .catch(err => {
+      return { message: 'API Error: Failed to Create Room.', error: err };
+    });
+}
+
+export async function editRoom(roomId: string, formData: FormData) {
+  const requestOptions = {
+    method: 'PUT',
+    body: formData
+  };
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/room/${roomId}/`, requestOptions)
+    .then(async (res) => {
+      return { message: res.json() };
+    })
+    .catch(err => {
+      return { message: 'API Error: Failed to Edit Room.', error: err };
+    });
+}
+
+export async function deleteDevice(deviceId: number, type: string) {
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: deviceId,
+      type: type
+    })
+  };
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/devices`, requestOptions)
+    .then(async () => {
+      return { message: `Deleted ${type} (${deviceId}).` };
+    }).catch(err => {
+      return { message: 'API Error: Failed to Delete Device.', error: err };
+    })
+}
+
+export async function deleteDoor(doorId: number, roomId: number) {
+  const requestOptions = {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: doorId,
+      room_id: roomId
+    })
+  };
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/doors`, requestOptions)
+    .then(async () => {
+      return { message: `Deleted Door (${doorId} -> ${roomId}).` };
+    }).catch(err => {
+      return { message: 'API Error: Failed to Delete Door.', error: err };
+    })
 }

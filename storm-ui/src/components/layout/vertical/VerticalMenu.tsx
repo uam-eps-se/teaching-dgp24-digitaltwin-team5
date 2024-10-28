@@ -24,7 +24,6 @@ import { useContext, useEffect } from 'react'
 import Icon from '@mdi/react'
 import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
 import { RoomsContext } from '@core/contexts/roomsContext'
-import { fetchRooms } from '@core/utils/data'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -44,12 +43,10 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
-  const { rooms, setRooms } = useContext(RoomsContext)
+  const { rooms, updateRooms } = useContext(RoomsContext)
 
   useEffect(() => {
-    fetchRooms().then(rs => {
-      if (rs) setRooms({ data: rs, fetched: true });
-    });
+    updateRooms();
   }, []);
 
   return (
