@@ -1,11 +1,15 @@
 'use client'
 
+import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import { DataGrid, GridCellParams, GridColDef, GridEventListener, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import { RoomDetailData } from '@core/types';
+
 import { Box, Tooltip } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+
+import type { RoomDetailData } from '@core/types';
 
 const colHeader = (name: string, subtitle: string) => {
   return (

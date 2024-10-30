@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   Box,
@@ -10,7 +10,7 @@ import {
 
 import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiWindowClosedVariant } from '@mdi/js';
 import Icon from '@mdi/react';
-import { useState } from 'react';
+
 import CreateDeviceModal from './CreateDeviceModal';
 
 const actions = [

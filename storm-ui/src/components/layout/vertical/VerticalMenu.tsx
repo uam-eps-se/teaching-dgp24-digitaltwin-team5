@@ -1,4 +1,6 @@
 // MUI Imports
+import { useContext, useEffect } from 'react'
+
 import Chip from '@mui/material/Chip'
 import { useTheme } from '@mui/material/styles'
 
@@ -6,6 +8,10 @@ import { useTheme } from '@mui/material/styles'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Type Imports
+import Icon from '@mdi/react'
+
+import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
+
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
 // Component Imports
@@ -20,9 +26,7 @@ import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNav
 // Style Imports
 import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
-import { useContext, useEffect } from 'react'
-import Icon from '@mdi/react'
-import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
+
 import { RoomsContext } from '@core/contexts/roomsContext'
 
 type RenderExpandIconProps = {

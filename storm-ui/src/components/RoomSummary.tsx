@@ -1,16 +1,19 @@
 'use client'
 
 // MUI Imports
+import { useContext } from 'react'
+
 import Grid from '@mui/material/Grid'
 
 // Components Imports
+import { useInterval } from 'react-use'
+
+import { Typography } from '@mui/material'
+
 import RoomsTable from '@/views/dashboard/RoomsTable'
 
-import { useContext } from 'react'
-
 import RoomSummaryButtons from './actionButtons/RoomSummaryButtons';
-import { useInterval } from 'react-use'
-import { Typography } from '@mui/material'
+
 import { RoomsContext } from '@core/contexts/roomsContext'
 
 const RoomSummary = () => {

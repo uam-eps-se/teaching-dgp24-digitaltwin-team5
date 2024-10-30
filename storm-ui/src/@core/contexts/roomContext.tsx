@@ -1,11 +1,13 @@
 'use client'
 
-import React, { createContext, useState, ReactNode } from 'react';
-import { RoomDetailData } from '../types';
+import type { ReactNode, Dispatch, SetStateAction } from 'react';
+import { createContext, useState } from 'react';
+
+import type { RoomDetailData } from '../types';
 
 interface RoomContextType {
   room: RoomDetailData | undefined;
-  setRoom: React.Dispatch<React.SetStateAction<RoomDetailData | undefined>>;
+  setRoom: Dispatch<SetStateAction<RoomDetailData | undefined>>;
 }
 
 export const RoomContext = createContext<RoomContextType>({

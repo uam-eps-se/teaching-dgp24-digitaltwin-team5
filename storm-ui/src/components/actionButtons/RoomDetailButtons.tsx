@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
 
 import {
@@ -11,9 +13,9 @@ import {
 
 import { mdiPlus, mdiWindowClose, mdiTrashCan, mdiHomeEdit } from '@mdi/js';
 import Icon from '@mdi/react';
-import { RoomDetailData } from '@/@core/types';
+
+import type { RoomDetailData } from '@/@core/types';
 import DeleteRoomModal from './DeleteRoomModal';
-import { useState } from 'react';
 
 const actions = (roomId: number) => [
   { icon: <Icon path={mdiTrashCan} size={1} color="var(--mui-palette-error-main)" />, name: 'Delete Room' },

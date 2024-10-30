@@ -1,18 +1,28 @@
 'use client'
 
-import { fetchRoom } from "@core/utils/data";
-import { RoomDetailData } from "@core/types";
 import { useEffect, useState } from "react";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
 import { useInterval } from "react-use";
-import RoomDetailButtons from "./actionButtons/RoomDetailButtons";
+
 import { Box, Chip, Fab } from "@mui/material";
+
 import Icon from "@mdi/react";
+
 import { mdiChartLine, mdiCog, mdiFloorPlan, mdiHomeOutline, mdiIdentifier } from "@mdi/js";
+
+import { TabContext, TabPanel } from "@mui/lab";
+
+import { useDebouncedCallback } from "use-debounce";
+
+import { fetchRoom } from "@core/utils/data";
+import type { RoomDetailData } from "@core/types";
+
+import RoomDetailButtons from "./actionButtons/RoomDetailButtons";
+
 import RoomStructure from "@views/dashboard/RoomStructure";
 import RoomStatus from "@views/dashboard/RoomStatus";
-import { TabContext, TabPanel } from "@mui/lab";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
 
 export default function RoomDetail(props: { roomId: string }) {
   const [room, setRoom] = useState<RoomDetailData>();
@@ -26,6 +36,7 @@ export default function RoomDetail(props: { roomId: string }) {
   const updateRoomData = async () => {
     return fetchRoom(props.roomId).then(r => {
       if (r) setRoom(r);
+
       if (!titleChanged && r.name) {
         setTitleChanged(true);
         document.title = document.title.replace(`Room ${props.roomId}`, r.name);
@@ -36,6 +47,7 @@ export default function RoomDetail(props: { roomId: string }) {
   useEffect(() => {
     updateRoomData().then(() => {
       const routeTab = searchParams.get('tab');
+
       if (routeTab) setTab(routeTab);
     });
   }, []);
@@ -72,6 +84,7 @@ export default function RoomDetail(props: { roomId: string }) {
           handleTab("0");
           document.getElementById('roomdetail-tab-0')?.focus()
         }
+
         if (e.key === "ArrowRight") {
           handleTab("2");
           document.getElementById('roomdetail-tab-2')?.focus()

@@ -1,4 +1,8 @@
-import { Dispatch, SetStateAction, useContext } from 'react';
+import type { Dispatch, SetStateAction} from 'react';
+import { useContext } from 'react';
+
+import { useRouter, usePathname } from 'next/navigation';
+
 import {
   Button,
   Dialog,
@@ -10,7 +14,6 @@ import {
 
 import { deleteRoom } from '@core/utils/actions';
 import { RoomsContext } from '@core/contexts/roomsContext';
-import { useRouter, usePathname } from 'next/navigation';
 
 export default function DeleteRoomModal(props: {
   roomId: number,
@@ -60,6 +63,7 @@ export default function DeleteRoomModal(props: {
 
               if (!('error' in res)) {
                 const idx = rooms.data.findIndex(x => x.id == props.roomId);
+
                 if (idx !== -1)
                   setRooms({
                     data: [...rooms.data.slice(0, idx), ...rooms.data.slice(idx + 1)],
@@ -68,6 +72,7 @@ export default function DeleteRoomModal(props: {
               } else {
                 console.error(res); // Show error on UI?
               }
+
               setDeleting(false);
               if (pathName !== '/rooms')
                 router.push('/rooms');

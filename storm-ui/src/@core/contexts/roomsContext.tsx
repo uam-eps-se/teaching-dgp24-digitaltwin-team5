@@ -1,7 +1,9 @@
 'use client'
 
-import React, { createContext, useState, ReactNode } from 'react';
-import { RoomSummaryRow } from '../types';
+import type { ReactNode, Dispatch, SetStateAction } from 'react';
+import { createContext, useState } from 'react';
+
+import type { RoomSummaryRow } from '../types';
 import { fetchRooms } from '../utils/data';
 
 type RoomsData = {
@@ -12,8 +14,8 @@ type RoomsData = {
 interface RoomsContextType {
   rooms: RoomsData;
   deleting: boolean;
-  setRooms: React.Dispatch<React.SetStateAction<RoomsData>>;
-  setDeleting: React.Dispatch<React.SetStateAction<boolean>>;
+  setRooms: Dispatch<SetStateAction<RoomsData>>;
+  setDeleting: Dispatch<SetStateAction<boolean>>;
   updateRooms: () => Promise<void>;
 }
 

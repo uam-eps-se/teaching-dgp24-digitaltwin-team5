@@ -1,5 +1,6 @@
+import type { Metadata } from 'next'
+
 import RoomEdit from '@/components/RoomEdit'
-import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Edit Room'

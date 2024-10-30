@@ -1,10 +1,14 @@
 'use client'
 
-import { RoomDetailData } from '@core/types'
+import { useEffect, useState } from 'react'
+
 import { mdiHomeOutline, mdiIdentifier } from '@mdi/js';
+
 import Icon from '@mdi/react';
 import { Chip } from '@mui/material'
-import { useEffect, useState } from 'react'
+
+import type { RoomDetailData } from '@core/types'
+
 import { fetchRoom } from '@core/utils/data'
 import RoomForm from '@/views/dashboard/RoomForm'
 

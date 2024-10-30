@@ -1,20 +1,26 @@
 'use client'
 
+import { useContext, useEffect, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import { Box, Grid, TextField, Divider, Button, Typography, Autocomplete, Chip } from '@mui/material';
 
-import { AvailableDevices, Device, Door, RoomDetailData, RoomDevice } from '@core/types';
-
 import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiTrashCan, mdiWindowClosedVariant } from '@mdi/js';
-import CreateDevicesDial from '@components/actionButtons/CreateDevicesButtons';
-import { useContext, useEffect, useState } from 'react';
+
 import Icon from '@mdi/react';
-import { useRouter } from 'next/navigation';
-import { fetchFreeDevices, fetchFreeDoors } from '@/@core/utils/data';
+
 import { useInterval } from 'react-use';
+
+import type { AvailableDevices, Device, Door, RoomDetailData, RoomDevice } from '@core/types';
+
+import CreateDevicesDial from '@components/actionButtons/CreateDevicesButtons';
+
+import { fetchFreeDevices, fetchFreeDoors } from '@/@core/utils/data';
+
 import { assignDevice, createDevice, createRoom, deleteDevice, deleteDoor, editRoom } from '@core/utils/actions';
 import { RoomsContext } from '@core/contexts/roomsContext'
 import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal';
-
 
 function RoomForm(props: { room?: RoomDetailData }) {
   const isEdit = props.room !== undefined;
@@ -64,6 +70,12 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
   const sortFreeDevices = (x: Device, y: Device) => (y.id as number) - (x.id as number);
 
+  const updateDoorsData = async () => {
+    const doors: Array<Door> = await fetchFreeDoors();
+
+    if (doors) setDoors(doors.toSorted(sortFreeDevices));
+  }
+
   const updateDevicesData = async () => {
     const devices: AvailableDevices = await fetchFreeDevices();
 
@@ -72,9 +84,8 @@ function RoomForm(props: { room?: RoomDetailData }) {
       if (devices.lights) setLights(devices.lights.toSorted(sortFreeDevices))
       if (devices.ventilators) setVentilators(devices.ventilators.toSorted(sortFreeDevices))
     }
-    const doors: Array<Door> = await fetchFreeDoors();
 
-    if (doors) setDoors(doors.toSorted(sortFreeDevices));
+    updateDoorsData();
   }
 
   const getDeviceData = (devices: Record<string, RoomDevice>) => {
@@ -101,6 +112,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
             rooms: [r.id]
           }
         });
+
         const oldWindows = getDeviceData(r.devices.windows);
         const oldLights = getDeviceData(r.devices.lights);
         const oldVentilators = getDeviceData(r.devices.ventilators);
@@ -156,6 +168,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
         });
         break;
     }
+
     setNewDevices(tempDevices);
   }
 
@@ -181,7 +194,8 @@ function RoomForm(props: { room?: RoomDetailData }) {
   ) => {
     if (props.room) {
       data.forEach((v) => {
-        var res;
+        let res;
+
         if (v.id)
           res = assignDevice(props.room?.id as number, v.id as number, type);
         else
@@ -208,6 +222,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
       return formData
     }
+
     formData.append('devices', JSON.stringify(devices));
 
     return formData;
@@ -215,6 +230,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
   const renderDeviceOption = (props: any, v: Device) => {
     const { key, ...rest } = props
+
     return (
       <li
         key={key}
@@ -242,15 +258,15 @@ function RoomForm(props: { room?: RoomDetailData }) {
         component="form"
         action={async () => {
           const formData = handleSubmitForm();
-          var res;
+          let res;
 
           if (isEdit) {
             const roomId = (props.room as RoomDetailData).id.toString();
+
             res = await editRoom(roomId, formData);
           }
           else
             res = await createRoom(formData);
-          console.log(res.message);
 
           if ('error' in res)
             console.error(res.error);
@@ -301,6 +317,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
               type="number"
               onInput={(e: any) => {
                 const input = e.target as HTMLInputElement;
+
                 input.value = input.value.replace(/[^0-9]/g, ''); // Keep only numbers
               }}
               InputProps={{
@@ -334,7 +351,9 @@ function RoomForm(props: { room?: RoomDetailData }) {
               options={newDevices.doors.concat(doors).concat(oldDevices.doors)}
               getOptionLabel={(v) => v.name}
               getOptionKey={(option) => `${option.id}-${option.name}`}
-              onChange={(_, v) => {
+              onChange={(_, v, reason) => {
+                if (reason === "clear" && props.room)
+                  v = oldDevices.doors;
                 setInputDoors(v);
               }}
               renderInput={(params) => (
@@ -351,6 +370,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
               renderOption={(props, v) => {
                 const connectedRoom = rooms.data.find(o => o.id === v.rooms[0])
                 const { key, ...rest } = props
+
                 return (
                   <li
                     key={key}
@@ -376,6 +396,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
                 return values.map((v, idx) => {
                   const oldIdx = oldDevices.doors.findIndex(o => o.id === v.id);
                   const isOld = oldIdx !== -1
+
                   return (
                     <Chip
                       size='small'
@@ -385,13 +406,16 @@ function RoomForm(props: { room?: RoomDetailData }) {
                         <Icon path={mdiTrashCan} color="var(--mui-palette-error-main)" size={0.8} />
                         : undefined
                       }
-                      onDelete={(e) => {
+                      onDelete={async (e) => {
                         getTagProps({ index: idx }).onDelete(e);
+
                         if (props.room && isOld) {
                           const tempDevices = { ...oldDevices }
+
                           tempDevices.doors.splice(oldIdx, 1);
                           setOldDevices(tempDevices);
-                          deleteDoor(v.id as number, props.room.id);
+                          await deleteDoor(v.id as number, props.room.id);
+                          updateDoorsData();
                         }
                       }}
                       className='m-0.5'
@@ -415,7 +439,9 @@ function RoomForm(props: { room?: RoomDetailData }) {
               options={newDevices.windows.concat(windows).concat(oldDevices.windows)}
               getOptionLabel={(v) => v.name}
               getOptionKey={(option) => `${option.id}-${option.name}`}
-              onChange={(_, v) => {
+              onChange={(_, v, reason) => {
+                if (reason === "clear" && props.room)
+                  v = oldDevices.windows;
                 setInputWindows(v);
               }}
               renderInput={(params) => (
@@ -434,6 +460,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
                 return values.map((v, idx) => {
                   const oldIdx = oldDevices.windows.findIndex(o => o.id === v.id);
                   const isOld = oldIdx !== -1
+
                   return (
                     <Chip
                       size='small'
@@ -445,8 +472,10 @@ function RoomForm(props: { room?: RoomDetailData }) {
                       }
                       onDelete={(e) => {
                         getTagProps({ index: idx }).onDelete(e);
+
                         if (props.room && isOld) {
                           const tempDevices = { ...oldDevices }
+
                           tempDevices.windows.splice(oldIdx, 1);
                           setOldDevices(tempDevices);
                           deleteDevice(v.id as number, 'window');
@@ -474,7 +503,9 @@ function RoomForm(props: { room?: RoomDetailData }) {
               options={newDevices.lights.concat(lights).concat(oldDevices.lights)}
               getOptionLabel={(v) => v.name}
               getOptionKey={(option) => `${option.id}-${option.name}`}
-              onChange={(_, v) => {
+              onChange={(_, v, reason) => {
+                if (reason === "clear" && props.room)
+                  v = oldDevices.lights;
                 setInputLights(v);
               }}
               renderInput={(params) => (
@@ -493,6 +524,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
                 return values.map((v, idx) => {
                   const oldIdx = oldDevices.lights.findIndex(o => o.id === v.id);
                   const isOld = oldIdx !== -1
+
                   return (
                     <Chip
                       size='small'
@@ -504,8 +536,10 @@ function RoomForm(props: { room?: RoomDetailData }) {
                       }
                       onDelete={(e) => {
                         getTagProps({ index: idx }).onDelete(e);
+
                         if (props.room && isOld) {
                           const tempDevices = { ...oldDevices }
+
                           tempDevices.lights.splice(oldIdx, 1);
                           setOldDevices(tempDevices);
                           deleteDevice(v.id as number, 'light');
@@ -531,7 +565,9 @@ function RoomForm(props: { room?: RoomDetailData }) {
               options={newDevices.ventilators.concat(ventilators).concat(oldDevices.ventilators)}
               getOptionLabel={(v) => v.name}
               getOptionKey={(option) => `${option.id}-${option.name}`}
-              onChange={(_, v) => {
+              onChange={(_, v, reason) => {
+                if (reason === "clear" && props.room)
+                  v = oldDevices.ventilators;
                 setInputVentilators(v);
               }}
               renderInput={(params) => (
@@ -550,6 +586,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
                 return values.map((v, idx) => {
                   const oldIdx = oldDevices.ventilators.findIndex(o => o.id === v.id);
                   const isOld = oldIdx !== -1
+
                   return (
                     <Chip
                       size='small'
@@ -561,8 +598,10 @@ function RoomForm(props: { room?: RoomDetailData }) {
                       }
                       onDelete={(e) => {
                         getTagProps({ index: idx }).onDelete(e);
+
                         if (props.room && isOld) {
                           const tempDevices = { ...oldDevices }
+
                           tempDevices.ventilators.splice(oldIdx, 1);
                           setOldDevices(tempDevices);
                           deleteDevice(v.id as number, 'ventilator');

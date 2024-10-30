@@ -2,6 +2,8 @@
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // Type Imports
+import type { Metadata } from 'next';
+
 import type { ChildrenType } from '@core/types'
 
 // Style Imports
@@ -9,8 +11,6 @@ import '@/app/globals.css'
 
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
-
-import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {

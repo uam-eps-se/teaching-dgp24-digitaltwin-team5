@@ -2,22 +2,23 @@
 
 import dynamic from 'next/dynamic'
 
-import { useSettings } from '@core/hooks/useSettings'
-
 //MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 
 import type { ApexOptions } from 'apexcharts'
-import { RoomDetailData, RoomDevice } from '@core/types'
 
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
 import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiWindowClosedVariant } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Badge, BadgeProps, Box, Grid, styled } from '@mui/material'
+import type { BadgeProps } from '@mui/material';
+import { Badge, Box, Grid, styled } from '@mui/material'
+
+import type { RoomDetailData, RoomDevice } from '@core/types'
+import { useSettings } from '@core/hooks/useSettings'
 
 const RoomStructure = (props: { room: RoomDetailData }) => {
   const room = props.room;
@@ -32,7 +33,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
   }));
 
   const getOptions = (chartId: string, trueLabel: string = 'Open', falseLabel: string = 'Closed'): ApexOptions => {
-    var zoom: any[] | undefined = undefined;
+    let zoom: any[] | undefined = undefined;
 
     return {
       chart: {
@@ -54,6 +55,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
             zoom = undefined;
             chart.w.globals.lastXAxis.min = undefined;
             chart.w.globals.lastXAxis.max = undefined;
+
             return true;
           },
           zoomed: (_, value) => {
@@ -125,17 +127,19 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
 
   const getDeviceData = (records: Record<string, RoomDevice>, cutoffTimestamp?: number) => {
     return Object.entries(records).map(([r, data]) => {
-      var sortedData = data.values.map((v, idx) =>
+      let sortedData = data.values.map((v, idx) =>
         [new Date(data.times[idx] * 1000).getTime(), Number(v)]
       ).toSorted((x, y) => x[0] - y[0]);
 
       if (cutoffTimestamp && sortedData.length) {
         const lastTimestamp = sortedData.slice(-1)[0][0];
         const timeCutoff = lastTimestamp - cutoffTimestamp;
+
         sortedData = sortedData.filter((metric) =>
           metric[0] >= timeCutoff
         )
       }
+
       return {
         name: r,
         data: sortedData,

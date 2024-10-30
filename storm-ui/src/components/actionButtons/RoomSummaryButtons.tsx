@@ -1,7 +1,9 @@
 'use client'
 
+import type { ChangeEvent, FormEvent} from 'react';
+import { createRef, useState } from 'react'
+
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, createRef, FormEvent, useState } from 'react'
 
 import {
   Button,
@@ -21,6 +23,7 @@ import {
 
 import { mdiHomePlus, mdiFileImport, mdiPlus, mdiWindowClose, mdiFileExport } from '@mdi/js';
 import Icon from '@mdi/react';
+
 import { importRooms } from '@core/utils/actions';
 
 const actions = [
@@ -71,7 +74,9 @@ const RoomSummaryActions = () => {
         const url = window.URL.createObjectURL(
           new Blob([blob]),
         );
+
         const link = document.createElement('a');
+
         link.href = url;
         link.setAttribute(
           'download',
@@ -147,6 +152,7 @@ const RoomSummaryActions = () => {
               if ('error' in res)
                 console.error(res)
             }
+
             handleClose();
           },
         }}

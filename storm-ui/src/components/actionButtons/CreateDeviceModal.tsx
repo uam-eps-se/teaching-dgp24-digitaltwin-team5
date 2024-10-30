@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+
 import {
   Button,
   Dialog,
@@ -9,7 +10,6 @@ import {
   TextField,
 } from '@mui/material';
 import Icon from '@mdi/react';
-
 
 export default function CreateDeviceModal(props: {
   title: string,
@@ -40,6 +40,7 @@ export default function CreateDeviceModal(props: {
           onSubmit={(e) => {
             e.preventDefault();
             const name = (document.getElementById('device-name') as HTMLInputElement).value;
+
             props.onCreateDevice(name, props.deviceType);
             handleClose();
           }}

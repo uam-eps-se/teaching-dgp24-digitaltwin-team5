@@ -1,5 +1,6 @@
+import type { Metadata } from 'next'
+
 import RoomForm from '@views/dashboard/RoomForm'
-import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Create Room'

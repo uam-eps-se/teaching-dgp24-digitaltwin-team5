@@ -1,8 +1,9 @@
 'use server';
 
-import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+
+import { z } from 'zod';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -151,7 +152,7 @@ async function manageDevice(
   else if (name)
     data.name = name
 
-  var endpoint = 'doors';
+  let endpoint = 'doors';
 
   if (['window', 'light', 'ventilator'].includes(type)) {
     endpoint = 'devices';

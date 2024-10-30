@@ -2,22 +2,24 @@
 
 import dynamic from 'next/dynamic'
 
-import { useSettings } from '@core/hooks/useSettings'
-
 //MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 
 import type { ApexOptions } from 'apexcharts'
-import { RoomDetailData, RoomMetric } from '@core/types'
+
 
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
 import { mdiAccountGroup, mdiMoleculeCo2, mdiThermometer } from '@mdi/js';
 import Icon from '@mdi/react';
-import { Badge, BadgeProps, Box, Grid, styled } from '@mui/material'
+import type { BadgeProps } from '@mui/material';
+import { Badge, Box, Grid, styled } from '@mui/material'
+
+import type { RoomDetailData, RoomMetric } from '@core/types'
+import { useSettings } from '@core/hooks/useSettings'
 
 const RoomStatus = (props: { room: RoomDetailData }) => {
   const room = props.room;
@@ -33,7 +35,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
   }));
 
   const getOptions = (chartId: string, unit: string, color?: string): ApexOptions => {
-    var zoom: any[] | undefined = undefined;
+    let zoom: any[] | undefined = undefined;
 
     return {
       chart: {
@@ -52,6 +54,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             zoom = undefined;
             chart.w.globals.lastXAxis.min = undefined;
             chart.w.globals.lastXAxis.max = undefined;
+
             return true;
           },
           zoomed: (_, value) => {
@@ -121,13 +124,14 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
   }
 
   const getMetricData = (metrics: RoomMetric, name: string, cutoffTimestamp?: number) => {
-    var data = metrics.values.map((v, idx) =>
+    let data = metrics.values.map((v, idx) =>
       [new Date(metrics.times[idx] * 1000).getTime(), Number(v)]
     ).toSorted((x, y) => x[0] - y[0]);
 
     if (cutoffTimestamp && data.length) {
       const lastTimestamp = data.slice(-1)[0][0];
       const timeCutoff = lastTimestamp - cutoffTimestamp;
+
       data = data.filter((metric) =>
         metric[0] >= timeCutoff
       )
