@@ -12,8 +12,9 @@ from datetime import datetime
 from io import BytesIO
 import json
 
+
 class DevicesAPIView(APIView):
-    allowed_devices = ['GET', 'POST', 'DELETE', 'PUT']
+    allowed_devices = ["GET", "POST", "DELETE", "PUT"]
 
     def get(self, request, format=None):
         """
@@ -28,7 +29,7 @@ class DevicesAPIView(APIView):
         dmodels = {
             "windows": [Window, WindowSerializer],
             "ventilators": [Ventilator, VentilatorSerializer],
-            "lights": [Light, LightSerializer]
+            "lights": [Light, LightSerializer],
         }
         data = {}
 
@@ -72,17 +73,20 @@ class DevicesAPIView(APIView):
 
         # Error Case: Missing Parameters
         if name is None or room_id is None or dtype is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Error Case: Wrong device kind
         if dtype not in dtypes:
-            return Response(f"type field must be {", ".join(dtypes.keys())}", status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                f"type field must be {", ".join(dtypes.keys())}",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         room = Room.objects.filter(id=room_id).first()
 
         # Error Case: Room does not exist
         if room is None:
-            return Response(f"Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
         # Create and save device
         dev = dtypes[dtype](name=name, room=room)
@@ -120,25 +124,30 @@ class DevicesAPIView(APIView):
 
         # Error Case: Missing Parameters
         if id is None or room_id is None or dtype is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Error Case: Wrong device kind
         if dtype not in dtypes:
-            return Response(f"type field must be {", ".join(dtypes.keys())}", status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                f"type field must be {", ".join(dtypes.keys())}",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         room = Room.objects.filter(id=room_id).first()
 
         # Error Case: Room does not exist
         if room is None:
-            return Response(f"Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
         dev = dtypes[dtype].objects.filter(id=id).first()
 
         # Error case: Invalid device
         if dev is None:
-            return Response(f"Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
         if dev.room is not None:
-            return Response(f"Device already belongs to a room!", status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Device already belongs to a room!", status=status.HTTP_400_BAD_REQUEST
+            )
 
         # Create and save device
         dev.room = room
@@ -174,37 +183,38 @@ class DevicesAPIView(APIView):
 
         # Error Case: Missing Parameters
         if id is None or dtype is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Error Case: Wrong device kind
         if dtype not in dtypes:
-            return Response(f"type field must be {dtypes}", status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                f"type field must be {dtypes}", status=status.HTTP_400_BAD_REQUEST
+            )
 
         # Remove device from the database
         dev = dtypes[dtype].objects.filter(id=id).first()
 
         # Error case: Invalid device
         if dev is None:
-            return Response(f"Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
 
         dev.delete()
 
-        return Response(f"Device succesfully removed!")
+        return Response("Device succesfully removed!")
 
 
 class DoorsAPIView(APIView):
-    allowed_methods = ['GET', 'PUT', 'POST', 'DELETE']
+    allowed_methods = ["GET", "PUT", "POST", "DELETE"]
 
     def get(self, request, format=None):
         """
         Retrieves all doors with less than two rooms.
         """
         ids = (
-            DoorConnectsRoom.objects
-            .values('door')
-            .annotate(rc=Count('room'))
+            DoorConnectsRoom.objects.values("door")
+            .annotate(rc=Count("room"))
             .filter(rc__lt=2)
-            .values('door')
+            .values("door")
         )
         doors = Door.objects.filter(id__in=ids)
 
@@ -230,13 +240,13 @@ class DoorsAPIView(APIView):
 
         # Error Case: Missing Parameters
         if name is None or room_id is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         room = Room.objects.filter(id=room_id).first()
 
         # Error Case: Room does not exist
         if room is None:
-            return Response(f"Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
         door = Door(name=name)
         door.save()
@@ -252,26 +262,29 @@ class DoorsAPIView(APIView):
 
         # Error Case: Missing Parameters
         if id is None or room_id is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         room = Room.objects.filter(id=room_id).first()
 
         # Error Case: Room does not exist
         if room is None:
-            return Response(f"Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
         door = Door.objects.filter(id=id).first()
 
         # Error Case: Invalid door
         if door is None:
-            return Response(f"Invalid door id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid door id!", status=status.HTTP_400_BAD_REQUEST)
 
-        connected_rooms = DoorConnectsRoom.objects.filter(
-            door=door).values_list('room', flat=True)
+        connected_rooms = DoorConnectsRoom.objects.filter(door=door).values_list(
+            "room", flat=True
+        )
 
         # Error Case: Invalid connections
         if room_id in connected_rooms:
-            return Response(f"Given room id {room_id} is already connected to this door!")
+            return Response(
+                f"Given room id {room_id} is already connected to this door!"
+            )
         elif connected_rooms.count() >= 2:
             return Response(f"Given door id {id} is connected to two rooms!")
         else:
@@ -300,26 +313,29 @@ class DoorsAPIView(APIView):
 
         # Error Case: Missing Parameters
         if id is None or room_id is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         room = Room.objects.filter(id=room_id).first()
 
         # Error Case: Room does not exist
         if room is None:
-            return Response(f"Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
         door = Door.objects.filter(id=id).first()
 
         # Error Case: Invalid door
         if door is None:
-            return Response(f"Invalid door id!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Invalid door id!", status=status.HTTP_400_BAD_REQUEST)
 
-        connected_rooms = DoorConnectsRoom. objects.filter(door=door).values()
+        connected_rooms = DoorConnectsRoom.objects.filter(door=door).values()
         droom = DoorConnectsRoom.objects.filter(door=door, room=room)
 
         # Error Case: Not connected door
         if droom is None:
-            return Response(f"Given door is not connected to the room!", status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Given door is not connected to the room!",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         # Delete Door on last connection
         if connected_rooms.count() == 1:
@@ -330,7 +346,7 @@ class DoorsAPIView(APIView):
 
 
 class RoomsAPIView(APIView):
-    allowed_methods = ['GET', 'POST', 'DELETE']
+    allowed_methods = ["GET", "POST", "DELETE"]
 
     def get_object(self, pk):
         try:
@@ -377,7 +393,7 @@ class RoomsAPIView(APIView):
             "windows": self._add_windows,
             "doors": self._add_doors,
             "ventilators": self._add_ventilators,
-            "lights": self._add_lights
+            "lights": self._add_lights,
         }
 
         # Obtain request parameters
@@ -387,14 +403,14 @@ class RoomsAPIView(APIView):
 
         # Error Case: Missing Parameters
         if name is None or size is None:
-            return Response(f"Missing field!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Create the room before appending devices
         room = Room(name=name, size=size)
         room.save()
 
         devices = json.loads(devices)
-        
+
         # Append devices to room
         for key in devices:
             device_manager[key](devices[key], room)
@@ -403,14 +419,17 @@ class RoomsAPIView(APIView):
 
     def delete(self, request: Request):
         """
-        Removes a room from the database, from a given "id" field in the 
+        Removes a room from the database, from a given "id" field in the
         Args:
             request (dict): A JSON-like dictionary.
 
         """
         room = self.get_object(request.data.get("id", None))
         room.delete()
-        return Response(f"Room with id {id} successfully deleted!", status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            f"Room with id {id} successfully deleted!",
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
     def _add_doors(self, doors: list[dict], room):
         """
@@ -435,7 +454,10 @@ class RoomsAPIView(APIView):
             # If an id is received, create a connection when possible
             else:
                 d_ = Door.objects.filter(id=id).first()
-                if d_ is not None and DoorConnectsRoom.objects.filter(door=d_).count() < 2:
+                if (
+                    d_ is not None
+                    and DoorConnectsRoom.objects.filter(door=d_).count() < 2
+                ):
                     d__ = DoorConnectsRoom(door=d_, room=room)
                     d__.save()
 
@@ -483,7 +505,8 @@ class RoomsAPIView(APIView):
                 if name is not None:
                     v_ = Ventilator(name=name, room=room)
                     v_.save()
-            # If an id is received, update ownership for an empty ventilator when possible
+            # If an id is received,
+            # update ownership for an empty ventilator when possible
             else:
                 v_ = Ventilator.objects.filter(id=id).first()
 
@@ -500,16 +523,17 @@ class RoomsAPIView(APIView):
             room: Room which contains lights.
         """
         # Process each light in request
-        for l in lights:
-            id = l.get("id", None)
-            name = l.get("name", None)
+        for light in lights:
+            id = light.get("id", None)
+            name = light.get("name", None)
 
             # If no id is received, create new window for the room
             if id is None:
                 if name is not None:
-                    l_ = Light(name=l["name"], room=room)
+                    l_ = Light(name=light["name"], room=room)
                     l_.save()
-            # If an id is received, update ownership for an empty ventilator when possible
+            # If an id is received,
+            # update ownership for an empty ventilator when possible
             else:
                 l_ = Light.objects.filter(id=id).first()
                 if l_ is not None:
@@ -518,7 +542,7 @@ class RoomsAPIView(APIView):
 
 
 class RoomDetailAPIView(APIView):
-    allowed_methods = ['GET', 'PUT']
+    allowed_methods = ["GET", "PUT"]
 
     def get_object(self, pk):
         try:
@@ -554,14 +578,19 @@ class RoomDetailAPIView(APIView):
 
 class DataAPIView(APIView):
     def get(self, request: Request):
-        
-        mods : list[models.Model] = [
-            Room, Window, Ventilator, Light, Door, DoorConnectsRoom
+
+        mods: list[models.Model] = [
+            Room,
+            Window,
+            Ventilator,
+            Light,
+            Door,
+            DoorConnectsRoom,
         ]
         b = BytesIO()
         writer = pd.ExcelWriter(b)
-        response = HttpResponse(content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment;filename=database.xlsx'
+        response = HttpResponse(content_type="application/vnd.ms-excel")
+        response["Content-Disposition"] = "attachment;filename=database.xlsx"
 
         for model in mods:
             df = pd.DataFrame(list(model.objects.all().values()))
@@ -594,17 +623,17 @@ class DataAPIView(APIView):
         Args:
             xls (pd.ExcelFile): Excel File.
         Returns:
-            A dictionary with the previous room ids 
+            A dictionary with the previous room ids
         """
         room_ids = {}
 
         # Read worksheet
-        df = pd.read_excel(xls, 'Room')
+        df = pd.read_excel(xls, "Room")
         df.columns = df.columns.str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
-            room = Room(name=row['name'], size=row['size (m2)'])
+            room = Room(name=row["name"], size=row["size (m2)"])
             room.save()
 
             # Map ids for future dependencies
@@ -627,36 +656,35 @@ class DataAPIView(APIView):
         Args:
             xls (pd.ExcelFile): Excel File.
         Returns:
-            A dictionary with the previous room ids 
+            A dictionary with the previous room ids
         """
         vent_ids = {}
 
         # Read ventilator worksheet
-        df = pd.read_excel(xls, 'Ventilator')
+        df = pd.read_excel(xls, "Ventilator")
         df.columns = df.columns.str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             vent = Ventilator(
-                name=f"Ventilator {row['ID']}",
-                room=room_ids[row['Room_Id'].lower()]
+                name=f"Ventilator {row['ID']}", room=room_ids[row["Room_Id"].lower()]
             )
             vent.save()
 
             # Map ids for ventilator-on dependencies
-            vent_ids[row['ID']] = vent
+            vent_ids[row["ID"]] = vent
 
         # Read ventilator-on worksheet
-        df = pd.read_excel(xls, 'VentilatorOn')
+        df = pd.read_excel(xls, "VentilatorOn")
         df.columns = df.columns.str.strip()
         df["Timestamp"] = df["Timestamp"].str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             vent_on = VentilatorOn(
-                ventilator=vent_ids[row['VentilatorId']],
-                is_on=row['isOn'],
-                time=datetime.strptime(row['Timestamp'], "%Y-%m-%dT%H:%M:%S%z")
+                ventilator=vent_ids[row["VentilatorId"]],
+                is_on=row["isOn"],
+                time=datetime.strptime(row["Timestamp"], "%Y-%m-%dT%H:%M:%S%z"),
             )
             vent_on.save()
 
@@ -675,36 +703,35 @@ class DataAPIView(APIView):
         Args:
             xls (pd.ExcelFile): Excel File.
         Returns:
-            A dictionary with the previous room ids 
+            A dictionary with the previous room ids
         """
         win_ids = {}
 
         # Read window worksheet
-        df = pd.read_excel(xls, 'Window')
+        df = pd.read_excel(xls, "Window")
         df.columns = df.columns.str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             win = Window(
-                name=f"Window {row['ID']}",
-                room=room_ids[row['Room_Id'].lower()]
+                name=f"Window {row['ID']}", room=room_ids[row["Room_Id"].lower()]
             )
             win.save()
 
             # Map ids for window-open dependencies
-            win_ids[row['ID']] = win
+            win_ids[row["ID"]] = win
 
         # Read window-open worksheet
-        df = pd.read_excel(xls, 'WindowOpen')
+        df = pd.read_excel(xls, "WindowOpen")
         df.columns = df.columns.str.strip()
         df["Timestamp"] = df["Timestamp"].str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             win_open = WindowOpen(
-                window=win_ids[row['Window_ID']],
-                is_open=row['isOpen'],
-                time=datetime.strptime(row['Timestamp'], "%Y-%m-%dT%H:%M:%S%z")
+                window=win_ids[row["Window_ID"]],
+                is_open=row["isOpen"],
+                time=datetime.strptime(row["Timestamp"], "%Y-%m-%dT%H:%M:%S%z"),
             )
             win_open.save()
 
@@ -713,8 +740,8 @@ class DataAPIView(APIView):
         Import doors from an excel worksheet in the database. All 'id' fields are
         repurposed as names, as this worksheet will be appended to an existent database.
 
-        This method expects to use the worksheets 'Door', 'DoorOpen' and 'Door_Connects_Room',
-        which should contain the following fields:
+        This method expects to use the worksheets 'Door', 'DoorOpen' and
+        'Door_Connects_Room', which should contain the following fields:
 
         - Window: ID, Room_Id
         - VentilatorOn: Timestamp, Window_ID, isOpen
@@ -722,62 +749,58 @@ class DataAPIView(APIView):
         Args:
             xls (pd.ExcelFile): Excel File.
         Returns:
-            A dictionary with the previous room ids 
+            A dictionary with the previous room ids
         """
         door_ids = {}
 
         # Read door worksheet
-        df = pd.read_excel(xls, 'Door')
+        df = pd.read_excel(xls, "Door")
         df.columns = df.columns.str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
-            door = Door(
-                name=f"Door {row['ID']}"
-            )
+            door = Door(name=f"Door {row['ID']}")
             door.save()
 
             # Map ids for door-open dependencies
-            door_ids[row['ID']] = door
+            door_ids[row["ID"]] = door
 
         # Read door-open worksheet
-        df = pd.read_excel(xls, 'DoorOpen')
+        df = pd.read_excel(xls, "DoorOpen")
         df.columns = df.columns.str.strip()
         df["Timestamp"] = df["Timestamp"].str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             door_open = DoorOpen(
-                door=door_ids[row['Door_Id']],
-                is_open=row['isOpen'],
-                time=datetime.strptime(row['Timestamp'], "%Y-%m-%dT%H:%M:%S%z")
+                door=door_ids[row["Door_Id"]],
+                is_open=row["isOpen"],
+                time=datetime.strptime(row["Timestamp"], "%Y-%m-%dT%H:%M:%S%z"),
             )
             door_open.save()
 
         # Read door-connections worksheet
-        df = pd.read_excel(xls, 'Door_Connects_Room')
+        df = pd.read_excel(xls, "Door_Connects_Room")
         df.columns = df.columns.str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             door_connection = DoorConnectsRoom(
-                door=door_ids[row['Door_ID']],
-                room=room_ids[row['Room_ID'].lower()]
+                door=door_ids[row["Door_ID"]], room=room_ids[row["Room_ID"].lower()]
             )
             door_connection.save()
 
     def import_people(self, xls: pd.ExcelFile, room_ids: dict):
         # Read people worksheet
-        df = pd.read_excel(xls, 'PeopleInRoom')
+        df = pd.read_excel(xls, "PeopleInRoom")
         df.columns = df.columns.str.strip()
         df["Timestamp"] = df["Timestamp"].str.strip()
 
         # Add rows to the database
         for _, row in df.iterrows():
             np = PeopleInRoom(
-                time=datetime.strptime(
-                    row['Timestamp'], "%Y-%m-%dT%H:%M:%S%z"),
-                room=room_ids[row['Room_Id'].lower()],
-                no_people_in_room=row['NOPeopleInRoom']
+                time=datetime.strptime(row["Timestamp"], "%Y-%m-%dT%H:%M:%S%z"),
+                room=room_ids[row["Room_Id"].lower()],
+                no_people_in_room=row["NOPeopleInRoom"],
             )
             np.save()

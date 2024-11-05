@@ -1,28 +1,28 @@
 'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 
-import type { GridCellParams, GridColDef, GridEventListener } from '@mui/x-data-grid';
-import { DataGrid, GridToolbarQuickFilter } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
+import type { GridCellParams, GridColDef, GridEventListener } from '@mui/x-data-grid'
+import { DataGrid, GridToolbarQuickFilter } from '@mui/x-data-grid'
+import Paper from '@mui/material/Paper'
 
-import { Box, IconButton, Tooltip } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material'
 
-import { mdiPencil, mdiTrashCan } from '@mdi/js';
+import { mdiPencil, mdiTrashCan } from '@mdi/js'
 
-import Icon from '@mdi/react';
+import Icon from '@mdi/react'
 
-import type { RoomSummaryRow } from '@core/types';
-import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal';
+import type { RoomSummaryRow } from '@core/types'
+import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal'
 
 const colHeader = (name: string, subtitle: string) => {
   return (
     <Tooltip title={`${name} (${subtitle})`} placement='bottom'>
-      <div className="flex flex-col truncate font-medium">
+      <div className='flex flex-col truncate font-medium'>
         <p className='truncate'>{name}</p>
         <p className='truncate self-center'>({subtitle})</p>
       </div>
@@ -36,26 +36,29 @@ function QuickSearchToolbar() {
       sx={{
         p: 1,
         pt: 2,
-        px: 3,
+        px: 3
       }}
     >
-      <GridToolbarQuickFilter sx={{
-        width: '100%'
-      }} />
+      <GridToolbarQuickFilter
+        sx={{
+          width: '100%'
+        }}
+      />
     </Box>
-  );
+  )
 }
 
-const paginationModel = { page: 0, pageSize: 10 };
+const paginationModel = { page: 0, pageSize: 10 }
 
 export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
-  const rooms = props.rooms;
-  const router = useRouter();
+  const rooms = props.rooms
+  const router = useRouter()
 
   const handleCellClick: GridEventListener<'cellClick'> = (params: GridCellParams) => {
-    if (!['edit', 'delete'].includes(params.colDef.field))
-      router.push(`/rooms/${params.row.id}`);
-  };
+    if (!['edit', 'delete'].includes(params.colDef.field)) {
+      router.push(`/rooms/${params.row.id}`)
+    }
+  }
 
   const columns: GridColDef[] = [
     {
@@ -71,7 +74,7 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.1,
       renderHeader: () => colHeader('Doors', 'open'),
       valueGetter: (value, row) => row.devices.doors.open,
-      valueFormatter: (value, row) => `${value}/${row.devices.doors.total}`,
+      valueFormatter: (value, row) => `${value}/${row.devices.doors.total}`
     },
     {
       field: 'windows',
@@ -81,7 +84,7 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.1,
       renderHeader: () => colHeader('Windows', 'open'),
       valueGetter: (value, row) => row.devices.windows.open,
-      valueFormatter: (value, row) => `${value}/${row.devices.windows.total}`,
+      valueFormatter: (value, row) => `${value}/${row.devices.windows.total}`
     },
     {
       field: 'lights',
@@ -91,7 +94,7 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.1,
       renderHeader: () => colHeader('Lights', 'on'),
       valueGetter: (value, row) => row.devices.lights.on,
-      valueFormatter: (value, row) => `${value}/${row.devices.lights.total}`,
+      valueFormatter: (value, row) => `${value}/${row.devices.lights.total}`
     },
     {
       field: 'ventilators',
@@ -101,7 +104,7 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.1,
       renderHeader: () => colHeader('Cooling Devices', 'on'),
       valueGetter: (value, row) => row.devices.ventilators.on,
-      valueFormatter: (value, row) => `${value}/${row.devices.ventilators.total}`,
+      valueFormatter: (value, row) => `${value}/${row.devices.ventilators.total}`
     },
     {
       field: 'people',
@@ -138,11 +141,13 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.05,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: (params) => {
+      renderCell: params => {
         return (
           <Link href={`/rooms/${params.row.id}/edit`}>
             <Tooltip title={`Edit ${params.row.name}`}>
-              <IconButton color='info'><Icon path={mdiPencil} size={1} /></IconButton>
+              <IconButton color='info'>
+                <Icon path={mdiPencil} size={1} />
+              </IconButton>
             </Tooltip>
           </Link>
         )
@@ -156,23 +161,27 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.05,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: (params) => {
-        const [openDelete, setOpenDelete] = useState(false);
+      renderCell: params => {
+        const [openDelete, setOpenDelete] = useState(false)
 
-        return <>
-          <Tooltip title={`Delete ${params.row.name}`}>
-            <IconButton color='error' onClick={() => setOpenDelete(true)}><Icon path={mdiTrashCan} size={1} /></IconButton>
-          </Tooltip>
-          <DeleteRoomModal
-            roomId={params.row.id}
-            roomName={params.row.name}
-            open={openDelete}
-            setOpen={setOpenDelete}
-          />
-        </>
+        return (
+          <>
+            <Tooltip title={`Delete ${params.row.name}`}>
+              <IconButton color='error' onClick={() => setOpenDelete(true)}>
+                <Icon path={mdiTrashCan} size={1} />
+              </IconButton>
+            </Tooltip>
+            <DeleteRoomModal
+              roomId={params.row.id}
+              roomName={params.row.name}
+              open={openDelete}
+              setOpen={setOpenDelete}
+            />
+          </>
+        )
       }
     }
-  ];
+  ]
 
   return (
     <Paper sx={{ height: '100%', width: '100%' }}>
@@ -188,5 +197,5 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
         slots={{ toolbar: QuickSearchToolbar }}
       />
     </Paper>
-  );
+  )
 }

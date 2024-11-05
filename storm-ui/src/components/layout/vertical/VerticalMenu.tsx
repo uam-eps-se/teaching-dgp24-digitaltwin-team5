@@ -50,21 +50,21 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
   const { rooms, updateRooms } = useContext(RoomsContext)
 
   useEffect(() => {
-    updateRooms();
-  }, []);
+    updateRooms()
+  }, [])
 
   return (
     // eslint-disable-next-line lines-around-comment
     <ScrollWrapper
       {...(isBreakpointReached
         ? {
-          className: 'bs-full overflow-y-auto overflow-x-hidden',
-          onScroll: container => scrollMenu(container, false)
-        }
+            className: 'bs-full overflow-y-auto overflow-x-hidden',
+            onScroll: container => scrollMenu(container, false)
+          }
         : {
-          options: { wheelPropagation: false, suppressScrollX: true },
-          onScrollY: container => scrollMenu(container, true)
-        })}
+            options: { wheelPropagation: false, suppressScrollX: true },
+            onScrollY: container => scrollMenu(container, true)
+          })}
     >
       {/* Vertical Menu */}
       <Menu
@@ -74,31 +74,28 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
         menuSectionStyles={menuSectionStyles(theme)}
       >
         <MenuSection label='Rooms' />
-        <MenuItem
-          href={`/rooms`}
-        >
-          Rooms Summary
-        </MenuItem>
+        <MenuItem href={`/rooms`}>Rooms Summary</MenuItem>
         <SubMenu
           label='My Rooms'
           icon={<i className='ri-home-smile-line' />}
           defaultOpen
           suffix={
-            rooms.data.length > 0 &&
-            <Chip label={rooms.data.length} size='small' color='primary' variant='tonal' />
+            rooms.data.length > 0 && <Chip label={rooms.data.length} size='small' color='primary' variant='tonal' />
           }
         >
-          {
-            rooms.data.toSorted((a, b) => a.id - b.id).slice(0, 10).map((room) => (
-              <MenuItem key={room.id} href={`/rooms/${room.id}`}>{room.name}</MenuItem>
-            ))
-          }
-          {
-            rooms.data.length > 10 &&
+          {rooms.data
+            .toSorted((a, b) => a.id - b.id)
+            .slice(0, 10)
+            .map(room => (
+              <MenuItem key={room.id} href={`/rooms/${room.id}`}>
+                {room.name}
+              </MenuItem>
+            ))}
+          {rooms.data.length > 10 && (
             <MenuItem disabled>
               <Icon path={mdiDotsHorizontal} size={1} />
             </MenuItem>
-          }
+          )}
         </SubMenu>
         <MenuSection label='Actions' />
         <MenuItem href='/rooms/create' prefix={<Icon path={mdiHomePlus} size={1} />}>

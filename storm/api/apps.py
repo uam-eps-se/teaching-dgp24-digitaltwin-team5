@@ -5,7 +5,8 @@ import sys
 from threading import Thread, Event
 import random
 from django.utils import timezone
-import pytz
+
+# import pytz
 
 
 class RealTimeModelUpdater(Thread):
@@ -21,6 +22,7 @@ class RealTimeModelUpdater(Thread):
 
     def update_people(self):
         from api.models import PeopleInRoom, Room
+
         for r in Room.objects.all():
 
             # Get most recent people value
@@ -31,30 +33,33 @@ class RealTimeModelUpdater(Thread):
                 people = PeopleInRoom(
                     room=r,
                     time=timezone.now(),
-                    no_people_in_room=random.choice([0, 1, 2, 3, 4])
+                    no_people_in_room=random.choice([0, 1, 2, 3, 4]),
                 )
             else:
                 # Update value randomly
                 np = random.choices(
-                    population=[-3, -2, -1, 0, 1, 2, 3],
-                    weights=[1, 2, 3, 5, 3, 2, 1]
+                    population=[-3, -2, -1, 0, 1, 2, 3], weights=[1, 2, 3, 5, 3, 2, 1]
                 )[0]
                 np += _.no_people_in_room
 
                 # Assign value "realistically"
                 if np < 0:
                     people = PeopleInRoom(
-                        room=r, time=timezone.now(), no_people_in_room=0)
+                        room=r, time=timezone.now(), no_people_in_room=0
+                    )
                 elif np > 30:
                     people = PeopleInRoom(
-                        room=r, time=timezone.now(), no_people_in_room=30)
+                        room=r, time=timezone.now(), no_people_in_room=30
+                    )
                 else:
                     people = PeopleInRoom(
-                        room=r, time=timezone.now(), no_people_in_room=np)
+                        room=r, time=timezone.now(), no_people_in_room=np
+                    )
             people.save()
 
     def update_co2(self):
         from api.models import Co2InRoom, Room
+
         for r in Room.objects.all():
             # Get most recent co2 value
             _ = Co2InRoom.objects.filter(room=r).last()
@@ -64,30 +69,28 @@ class RealTimeModelUpdater(Thread):
                 co2 = Co2InRoom(
                     room=r,
                     time=timezone.now(),
-                    co2=random.choice([400, 500, 600, 700, 800])
+                    co2=random.choice([400, 500, 600, 700, 800]),
                 )
             else:
                 # Update value randomly
                 co2_val = random.choices(
                     population=[-60, -30, -15, 0, 15, 30, 60],
-                    weights=[1, 2, 3, 5, 3, 2, 1]
+                    weights=[1, 2, 3, 5, 3, 2, 1],
                 )[0]
                 co2_val += _.co2
 
                 # Update values "realistically"
                 if co2_val < 300:
-                    co2 = Co2InRoom(
-                        room=r, time=timezone.now(), co2=300)
+                    co2 = Co2InRoom(room=r, time=timezone.now(), co2=300)
                 elif co2_val > 1200:
-                    co2 = Co2InRoom(
-                        room=r, time=timezone.now(), co2=1200)
+                    co2 = Co2InRoom(room=r, time=timezone.now(), co2=1200)
                 else:
-                    co2 = Co2InRoom(
-                        room=r, time=timezone.now(), co2=co2_val)
+                    co2 = Co2InRoom(room=r, time=timezone.now(), co2=co2_val)
             co2.save()
 
     def update_temperature(self):
         from api.models import TemperatureInRoom, Room
+
         for r in Room.objects.all():
             # Get most recent temp value
             _ = TemperatureInRoom.objects.filter(room=r).last()
@@ -97,32 +100,31 @@ class RealTimeModelUpdater(Thread):
                 tmp = TemperatureInRoom(
                     room=r,
                     time=timezone.now(),
-                    temp=random.choice([15, 16, 17, 18, 19])
+                    temp=random.choice([15, 16, 17, 18, 19]),
                 )
             else:
                 # Update value randomly
-                tmp_val = decimal.Decimal(random.choices(
-                    population=[-0.7, -0.3, -0.1, 0, 0.1, 0.3, 0.7],
-                    weights=[1, 2, 3, 5, 3, 2, 1]
-                )[0])
+                tmp_val = decimal.Decimal(
+                    random.choices(
+                        population=[-0.7, -0.3, -0.1, 0, 0.1, 0.3, 0.7],
+                        weights=[1, 2, 3, 5, 3, 2, 1],
+                    )[0]
+                )
                 tmp_val += _.temp
 
                 # Update values "realistically"
                 if tmp_val < -20:
-                    tmp = TemperatureInRoom(
-                        room=r, time=timezone.now(), temp=-20)
+                    tmp = TemperatureInRoom(room=r, time=timezone.now(), temp=-20)
                 elif tmp_val > 70:
-                    tmp = TemperatureInRoom(
-                        room=r, time=timezone.now(), temp=70)
+                    tmp = TemperatureInRoom(room=r, time=timezone.now(), temp=70)
                 else:
-                    tmp = TemperatureInRoom(
-                        room=r, time=timezone.now(), temp=tmp_val)
+                    tmp = TemperatureInRoom(room=r, time=timezone.now(), temp=tmp_val)
             tmp.save()
 
 
 class ApiConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'api'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "api"
 
     def handle(self, sig, frame):
         self.thread.stopped.set()

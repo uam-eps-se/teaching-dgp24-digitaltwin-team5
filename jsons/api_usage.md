@@ -5,13 +5,13 @@ Se asume el uso de esta API en cinco escenarios principales: Visualización (Das
 ## Creación
 Este escenario asume la creación de una habitación por parte del usuario, y por tanto le corresponden las siguientes llamadas:
 
-- **GET**: Permite obtener información de dispositivos (`v1/devices`) y puertas (`v1/doors`) sin dueño. 
+- **GET**: Permite obtener información de dispositivos (`v1/devices`) y puertas (`v1/doors`) sin dueño.
 - **POST**: Permite crear el cuarto nuevo con sus correspondientes dispositivos/puertas, así como la posibilidad de asignar aquellos sin dueño (`v1/rooms`). Se espera este comportamiento en una sola llamada.
 
 ## Edición
 Este escenario asume que un usuario accederá a los detalles de una habitación por medio del dashboard, sobre la que editará **(i)** sus datos o **(ii)** sus dispositivos y puertas. Por tanto, le corresponden las siguientes llamadas:
 
-- **GET**: Permite obtener la información de un cuarto y sus dispositivos/puertas/métricas (`v1/room/id`), así como dispositivos (`v1/devices`) y puertas (`v1/doors`) sin dueño.    
+- **GET**: Permite obtener la información de un cuarto y sus dispositivos/puertas/métricas (`v1/room/id`), así como dispositivos (`v1/devices`) y puertas (`v1/doors`) sin dueño.
 - **POST**: Permite crear dispositivos (`v1/devices`) o puertas (`v1/doors`) nuevas dentro de una habitación.
 - **PUT**: Permite actualizar dispositivos (`v1/devices`) sin dueño o puertas (`v1/doors`) con menos de dos conexiones para asignarlos al cuarto.
 - **DELETE**

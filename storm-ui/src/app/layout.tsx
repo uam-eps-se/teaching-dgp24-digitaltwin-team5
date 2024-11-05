@@ -2,7 +2,7 @@
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // Type Imports
-import type { Metadata } from 'next';
+import type { Metadata } from 'next'
 
 import type { ChildrenType } from '@core/types'
 
@@ -17,8 +17,7 @@ export const metadata: Metadata = {
     template: '%s | STORM',
     default: 'STORM: Smart Tracking & Optimization for Room Monitoring'
   },
-  description:
-    'User Interface for STORM: Smart Tracking & Optimization for Room Monitoring'
+  description: 'User Interface for STORM: Smart Tracking & Optimization for Room Monitoring'
 }
 
 const RootLayout = ({ children }: ChildrenType) => {
