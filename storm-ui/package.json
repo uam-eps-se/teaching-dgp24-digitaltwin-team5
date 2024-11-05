@@ -11,8 +11,7 @@
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "build:icons": "tsx src/assets/iconify-icons/bundle-icons-css.ts",
-    "postinstall": "npm run build:icons",
-    "prepare": "husky"
+    "postinstall": "npm run build:icons"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",
@@ -52,7 +51,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
-    "husky": "^9.1.6",
     "postcss": "^8.4.47",
     "postcss-styled-syntax": "^0.6.4",
     "prettier": "^3.3.3",

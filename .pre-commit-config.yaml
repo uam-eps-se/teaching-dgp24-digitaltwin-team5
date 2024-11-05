@@ -12,4 +12,10 @@ repos:
 -   repo: https://github.com/PyCQA/flake8
     rev: 7.1.1
     hooks:
-    - id: flake8
+    -   id: flake8
+-   repo: local
+    hooks:
+    -   id: frontend-prettier-eslint
+        name: frontend-prettier-eslint
+        entry: storm-ui/format_lint.sh
+        language: script
