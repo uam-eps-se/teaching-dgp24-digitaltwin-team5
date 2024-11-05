@@ -12,20 +12,14 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = [
-            'id',
-            'name',
-            'size',
-            'devices',
-            'metrics'
-        ]
+        fields = ["id", "name", "size", "devices", "metrics"]
 
     def get_devices(self, obj):
         devs = {
             "doors": self._get_doors,
             "windows": self._get_windows,
             "ventilators": self._get_ventilators,
-            "lights": self._get_lights
+            "lights": self._get_lights,
         }
         return {k: devs[k](obj) for k in devs}
 
@@ -60,7 +54,6 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class RoomDashboardSerializer(RoomSerializer):
-
     def _get_doors(self, obj):
         doors: dict = {"total": 0, "open": 0}
 
@@ -97,9 +90,9 @@ class RoomDashboardSerializer(RoomSerializer):
     def _get_lights(self, obj):
         lights: dict = {"total": 0, "on": 0}
 
-        for l in Light.objects.filter(room=obj.id):
+        for light in Light.objects.filter(room=obj.id):
             lights["total"] += 1
-            _ = LightOn.objects.filter(light=l).last()
+            _ = LightOn.objects.filter(light=light).last()
             if _ is not None and _.is_on:
                 lights["on"] += 1
 
@@ -119,21 +112,18 @@ class RoomDashboardSerializer(RoomSerializer):
 
 
 class RoomDetailSerializer(RoomSerializer):
-
     def _get_doors(self, obj):
         doors: dict = {}
 
         for d in DoorConnectsRoom.objects.filter(room=obj):
-            data = DoorOpen.timescale.filter(
-                door=d.door
-            ).time_bucket(
-                'time', '1 hour'
-            )
+            data = DoorOpen.timescale.filter(door=d.door).time_bucket("time", "1 hour")
 
             doors[d.door.name] = {
                 "id": d.door.id,
-                "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-                "values": list(data.values_list("is_open", flat=True))
+                "times": [
+                    date.timestamp() for date in data.values_list("time", flat=True)
+                ],
+                "values": list(data.values_list("is_open", flat=True)),
             }
 
         return doors
@@ -142,16 +132,14 @@ class RoomDetailSerializer(RoomSerializer):
         windows: dict = {}
 
         for w in Window.objects.filter(room=obj):
-            data = WindowOpen.timescale.filter(
-                window=w
-            ).time_bucket(
-                'time', '1 hour'
-            )
+            data = WindowOpen.timescale.filter(window=w).time_bucket("time", "1 hour")
 
             windows[w.name] = {
                 "id": w.id,
-                "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-                "values": list(data.values_list("is_open", flat=True))
+                "times": [
+                    date.timestamp() for date in data.values_list("time", flat=True)
+                ],
+                "values": list(data.values_list("is_open", flat=True)),
             }
 
         return windows
@@ -160,16 +148,16 @@ class RoomDetailSerializer(RoomSerializer):
         ventilators: dict = {}
 
         for v in Ventilator.objects.filter(room=obj):
-            data = VentilatorOn.timescale.filter(
-                ventilator=v
-            ).time_bucket(
-                'time', '1 hour'
+            data = VentilatorOn.timescale.filter(ventilator=v).time_bucket(
+                "time", "1 hour"
             )
 
             ventilators[v.name] = {
                 "id": v.id,
-                "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-                "values": list(data.values_list("is_on", flat=True))
+                "times": [
+                    date.timestamp() for date in data.values_list("time", flat=True)
+                ],
+                "values": list(data.values_list("is_on", flat=True)),
             }
 
         return ventilators
@@ -177,76 +165,74 @@ class RoomDetailSerializer(RoomSerializer):
     def _get_lights(self, obj):
         lights: dict = {}
 
-        for l in Light.objects.filter(room=obj):
-            data = LightOn.timescale.filter(
-                light=l
-            ).time_bucket(
-                'time', '1 hour'
-            )
+        for light in Light.objects.filter(room=obj):
+            data = LightOn.timescale.filter(light=light).time_bucket("time", "1 hour")
 
-            lights[l.name] = {
-                "id": l.id,
-                "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-                "values": list(data.values_list("is_on", flat=True))
+            lights[light.name] = {
+                "id": light.id,
+                "times": [
+                    date.timestamp() for date in data.values_list("time", flat=True)
+                ],
+                "values": list(data.values_list("is_on", flat=True)),
             }
 
         return lights
 
     def _get_people(self, obj):
 
-        data = PeopleInRoom.timescale.filter(
-            room=obj).time_bucket('time', '1 hour')
+        data = PeopleInRoom.timescale.filter(room=obj).time_bucket("time", "1 hour")
 
         people = {
             "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-            "values": list(data.values_list("no_people_in_room", flat=True))
+            "values": list(data.values_list("no_people_in_room", flat=True)),
         }
 
         return people
 
     def _get_temperature(self, obj):
 
-        data = TemperatureInRoom.timescale.filter(
-            room=obj).time_bucket('time', '1 hour')
+        data = TemperatureInRoom.timescale.filter(room=obj).time_bucket(
+            "time", "1 hour"
+        )
 
         temps = {
             "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-            "values": list(data.values_list("temp", flat=True))
+            "values": list(data.values_list("temp", flat=True)),
         }
 
         return temps
-    
+
     def _get_co2(self, obj):
 
-        data = Co2InRoom.timescale.filter(
-            room=obj).time_bucket('time', '1 hour')
+        data = Co2InRoom.timescale.filter(room=obj).time_bucket("time", "1 hour")
 
         co2 = {
             "times": [date.timestamp() for date in data.values_list("time", flat=True)],
-            "values": list(data.values_list("co2", flat=True))
+            "values": list(data.values_list("co2", flat=True)),
         }
 
-        return co2 
+        return co2
+
 
 class WindowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Window
-        fields = ['id', 'name']
+        fields = ["id", "name"]
 
 
 class LightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Light
-        fields = ['id', 'name']
+        fields = ["id", "name"]
 
 
 class VentilatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ventilator
-        fields = ['id', 'name']
+        fields = ["id", "name"]
 
 
 class DoorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Door
-        fields = ['id', 'name', 'rooms']
+        fields = ["id", "name", "rooms"]

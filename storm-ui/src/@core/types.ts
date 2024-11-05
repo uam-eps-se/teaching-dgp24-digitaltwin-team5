@@ -18,30 +18,30 @@ export type ThemeColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' 
 /* ROOMS */
 
 export type RoomSummaryRow = {
-  id: number,
-  name: string,
-  size: number,
+  id: number
+  name: string
+  size: number
   devices: {
     doors: {
-      open: number,
-      total: number
-    },
-    windows: {
-      open: number,
-      total: number
-    },
-    lights: {
-      on: number,
-      total: number
-    },
-    ventilators: {
-      on: number,
+      open: number
       total: number
     }
-  },
+    windows: {
+      open: number
+      total: number
+    }
+    lights: {
+      on: number
+      total: number
+    }
+    ventilators: {
+      on: number
+      total: number
+    }
+  }
   metrics: {
-    people: number,
-    co2: number,
+    people: number
+    co2: number
     temperature: number
   }
 }
@@ -49,33 +49,33 @@ export type RoomSummaryRow = {
 /* ROOM DETAIL */
 
 export type RoomDevice = {
-  id: number,
-  values: Array<boolean>,
+  id: number
+  values: Array<boolean>
   times: Array<number>
 }
 
 export type RoomMetric = {
-  values: Array<number>,
+  values: Array<number>
   times: Array<number>
 }
 
 export type RoomStructureData = {
-  doors: Record<string, RoomDevice>;
-  windows: Record<string, RoomDevice>;
-  ventilators: Record<string, RoomDevice>;
-  lights: Record<string, RoomDevice>;
+  doors: Record<string, RoomDevice>
+  windows: Record<string, RoomDevice>
+  ventilators: Record<string, RoomDevice>
+  lights: Record<string, RoomDevice>
 }
 
 export type RoomRealtimeData = {
-  people: RoomMetric,
-  co2: RoomMetric,
+  people: RoomMetric
+  co2: RoomMetric
   temperature: RoomMetric
 }
 
 export type RoomDetailData = {
-  id: number,
-  name: string,
-  size: number,
+  id: number
+  name: string
+  size: number
   devices: RoomStructureData
   metrics: RoomRealtimeData
 }
@@ -83,7 +83,7 @@ export type RoomDetailData = {
 /* DEVICES */
 
 export type Device = {
-  id: number | undefined,
+  id: number | undefined
   name: string
 }
 
@@ -92,7 +92,7 @@ export type Door = Device & {
 }
 
 export type AvailableDevices = {
-  windows: Array<Device>,
-  lights: Array<Device>,
+  windows: Array<Device>
+  lights: Array<Device>
   ventilators: Array<Device>
 }

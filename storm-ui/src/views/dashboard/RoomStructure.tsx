@@ -12,28 +12,28 @@ import type { ApexOptions } from 'apexcharts'
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
-import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiWindowClosedVariant } from '@mdi/js';
-import Icon from '@mdi/react';
-import type { BadgeProps } from '@mui/material';
+import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiWindowClosedVariant } from '@mdi/js'
+import Icon from '@mdi/react'
+import type { BadgeProps } from '@mui/material'
 import { Badge, Box, Grid, styled } from '@mui/material'
 
 import type { RoomDetailData, RoomDevice } from '@core/types'
 import { useSettings } from '@core/hooks/useSettings'
 
 const RoomStructure = (props: { room: RoomDetailData }) => {
-  const room = props.room;
-  const settings = useSettings();
+  const room = props.room
+  const settings = useSettings()
 
   const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -3,
       border: `2px solid ${theme.palette.background.paper}`,
-      padding: '0 4px',
-    },
-  }));
+      padding: '0 4px'
+    }
+  }))
 
   const getOptions = (chartId: string, trueLabel: string = 'Open', falseLabel: string = 'Closed'): ApexOptions => {
-    let zoom: any[] | undefined = undefined;
+    let zoom: any[] | undefined = undefined
 
     return {
       chart: {
@@ -45,44 +45,46 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         },
         animations: {
           enabled: true,
-          easing: "easeinout",
+          easing: 'easeinout',
           dynamicAnimation: {
             speed: 500
           }
         },
         events: {
-          beforeResetZoom: (chart) => {
-            zoom = undefined;
-            chart.w.globals.lastXAxis.min = undefined;
-            chart.w.globals.lastXAxis.max = undefined;
+          beforeResetZoom: chart => {
+            zoom = undefined
+            chart.w.globals.lastXAxis.min = undefined
+            chart.w.globals.lastXAxis.max = undefined
 
-            return true;
+            return true
           },
           zoomed: (_, value) => {
-            zoom = [value.xaxis.min, value.xaxis.max];
+            zoom = [value.xaxis.min, value.xaxis.max]
           },
           updated: (chart, options) => {
             // Make sure its a series update and not config
-            if (zoom &&
-              options.config.xaxis.min !== zoom[0] &&
-              options.config.xaxis.max !== zoom[1]) {
-              chart.updateOptions({ chart: { animations: { dynamicAnimations: { enabled: false } } } });
-              chart.zoomX(zoom[0], zoom[1]);
-              chart.updateOptions({ chart: { animations: { dynamicAnimations: { enabled: true } } } });
+            if (zoom && options.config.xaxis.min !== zoom[0] && options.config.xaxis.max !== zoom[1]) {
+              chart.updateOptions({
+                chart: { animations: { dynamicAnimations: { enabled: false } } }
+              })
+              chart.zoomX(zoom[0], zoom[1])
+              chart.updateOptions({
+                chart: { animations: { dynamicAnimations: { enabled: true } } }
+              })
             }
           }
         },
         zoom: {
           enabled: true,
-          type: 'x',
-        },
+          type: 'x'
+        }
       },
       tooltip: {
         enabled: true,
         followCursor: true,
         shared: false,
         y: {
-          formatter: (val: number) => val === 1 ? trueLabel : falseLabel
+          formatter: (val: number) => (val === 1 ? trueLabel : falseLabel)
         },
         theme: settings.settings.mode
       },
@@ -111,12 +113,12 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         type: 'datetime',
         labels: {
           style: { colors: 'var(--mui-palette-text-primary)' },
-          datetimeUTC: false,
-        },
+          datetimeUTC: false
+        }
       },
       yaxis: {
         labels: { show: false },
-        tickAmount: 2,
+        tickAmount: 2
       },
       legend: {
         showForSingleSeries: true,
@@ -127,32 +129,30 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
 
   const getDeviceData = (records: Record<string, RoomDevice>, cutoffTimestamp?: number) => {
     return Object.entries(records).map(([r, data]) => {
-      let sortedData = data.values.map((v, idx) =>
-        [new Date(data.times[idx] * 1000).getTime(), Number(v)]
-      ).toSorted((x, y) => x[0] - y[0]);
+      let sortedData = data.values
+        .map((v, idx) => [new Date(data.times[idx] * 1000).getTime(), Number(v)])
+        .toSorted((x, y) => x[0] - y[0])
 
       if (cutoffTimestamp && sortedData.length) {
-        const lastTimestamp = sortedData.slice(-1)[0][0];
-        const timeCutoff = lastTimestamp - cutoffTimestamp;
+        const lastTimestamp = sortedData.slice(-1)[0][0]
+        const timeCutoff = lastTimestamp - cutoffTimestamp
 
-        sortedData = sortedData.filter((metric) =>
-          metric[0] >= timeCutoff
-        )
+        sortedData = sortedData.filter(metric => metric[0] >= timeCutoff)
       }
 
       return {
         name: r,
-        data: sortedData,
+        data: sortedData
       }
-    });
+    })
   }
 
-  const cutoff = 3600000;
+  const cutoff = 3600000
 
-  const doorData = getDeviceData(room.devices.doors);
-  const windowData = getDeviceData(room.devices.windows);
-  const lightData = getDeviceData(room.devices.lights);
-  const coolingData = getDeviceData(room.devices.ventilators);
+  const doorData = getDeviceData(room.devices.doors)
+  const windowData = getDeviceData(room.devices.windows)
+  const lightData = getDeviceData(room.devices.lights)
+  const coolingData = getDeviceData(room.devices.ventilators)
 
   return (
     <div>
@@ -160,28 +160,25 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Box display="flex" alignItems="center">
-                <StyledBadge
-                  badgeContent={doorData.length}
-                  color='secondary'
-                  className='mr-5'
-                >
+              <Box display='flex' alignItems='center'>
+                <StyledBadge badgeContent={doorData.length} color='secondary' className='mr-5'>
                   <Icon path={mdiDoorOpen} size={1} />
                 </StyledBadge>
                 <Typography variant='h4'>Doors</Typography>
               </Box>
-              {
-                doorData.length ?
-                  <AppReactApexCharts
-                    type='line'
-                    height='140%'
-                    width='100%'
-                    options={getOptions('doors')}
-                    series={doorData}
-                  />
-                  :
-                  <Typography variant='h5' className='mt-4'>No doors available</Typography>
-              }
+              {doorData.length ? (
+                <AppReactApexCharts
+                  type='line'
+                  height='140%'
+                  width='100%'
+                  options={getOptions('doors')}
+                  series={doorData}
+                />
+              ) : (
+                <Typography variant='h5' className='mt-4'>
+                  No doors available
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>
@@ -189,28 +186,25 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Box display="flex" alignItems="center">
-                <StyledBadge
-                  badgeContent={windowData.length}
-                  color='secondary'
-                  className='mr-5'
-                >
+              <Box display='flex' alignItems='center'>
+                <StyledBadge badgeContent={windowData.length} color='secondary' className='mr-5'>
                   <Icon path={mdiWindowClosedVariant} size={1} />
                 </StyledBadge>
                 <Typography variant='h4'>Windows</Typography>
               </Box>
-              {
-                windowData.length ?
-                  <AppReactApexCharts
-                    type='line'
-                    height='140%'
-                    width='100%'
-                    options={getOptions('windows')}
-                    series={windowData}
-                  />
-                  :
-                  <Typography variant='h5' className='mt-4'>No windows available</Typography>
-              }
+              {windowData.length ? (
+                <AppReactApexCharts
+                  type='line'
+                  height='140%'
+                  width='100%'
+                  options={getOptions('windows')}
+                  series={windowData}
+                />
+              ) : (
+                <Typography variant='h5' className='mt-4'>
+                  No windows available
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>
@@ -218,28 +212,25 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Box display="flex" alignItems="center">
-                <StyledBadge
-                  badgeContent={lightData.length}
-                  color='secondary'
-                  className='mr-5'
-                >
+              <Box display='flex' alignItems='center'>
+                <StyledBadge badgeContent={lightData.length} color='secondary' className='mr-5'>
                   <Icon path={mdiLightbulbOn} size={1} />
                 </StyledBadge>
                 <Typography variant='h4'>Lights</Typography>
               </Box>
-              {
-                lightData.length ?
-                  <AppReactApexCharts
-                    type='line'
-                    height='140%'
-                    width='100%'
-                    options={getOptions('lights', 'On', 'Off')}
-                    series={lightData}
-                  />
-                  :
-                  <Typography variant='h5' className='mt-4'>No lights available</Typography>
-              }
+              {lightData.length ? (
+                <AppReactApexCharts
+                  type='line'
+                  height='140%'
+                  width='100%'
+                  options={getOptions('lights', 'On', 'Off')}
+                  series={lightData}
+                />
+              ) : (
+                <Typography variant='h5' className='mt-4'>
+                  No lights available
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>
@@ -247,28 +238,25 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Box display="flex" alignItems="center">
-                <StyledBadge
-                  badgeContent={coolingData.length}
-                  color='secondary'
-                  className='mr-5'
-                >
+              <Box display='flex' alignItems='center'>
+                <StyledBadge badgeContent={coolingData.length} color='secondary' className='mr-5'>
                   <Icon path={mdiFan} size={1} />
                 </StyledBadge>
                 <Typography variant='h4'>Cooling Devices</Typography>
               </Box>
-              {
-                coolingData.length ?
-                  <AppReactApexCharts
-                    type='line'
-                    height='140%'
-                    width='100%'
-                    options={getOptions('cooling', 'On', 'Off')}
-                    series={coolingData}
-                  />
-                  :
-                  <Typography variant='h5' className='mt-4'>No cooling devices available</Typography>
-              }
+              {coolingData.length ? (
+                <AppReactApexCharts
+                  type='line'
+                  height='140%'
+                  width='100%'
+                  options={getOptions('cooling', 'On', 'Off')}
+                  series={coolingData}
+                />
+              ) : (
+                <Typography variant='h5' className='mt-4'>
+                  No cooling devices available
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>

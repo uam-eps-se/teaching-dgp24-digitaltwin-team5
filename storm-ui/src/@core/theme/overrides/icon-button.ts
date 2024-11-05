@@ -50,7 +50,9 @@ const iconButton: Theme['components'] = {
             backgroundColor: 'var(--mui-palette-primary-lighterOpacity)'
           },
           ...(themeConfig.disableRipple && {
-            '&.Mui-focusVisible:not(.Mui-disabled)': { backgroundColor: 'var(--mui-palette-primary-lighterOpacity)' }
+            '&.Mui-focusVisible:not(.Mui-disabled)': {
+              backgroundColor: 'var(--mui-palette-primary-lighterOpacity)'
+            }
           }),
           '&.Mui-disabled': {
             opacity: 0.45,
@@ -65,7 +67,9 @@ const iconButton: Theme['components'] = {
             backgroundColor: 'var(--mui-palette-secondary-lighterOpacity)'
           },
           ...(themeConfig.disableRipple && {
-            '&.Mui-focusVisible:not(.Mui-disabled)': { backgroundColor: 'var(--mui-palette-secondary-lighterOpacity)' }
+            '&.Mui-focusVisible:not(.Mui-disabled)': {
+              backgroundColor: 'var(--mui-palette-secondary-lighterOpacity)'
+            }
           }),
           '&.Mui-disabled': {
             opacity: 0.45,
@@ -80,7 +84,9 @@ const iconButton: Theme['components'] = {
             backgroundColor: 'var(--mui-palette-error-lighterOpacity)'
           },
           ...(themeConfig.disableRipple && {
-            '&.Mui-focusVisible:not(.Mui-disabled)': { backgroundColor: 'var(--mui-palette-error-lighterOpacity)' }
+            '&.Mui-focusVisible:not(.Mui-disabled)': {
+              backgroundColor: 'var(--mui-palette-error-lighterOpacity)'
+            }
           }),
           '&.Mui-disabled': {
             opacity: 0.45,
@@ -95,7 +101,9 @@ const iconButton: Theme['components'] = {
             backgroundColor: 'var(--mui-palette-warning-lighterOpacity)'
           },
           ...(themeConfig.disableRipple && {
-            '&.Mui-focusVisible:not(.Mui-disabled)': { backgroundColor: 'var(--mui-palette-warning-lighterOpacity)' }
+            '&.Mui-focusVisible:not(.Mui-disabled)': {
+              backgroundColor: 'var(--mui-palette-warning-lighterOpacity)'
+            }
           }),
           '&.Mui-disabled': {
             opacity: 0.45,
@@ -110,7 +118,9 @@ const iconButton: Theme['components'] = {
             backgroundColor: 'var(--mui-palette-info-lighterOpacity)'
           },
           ...(themeConfig.disableRipple && {
-            '&.Mui-focusVisible:not(.Mui-disabled)': { backgroundColor: 'var(--mui-palette-info-lighterOpacity)' }
+            '&.Mui-focusVisible:not(.Mui-disabled)': {
+              backgroundColor: 'var(--mui-palette-info-lighterOpacity)'
+            }
           }),
           '&.Mui-disabled': {
             opacity: 0.45,
@@ -125,7 +135,9 @@ const iconButton: Theme['components'] = {
             backgroundColor: 'var(--mui-palette-success-lighterOpacity)'
           },
           ...(themeConfig.disableRipple && {
-            '&.Mui-focusVisible:not(.Mui-disabled)': { backgroundColor: 'var(--mui-palette-success-lighterOpacity)' }
+            '&.Mui-focusVisible:not(.Mui-disabled)': {
+              backgroundColor: 'var(--mui-palette-success-lighterOpacity)'
+            }
           }),
           '&.Mui-disabled': {
             opacity: 0.45,

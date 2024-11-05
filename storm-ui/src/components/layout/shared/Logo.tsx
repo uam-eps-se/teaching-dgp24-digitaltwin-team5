@@ -7,7 +7,7 @@ import StormLogo from '@core/svg/Logo'
 import { useSettings } from '@core/hooks/useSettings'
 
 const Logo = () => {
-  const { settings } = useSettings();
+  const { settings } = useSettings()
 
   return (
     <div className='flex items-center min-bs-[24px]'>
