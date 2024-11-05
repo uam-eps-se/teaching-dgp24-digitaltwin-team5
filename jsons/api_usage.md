@@ -1,6 +1,6 @@
 # STORM API
 
-Se asume el uso de esta API en cinco escenarios principales: Visualización (Dashboard), Creación de Habitaciones, Edición de Habitaciones, Importado de Datos y Exportado de Datos. Los verbos destinados para cada escenario, así como su uso de caso esperado, son especificados más adelante.
+Se asume el uso de esta API en varios escenarios: Visualización (Dashboard), Creación de Habitaciones, Edición de Habitaciones, Panel de Control, Importado de Datos y Exportado de Datos. Los verbos destinados para cada escenario, así como su uso de caso esperado, son especificados más adelante.
 
 ## Creación
 Este escenario asume la creación de una habitación por parte del usuario, y por tanto le corresponden las siguientes llamadas:
@@ -19,6 +19,10 @@ Este escenario asume que un usuario accederá a los detalles de una habitación 
     2. Permite borrar un dispositivo (`v1/devices`) asignado a este cuarto. Este comportamiento no es esperado para aquellos obtenidos por GET que no hayan sido asignados.
     3. Permite borrar una conexión con una puerta (`v1/doors`) asignada al cuarto. En caso de ser conexión única, la puerta se borra
 
+# Control
+Este escenario asume que un usuario accederá a la tab "Control Panel" dentro de su página de detalles. Por tanto, le corresponden las siguientes llamadas:
+
+- **PATCH**: Permite cambiar el estado actual de un dispositivo (`v1/devices`) o una puerta (`v1/doors`).
 
 ## Call List
 ### Rooms
