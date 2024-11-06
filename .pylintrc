@@ -1,0 +1,4 @@
+[MAIN]
+
+ignore-paths=storm/api/migrations/.*$,storm-ui
+fail-under=10.0
