@@ -19,6 +19,7 @@ repos:
         name: frontend-prettier-eslint
         entry: storm-ui/format_lint.sh
         language: script
+        types_or: [javascript, jsx, ts, tsx, css]
     -   id: pylint
         name: pylint
         entry: pylint
