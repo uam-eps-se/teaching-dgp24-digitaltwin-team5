@@ -22,12 +22,12 @@
     "@mui/lab": "5.0.0-alpha.170",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.16.6",
-    "@mui/x-data-grid": "^7.22.1",
+    "@mui/x-data-grid": "^7.22.2",
     "apexcharts": "^3.54.1",
     "classnames": "^2.5.1",
     "next": "^14.2.17",
     "react": "^18.3.1",
-    "react-apexcharts": "^1.4.4",
+    "react-apexcharts": "1.4.1",
     "react-dom": "^18.3.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-use": "^17.5.1",
@@ -36,7 +36,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.269",
+    "@iconify/json": "^2.2.270",
     "@iconify/tools": "^4.0.7",
     "@iconify/types": "^2.0.0",
     "@iconify/utils": "^2.1.33",
