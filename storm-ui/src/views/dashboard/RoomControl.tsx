@@ -13,7 +13,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import type { DeviceStatus, RoomDetailData, RoomDevice } from '@core/types'
 import { updateDeviceAction } from '@/@core/utils/actions'
 
-function QuickSearchFooter() {
+const QuickSearchFooter = () => {
   return (
     <Box
       sx={{
@@ -31,6 +31,48 @@ function QuickSearchFooter() {
       />
       <GridPagination sx={{ minWidth: 'fit-content' }} />
     </Box>
+  )
+}
+
+const DeviceActionCell = (props: {
+  row: DeviceStatus
+  type: string
+  actionTrue: string
+  actionFalse: string
+  getTooltip: (name: string, action: string) => string
+}) => {
+  const { row, type, actionTrue, actionFalse, getTooltip } = props
+  const [disabled, setDisabled] = useState<boolean>(false)
+  const [active, setActive] = useState<boolean>(row.status)
+
+  const handleAction = useDebouncedCallback(async () => {
+    const res: any = await updateDeviceAction(row.id as number, type, !active)
+
+    if (!('error' in res)) {
+      // TODO Check if button actually updates with params.row.status value
+      row.status = !active
+      setActive(!active)
+    }
+
+    setDisabled(false)
+  }, 500)
+
+  return (
+    <Tooltip title={getTooltip(row.name, active ? actionFalse : actionTrue)} enterDelay={500} enterNextDelay={500}>
+      <Button
+        variant='outlined'
+        size='small'
+        disabled={disabled}
+        onClick={() => {
+          setDisabled(true)
+          handleAction()
+        }}
+        color={active ? 'error' : 'success'}
+        className='h-3/5 rounded'
+      >
+        {active ? actionFalse : actionTrue}
+      </Button>
+    </Tooltip>
   )
 }
 
@@ -88,44 +130,15 @@ function ControlTable(props: { devices: DeviceStatus[]; type: string; title: str
       flex: 0.3,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: params => {
-        const [disabled, setDisabled] = useState<boolean>(false)
-        const [active, setActive] = useState<boolean>(params.row.status)
-
-        const handleAction = useDebouncedCallback(async () => {
-          const res: any = await updateDeviceAction(params.row.id as number, type, !active)
-
-          if (!('error' in res)) {
-            // TODO Check if button actually updates with params.row.status value
-            params.row.status = !active
-            setActive(!active)
-          }
-
-          setDisabled(false)
-        }, 500)
-
-        return (
-          <Tooltip
-            title={getTooltip(params.row.name, active ? actionFalse : actionTrue)}
-            enterDelay={500}
-            enterNextDelay={500}
-          >
-            <Button
-              variant='outlined'
-              size='small'
-              disabled={disabled}
-              onClick={() => {
-                setDisabled(true)
-                handleAction()
-              }}
-              color={active ? 'error' : 'success'}
-              className='h-3/5 rounded'
-            >
-              {active ? actionFalse : actionTrue}
-            </Button>
-          </Tooltip>
-        )
-      }
+      renderCell: params => (
+        <DeviceActionCell
+          row={params.row}
+          type={type}
+          actionTrue={actionTrue}
+          actionFalse={actionFalse}
+          getTooltip={getTooltip}
+        />
+      )
     }
   ]
 

@@ -30,7 +30,7 @@ const colHeader = (name: string, subtitle: string) => {
   )
 }
 
-function QuickSearchToolbar() {
+const QuickSearchToolbar = () => {
   return (
     <Box
       sx={{
@@ -45,6 +45,22 @@ function QuickSearchToolbar() {
         }}
       />
     </Box>
+  )
+}
+
+const DeleteRoomCell = (props: { row: RoomSummaryRow }) => {
+  const [openDelete, setOpenDelete] = useState(false)
+  const { row } = props
+
+  return (
+    <>
+      <Tooltip title={`Delete ${row.name}`}>
+        <IconButton color='error' onClick={() => setOpenDelete(true)}>
+          <Icon path={mdiTrashCan} size={1} />
+        </IconButton>
+      </Tooltip>
+      <DeleteRoomModal roomId={row.id} roomName={row.name} open={openDelete} setOpen={setOpenDelete} />
+    </>
   )
 }
 
@@ -161,25 +177,7 @@ export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
       flex: 0.05,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: params => {
-        const [openDelete, setOpenDelete] = useState(false)
-
-        return (
-          <>
-            <Tooltip title={`Delete ${params.row.name}`}>
-              <IconButton color='error' onClick={() => setOpenDelete(true)}>
-                <Icon path={mdiTrashCan} size={1} />
-              </IconButton>
-            </Tooltip>
-            <DeleteRoomModal
-              roomId={params.row.id}
-              roomName={params.row.name}
-              open={openDelete}
-              setOpen={setOpenDelete}
-            />
-          </>
-        )
-      }
+      renderCell: params => <DeleteRoomCell row={params.row} />
     }
   ]
 

@@ -16,6 +16,40 @@ const actions = [
   { icon: mdiFan, name: 'New Cooling Device', item: 'cooling device' }
 ]
 
+const CreateDeviceButton = (props: {
+  name: string
+  item: string
+  icon: string
+  onCreateDevice: (name: string, type: string) => void
+}) => {
+  const [open, setOpen] = useState(false)
+  const { name, item, icon, onCreateDevice } = props
+
+  return (
+    <div>
+      <Tooltip title={name} placement='top'>
+        <Fab
+          id={item}
+          onClick={() => {
+            setOpen(true)
+          }}
+          color='primary'
+        >
+          <Icon path={icon} size={1.2} />
+        </Fab>
+      </Tooltip>
+      <CreateDeviceModal
+        title={name}
+        deviceType={item}
+        open={open}
+        setOpen={setOpen}
+        icon={icon}
+        onCreateDevice={onCreateDevice}
+      />
+    </div>
+  )
+}
+
 const CreateDevicesButtons = (props: { onCreateDevice: (name: string, type: string) => void }) => {
   return (
     <div>
@@ -29,33 +63,9 @@ const CreateDevicesButtons = (props: { onCreateDevice: (name: string, type: stri
           gap: '25px'
         }}
       >
-        {actions.map(({ name, item, icon }) => {
-          const [open, setOpen] = useState(false)
-
-          return (
-            <div key={item}>
-              <Tooltip title={name} placement='top'>
-                <Fab
-                  id={item}
-                  onClick={() => {
-                    setOpen(true)
-                  }}
-                  color='primary'
-                >
-                  <Icon path={icon} size={1.2} />
-                </Fab>
-              </Tooltip>
-              <CreateDeviceModal
-                title={name}
-                deviceType={item}
-                open={open}
-                setOpen={setOpen}
-                icon={icon}
-                onCreateDevice={props.onCreateDevice}
-              />
-            </div>
-          )
-        })}
+        {actions.map(({ name, item, icon }) => (
+          <CreateDeviceButton key={item} name={name} item={item} icon={icon} onCreateDevice={props.onCreateDevice} />
+        ))}
       </Box>
     </div>
   )

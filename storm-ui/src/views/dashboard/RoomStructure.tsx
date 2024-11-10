@@ -147,7 +147,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
     })
   }
 
-  const cutoff = 3600000
+  // const cutoff = 3600000
 
   const doorData = getDeviceData(room.devices.doors)
   const windowData = getDeviceData(room.devices.windows)

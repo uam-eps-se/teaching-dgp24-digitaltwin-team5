@@ -12,6 +12,8 @@ import Icon from '@mdi/react'
 
 import { useInterval } from 'react-use'
 
+import { z } from 'zod'
+
 import type { AvailableDevices, Device, Door, RoomDetailData, RoomDevice } from '@core/types'
 
 import CreateDevicesDial from '@components/actionButtons/CreateDevicesButtons'
@@ -21,6 +23,12 @@ import { fetchFreeDevices, fetchFreeDoors } from '@/@core/utils/data'
 import { assignDevice, createDevice, createRoom, deleteDevice, deleteDoor, editRoom } from '@core/utils/actions'
 import { RoomsContext } from '@core/contexts/roomsContext'
 import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal'
+
+const RoomFormSchema = z.object({
+  name: z.string().min(1, 'Room name is required'),
+  size: z.coerce.number().nonnegative('Room size must be a positive value'),
+  devices: z.string().optional()
+})
 
 function RoomForm(props: { room?: RoomDetailData }) {
   const isEdit = props.room !== undefined
@@ -130,6 +138,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
         setInputVentilators(oldVentilators)
       }
     })
+    // eslint-disable-next-line
   }, [])
 
   useInterval(() => updateDevicesData(), intervalDelay)
@@ -241,6 +250,11 @@ function RoomForm(props: { room?: RoomDetailData }) {
         component='form'
         action={async () => {
           const formData = handleSubmitForm()
+          const parseRes = RoomFormSchema.safeParse(Object.fromEntries(formData.entries()))
+
+          // Form validation
+          if (!parseRes.success) return console.error(parseRes.error.format())
+
           let res
 
           if (isEdit) {
@@ -254,7 +268,8 @@ function RoomForm(props: { room?: RoomDetailData }) {
           if ('error' in res) console.error(res.error)
           else {
             await updateRooms()
-            router.push('/rooms')
+            if (isEdit) router.back()
+            else router.push('/rooms')
           }
         }}
         sx={{

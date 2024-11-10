@@ -51,6 +51,7 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
 
   useEffect(() => {
     updateRooms()
+    // eslint-disable-next-line
   }, [])
 
   return (

@@ -19,6 +19,7 @@ const RoomEdit = (props: { roomId: string }) => {
     fetchRoom(props.roomId).then(r => {
       if (r) setRoom(r)
     })
+    // eslint-disable-next-line
   }, [])
 
   return (

@@ -51,6 +51,7 @@ export default function RoomDetail(props: { roomId: string }) {
 
       if (routeTab) setTab(routeTab)
     })
+    // eslint-disable-next-line
   }, [])
 
   useInterval(() => updateRoomData(), intervalDelay as number)
