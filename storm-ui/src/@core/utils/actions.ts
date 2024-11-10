@@ -141,7 +141,7 @@ async function manageDevice(roomId: number, type: string, deviceId?: number, nam
 
   let endpoint = 'doors'
 
-  if (['window', 'light', 'ventilator'].includes(type)) {
+  if (type !== 'door') {
     endpoint = 'devices'
     data.type = type
   }
@@ -231,5 +231,39 @@ export async function deleteDoor(doorId: number, roomId: number) {
     })
     .catch(err => {
       return { message: 'API Error: Failed to Delete Door.', error: err }
+    })
+}
+
+export async function updateDeviceAction(deviceId: number, type: string, action: boolean) {
+  const requestOptions = {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' }
+  }
+
+  const data: any = {
+    id: deviceId,
+    action: action
+  }
+
+  let endpoint = 'doors'
+
+  if (type !== 'door') {
+    endpoint = 'devices'
+    data.type = type
+  }
+
+  console.log('Placeholder', data)
+
+  return { message: `Set ${type} (ID ${deviceId}) Action to ${action}.` }
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`, {
+    ...requestOptions,
+    body: JSON.stringify(data)
+  })
+    .then(async () => {
+      return { message: `Set ${type} (ID ${deviceId}) Action to ${action}.` }
+    })
+    .catch(err => {
+      return { message: `API Error: Failed to Set ${type} Action.`, error: err }
     })
 }

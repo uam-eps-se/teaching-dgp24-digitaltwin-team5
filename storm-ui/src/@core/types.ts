@@ -96,3 +96,7 @@ export type AvailableDevices = {
   lights: Array<Device>
   ventilators: Array<Device>
 }
+
+export type DeviceStatus = Device & {
+  status: boolean
+}

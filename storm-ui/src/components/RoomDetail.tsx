@@ -23,6 +23,7 @@ import RoomDetailButtons from './actionButtons/RoomDetailButtons'
 
 import RoomStructure from '@views/dashboard/RoomStructure'
 import RoomStatus from '@views/dashboard/RoomStatus'
+import RoomControl from '@views/dashboard/RoomControl'
 
 export default function RoomDetail(props: { roomId: string }) {
   const [room, setRoom] = useState<RoomDetailData>()
@@ -56,7 +57,7 @@ export default function RoomDetail(props: { roomId: string }) {
 
   const setTabParam = useDebouncedCallback((tab: string) => {
     router.push(`${pathname}?tab=${tab}`)
-  }, 2000)
+  }, 1500)
 
   const handleTab = (tab: string) => {
     setTab(tab)
@@ -120,7 +121,7 @@ export default function RoomDetail(props: { roomId: string }) {
               <RoomStatus room={room} />
             </TabPanel>
             <TabPanel value='2'>
-              <h3>Control Panel Placeholder</h3>
+              <RoomControl room={room} />
             </TabPanel>
             <Box
               sx={{
