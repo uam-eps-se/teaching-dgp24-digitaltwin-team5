@@ -11,10 +11,11 @@ import pandas as pd
 from datetime import datetime
 from io import BytesIO
 import json
+from django.utils import timezone
 
 
 class DevicesAPIView(APIView):
-    allowed_devices = ["GET", "POST", "DELETE", "PUT"]
+    allowed_devices = ["GET", "POST", "DELETE", "PUT", "PATCH"]
 
     def get(self, request, format=None):
         """
@@ -202,9 +203,77 @@ class DevicesAPIView(APIView):
 
         return Response("Device succesfully removed!")
 
+    def patch(self, request: Request):
+        """
+        Updates a device status. To be used on CONTROL PANEL.
+
+        This method  expects  to  receive  the  required  "id"  and "action"
+        parameters to modify a device, and an additional field "type", which
+        must be one of the following:
+
+        - "window"
+        - "ventilator"
+        - "light"
+
+        Args:
+            request (dict): A JSON-like dictionary
+        """
+
+        # Dictionary with classes for all devices
+        dtypes: dict[str, models.Model] = {
+            "window": Window,
+            "ventilator": Ventilator,
+            "light": Light,
+        }
+
+        dstatus: dict[str, models.Model] = {
+            "window": WindowOpen,
+            "ventilator": VentilatorOn,
+            "light": LightOn,
+        }
+
+        dactions: dict[str, str] = {
+            "window": "is_open",
+            "ventilator": "is_on",
+            "light": "is_on",
+        }
+
+        # Obtain request parameters
+        id = request.data.get("id", None)
+        dtype = request.data.get("type", None)
+        action = request.data.get("action", None)
+
+        # Error Case: Missing Parameters
+        if id is None or action is None or dtype is None:
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
+
+        # Error Case: Wrong device kind
+        if dtype not in dtypes:
+            return Response(
+                f"type field must be {", ".join(dtypes.keys())}",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        dev = dtypes[dtype].objects.filter(id=id).first()
+
+        # Error case: Invalid device
+        if dev is None:
+            return Response("Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
+
+        if type(action) is not bool:
+            return Response("Invalid action!", status=status.HTTP_400_BAD_REQUEST)
+
+        # Create new dev status
+        ds = dstatus[dtype](time=timezone.now())
+        setattr(ds, dtype, dev)
+        setattr(ds, dactions[dtype], action)
+        ds.save()
+        print(getattr(ds, dactions[dtype]))
+        return Response(f"Device {dev.name} assigned the status {action}!")
+
 
 class DoorsAPIView(APIView):
-    allowed_methods = ["GET", "PUT", "POST", "DELETE"]
+    allowed_methods = ["GET", "PUT", "POST", "DELETE", "PATCH"]
 
     def get(self, request, format=None):
         """
@@ -220,8 +289,6 @@ class DoorsAPIView(APIView):
 
         serializer = DoorSerializer(doors, many=True)
         return Response(serializer.data)
-
-        # return Response(serializer.data)
 
     def post(self, request: Request):
         """
@@ -343,6 +410,29 @@ class DoorsAPIView(APIView):
         else:
             droom.delete()
         return Response(f"Door {door.name} updated successfully!")
+
+    def patch(self, request: Request):
+        # Obtain request parameters
+        id = request.data.get("id", None)
+        action = request.data.get("action", None)
+
+        # Error Case: Missing Parameters
+        if id is None or action is None:
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
+
+        if type(action) is not bool:
+            return Response("Invalid action!", status=status.HTTP_400_BAD_REQUEST)
+
+        door = Door.objects.filter(id=id).first()
+
+        # Error Case: Invalid door
+        if door is None:
+            return Response("Invalid door id!", status=status.HTTP_400_BAD_REQUEST)
+
+        door_open = DoorOpen(door=door, time=timezone.now(), is_open=action)
+        door_open.save()
+
+        return Response(f"Door {door.name} assigned the status {action}!")
 
 
 class RoomsAPIView(APIView):

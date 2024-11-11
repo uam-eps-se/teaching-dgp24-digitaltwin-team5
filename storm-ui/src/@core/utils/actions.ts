@@ -160,9 +160,9 @@ export async function updateDeviceAction(deviceId: number, type: string, action:
     data.type = type
   }
 
-  console.log('Placeholder', data)
+  // console.log('Placeholder', data)
 
-  return { message: `Set ${type} (ID ${deviceId}) Action to ${action}.` }
+  // return { message: `Set ${type} (ID ${deviceId}) Action to ${action}.` }
 
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`, {
     ...requestOptions,

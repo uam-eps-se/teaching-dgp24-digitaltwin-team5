@@ -175,7 +175,7 @@ export default function RoomControl(props: { room: RoomDetailData }) {
       return {
         id: device.id,
         name: name,
-        status: device.values.slice(-1)[0]
+        status: device.values[0]
       }
     })
 

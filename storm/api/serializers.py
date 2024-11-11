@@ -1,5 +1,7 @@
 from api.models import *
 from rest_framework import serializers
+from django.utils import timezone
+from datetime import timedelta
 
 #
 #   BASE MODELS
@@ -116,7 +118,9 @@ class RoomDetailSerializer(RoomSerializer):
         doors: dict = {}
 
         for d in DoorConnectsRoom.objects.filter(room=obj):
-            data = DoorOpen.timescale.filter(door=d.door).time_bucket("time", "1 hour")
+            data = DoorOpen.timescale.filter(
+                door=d.door, time__gt=(timezone.now() - timedelta(hours=1))
+            ).order_by("-time")
 
             doors[d.door.name] = {
                 "id": d.door.id,
@@ -132,7 +136,9 @@ class RoomDetailSerializer(RoomSerializer):
         windows: dict = {}
 
         for w in Window.objects.filter(room=obj):
-            data = WindowOpen.timescale.filter(window=w).time_bucket("time", "1 hour")
+            data = WindowOpen.timescale.filter(
+                window=w, time__gt=(timezone.now() - timedelta(hours=1))
+            ).order_by("-time")
 
             windows[w.name] = {
                 "id": w.id,
@@ -148,9 +154,9 @@ class RoomDetailSerializer(RoomSerializer):
         ventilators: dict = {}
 
         for v in Ventilator.objects.filter(room=obj):
-            data = VentilatorOn.timescale.filter(ventilator=v).time_bucket(
-                "time", "1 hour"
-            )
+            data = VentilatorOn.timescale.filter(
+                ventilator=v, time__gt=(timezone.now() - timedelta(hours=1))
+            ).order_by("-time")
 
             ventilators[v.name] = {
                 "id": v.id,
@@ -166,7 +172,9 @@ class RoomDetailSerializer(RoomSerializer):
         lights: dict = {}
 
         for light in Light.objects.filter(room=obj):
-            data = LightOn.timescale.filter(light=light).time_bucket("time", "1 hour")
+            data = LightOn.timescale.filter(
+                light=light, time__gt=(timezone.now() - timedelta(hours=1))
+            ).order_by("-time")
 
             lights[light.name] = {
                 "id": light.id,
@@ -179,8 +187,9 @@ class RoomDetailSerializer(RoomSerializer):
         return lights
 
     def _get_people(self, obj):
-
-        data = PeopleInRoom.timescale.filter(room=obj).time_bucket("time", "1 hour")
+        data = PeopleInRoom.timescale.filter(
+            room=obj, time__gt=(timezone.now() - timedelta(hours=1))
+        ).order_by("-time")
 
         people = {
             "times": [date.timestamp() for date in data.values_list("time", flat=True)],
@@ -190,10 +199,9 @@ class RoomDetailSerializer(RoomSerializer):
         return people
 
     def _get_temperature(self, obj):
-
-        data = TemperatureInRoom.timescale.filter(room=obj).time_bucket(
-            "time", "1 hour"
-        )
+        data = TemperatureInRoom.timescale.filter(
+            room=obj, time__gt=(timezone.now() - timedelta(hours=1))
+        ).order_by("-time")
 
         temps = {
             "times": [date.timestamp() for date in data.values_list("time", flat=True)],
@@ -203,8 +211,9 @@ class RoomDetailSerializer(RoomSerializer):
         return temps
 
     def _get_co2(self, obj):
-
-        data = Co2InRoom.timescale.filter(room=obj).time_bucket("time", "1 hour")
+        data = Co2InRoom.timescale.filter(
+            room=obj, time__gt=(timezone.now() - timedelta(hours=1))
+        ).order_by("-time")
 
         co2 = {
             "times": [date.timestamp() for date in data.values_list("time", flat=True)],
