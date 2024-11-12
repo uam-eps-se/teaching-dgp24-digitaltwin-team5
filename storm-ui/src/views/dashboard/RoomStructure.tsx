@@ -118,7 +118,9 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
       },
       yaxis: {
         labels: { show: false },
-        tickAmount: 2
+        tickAmount: 2,
+        min: -0.01,
+        max: 1.01
       },
       legend: {
         showForSingleSeries: true,

@@ -59,9 +59,9 @@ class RoomDashboardSerializer(RoomSerializer):
     def _get_doors(self, obj):
         doors: dict = {"total": 0, "open": 0}
 
-        for d in DoorConnectsRoom.objects.filter(room=obj.id):
+        for door in DoorConnectsRoom.objects.filter(room=obj.id):
             doors["total"] += 1
-            _ = DoorOpen.objects.filter(door=d.door).last()
+            _ = DoorOpen.objects.filter(door=door.door).last()
             if _ is not None and _.is_open:
                 doors["open"] += 1
 
@@ -70,9 +70,9 @@ class RoomDashboardSerializer(RoomSerializer):
     def _get_windows(self, obj):
         windows: dict = {"total": 0, "open": 0}
 
-        for w in Window.objects.filter(room=obj.id):
+        for window in Window.objects.filter(room=obj.id):
             windows["total"] += 1
-            _ = WindowOpen.objects.filter(window=w).last()
+            _ = WindowOpen.objects.filter(window=window).last()
             if _ is not None and _.is_open:
                 windows["open"] += 1
 
@@ -81,9 +81,9 @@ class RoomDashboardSerializer(RoomSerializer):
     def _get_ventilators(self, obj):
         ventilators: dict = {"total": 0, "on": 0}
 
-        for v in Ventilator.objects.filter(room=obj.id):
+        for ventilator in Ventilator.objects.filter(room=obj.id):
             ventilators["total"] += 1
-            _ = VentilatorOn.objects.filter(ventilator=v).last()
+            _ = VentilatorOn.objects.filter(ventilator=ventilator).last()
             if _ is not None and _.is_on:
                 ventilators["on"] += 1
 
@@ -117,54 +117,77 @@ class RoomDetailSerializer(RoomSerializer):
     def _get_doors(self, obj):
         doors: dict = {}
 
-        for d in DoorConnectsRoom.objects.filter(room=obj):
-            data = DoorOpen.timescale.filter(
-                door=d.door, time__gt=(timezone.now() - timedelta(hours=1))
-            ).order_by("-time")
+        for door in DoorConnectsRoom.objects.filter(room=obj):
+            last = DoorOpen.objects.filter(door=door.door).last()
+            if last is not None:
+                data = DoorOpen.timescale.filter(
+                    door=door.door, time__gt=(last.time - timedelta(hours=1))
+                ).order_by("-time")
 
-            doors[d.door.name] = {
-                "id": d.door.id,
-                "times": [
-                    date.timestamp() for date in data.values_list("time", flat=True)
-                ],
-                "values": list(data.values_list("is_open", flat=True)),
-            }
-
+                doors[door.door.name] = {
+                    "id": door.door.id,
+                    "times": [
+                        date.timestamp() for date in data.values_list("time", flat=True)
+                    ],
+                    "values": list(data.values_list("is_open", flat=True)),
+                }
+            else:
+                doors[door.door.name] = {
+                    "id": door.door.id,
+                    "times": [],
+                    "values": [],
+                }
         return doors
 
     def _get_windows(self, obj):
         windows: dict = {}
 
-        for w in Window.objects.filter(room=obj):
-            data = WindowOpen.timescale.filter(
-                window=w, time__gt=(timezone.now() - timedelta(hours=1))
-            ).order_by("-time")
+        for window in Window.objects.filter(room=obj):
+            last = WindowOpen.objects.filter(window=window).last()
+            if last is not None:
+                data = WindowOpen.timescale.filter(
+                    window=window, time__gt=(last.time - timedelta(hours=1))
+                ).order_by("-time")
 
-            windows[w.name] = {
-                "id": w.id,
-                "times": [
-                    date.timestamp() for date in data.values_list("time", flat=True)
-                ],
-                "values": list(data.values_list("is_open", flat=True)),
-            }
+                windows[window.name] = {
+                    "id": window.id,
+                    "times": [
+                        date.timestamp() for date in data.values_list("time", flat=True)
+                    ],
+                    "values": list(data.values_list("is_open", flat=True)),
+                }
+            else:
+                windows[window.name] = {
+                    "id": window.id,
+                    "times": [],
+                    "values": [],
+                }
 
         return windows
 
     def _get_ventilators(self, obj):
         ventilators: dict = {}
 
-        for v in Ventilator.objects.filter(room=obj):
-            data = VentilatorOn.timescale.filter(
-                ventilator=v, time__gt=(timezone.now() - timedelta(hours=1))
-            ).order_by("-time")
+        for ventilator in Ventilator.objects.filter(room=obj):
+            last = VentilatorOn.objects.filter(ventilator=ventilator).last()
+            if last is not None:
+                data = VentilatorOn.timescale.filter(
+                    ventilator=ventilator, time__gt=(last.time - timedelta(hours=1))
+                ).order_by("-time")
 
-            ventilators[v.name] = {
-                "id": v.id,
-                "times": [
-                    date.timestamp() for date in data.values_list("time", flat=True)
-                ],
-                "values": list(data.values_list("is_on", flat=True)),
-            }
+                ventilators[ventilator.name] = {
+                    "id": ventilator.id,
+                    "times": [
+                        date.timestamp() for date in data.values_list("time", flat=True)
+                    ],
+                    "values": list(data.values_list("is_on", flat=True)),
+                }
+            else:
+                ventilators[ventilator.name] = {
+                    "id": ventilator.id,
+                    "times": [],
+                    "values": [],
+                }
 
         return ventilators
 
@@ -172,17 +195,25 @@ class RoomDetailSerializer(RoomSerializer):
         lights: dict = {}
 
         for light in Light.objects.filter(room=obj):
-            data = LightOn.timescale.filter(
-                light=light, time__gt=(timezone.now() - timedelta(hours=1))
-            ).order_by("-time")
+            last = LightOn.objects.filter(light=light).last()
+            if last is not None:
+                data = LightOn.timescale.filter(
+                    light=light, time__gt=(last.time - timedelta(hours=1))
+                ).order_by("-time")
 
-            lights[light.name] = {
-                "id": light.id,
-                "times": [
-                    date.timestamp() for date in data.values_list("time", flat=True)
-                ],
-                "values": list(data.values_list("is_on", flat=True)),
-            }
+                lights[light.name] = {
+                    "id": light.id,
+                    "times": [
+                        date.timestamp() for date in data.values_list("time", flat=True)
+                    ],
+                    "values": list(data.values_list("is_on", flat=True)),
+                }
+            else:
+                lights[light.name] = {
+                    "id": light.id,
+                    "times": [],
+                    "values": [],
+                }
 
         return lights
 
