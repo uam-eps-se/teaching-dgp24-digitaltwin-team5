@@ -2,134 +2,79 @@
 This module defines the serialized representation of the room dashboard.
 """
 
-from api.models.base import Ventilator, Light, Window
+from api.models.base import Room, Ventilator, Light, Window
 from api.models.base import DoorConnectsRoom
 from api.models.metrics import PeopleInRoom, Co2InRoom, TemperatureInRoom
 from api.models.events import DoorOpen, VentilatorOn, LightOn, WindowOpen
-from api.serializers.base import RoomSerializer
+
+from rest_framework import serializers
 
 
-class RoomDashboardSerializer(RoomSerializer):
+class RoomDashboardSerializer(serializers.ModelSerializer):
     """
     This class serializes generic room information to be shown in the dashboard
     at the root url.
     """
 
-    def _get_doors(self, obj):
+    devices = serializers.SerializerMethodField()
+    metrics = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Room
+        fields = ["id", "name", "size", "devices", "metrics"]
+
+    def get_devices(self, obj):
         """
-        Obtains the number of opened/total doors in a room.
+        Obtains generic device information for a room.
 
         Args:
-            obj (Room): room from where the information is extracted.
+            obj (Room): Room from where information is extracted
 
         Returns:
-            dict: Dictionary with the number of opened and total doors.
+            dict: json-like dictionary with device information.
         """
-        doors: dict = {"total": 0, "open": 0}
+        devs = {
+            "doors": (DoorConnectsRoom, DoorOpen, "is_open"),
+            "windows": (Window, WindowOpen, "is_open"),
+            "ventilators": (Ventilator, VentilatorOn, "is_on"),
+            "lights": (Light, LightOn, "is_on"),
+        }
 
-        for door in DoorConnectsRoom.objects.filter(room=obj.id):
-            doors["total"] += 1
-            _ = DoorOpen.objects.filter(door=door.door).last()
-            if _ is not None and _.is_open:
-                doors["open"] += 1
+        devices = {
+            "doors": {"total": 0, "open": 0},
+            "windows": {"total": 0, "open": 0},
+            "ventilators": {"total": 0, "on": 0},
+            "lights": {"total": 0, "on": 0},
+        }
 
-        return doors
+        for key, (model, event, attr) in devs.items():
+            for device in model.objects.filter(room=obj):
+                devices[key]["total"] += 1
+                device = device.door if key == "doors" else device
+                _ = event.objects.filter(**{f"{key[:-1]}": device}).last()
+                if _ is not None and getattr(_, attr):
+                    devices[key][f"{attr[3:]}"] += 1
+        return devices
 
-    def _get_windows(self, obj):
+    def get_metrics(self, obj):
         """
-        Obtains the number of opened/total windows in a room.
+        Obtains real-time metrics for a room.
 
         Args:
-            obj (Room): room from where the information is extracted.
+            obj (Room): Room from where information is extracted
 
         Returns:
-            dict: Dictionary with the number of opened and total windows.
+            dict: json-like dictionary with metric information.
         """
-        windows: dict = {"total": 0, "open": 0}
+        mets = {
+            "people": (PeopleInRoom, "no_people_in_room"),
+            "co2": (Co2InRoom, "co2"),
+            "temperature": (TemperatureInRoom, "temp"),
+        }
+        metrics = {}
 
-        for window in Window.objects.filter(room=obj.id):
-            windows["total"] += 1
-            _ = WindowOpen.objects.filter(window=window).last()
-            if _ is not None and _.is_open:
-                windows["open"] += 1
+        for key, (model, attr) in mets.items():
+            _ = model.objects.filter(room=obj).last()
+            metrics[key] = 0 if _ is None else getattr(_, attr)
 
-        return windows
-
-    def _get_ventilators(self, obj):
-        """
-        Obtains the number of on/total ventilators in a room.
-
-        Args:
-            obj (Room): room from where the information is extracted.
-
-        Returns:
-            dict: Dictionary with the number of on and total ventilators.
-        """
-        ventilators: dict = {"total": 0, "on": 0}
-
-        for ventilator in Ventilator.objects.filter(room=obj.id):
-            ventilators["total"] += 1
-            _ = VentilatorOn.objects.filter(ventilator=ventilator).last()
-            if _ is not None and _.is_on:
-                ventilators["on"] += 1
-
-        return ventilators
-
-    def _get_lights(self, obj):
-        """
-        Obtains the number of on/total lights in a room.
-
-        Args:
-            obj (Room): room from where the information is extracted.
-
-        Returns:
-            dict: Dictionary with the number of on and total lights.
-        """
-        lights: dict = {"total": 0, "on": 0}
-
-        for light in Light.objects.filter(room=obj.id):
-            lights["total"] += 1
-            _ = LightOn.objects.filter(light=light).last()
-            if _ is not None and _.is_on:
-                lights["on"] += 1
-
-        return lights
-
-    def _get_people(self, obj):
-        """
-        Obtains the current number of people in a room.
-
-        Args:
-            obj (Room): room from where the information is extracted.
-
-        Returns:
-            int: Number of people.
-        """
-        _ = PeopleInRoom.objects.filter(room=obj).last()
-        return 0 if _ is None else _.no_people_in_room
-
-    def _get_co2(self, obj):
-        """
-        Obtains the current Co2 value in a room.
-
-        Args:
-            obj (Room): room from where the information is extracted.
-
-        Returns:
-            int: Co2 value.
-        """
-        _ = Co2InRoom.objects.filter(room=obj).last()
-        return 0 if _ is None else _.co2
-
-    def _get_temperature(self, obj):
-        """
-        Obtains the current temperature in a room.
-
-        Args:
-            obj (Room): room from where the information is extracted.
-
-        Returns:
-            int: Temperature value.
-        """
-        _ = TemperatureInRoom.objects.filter(room=obj).last()
-        return 0 if _ is None else _.temp
+        return metrics
