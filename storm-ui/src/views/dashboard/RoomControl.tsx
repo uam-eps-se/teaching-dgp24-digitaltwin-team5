@@ -40,8 +40,9 @@ const DeviceActionCell = (props: {
   actionTrue: string
   actionFalse: string
   getTooltip: (name: string, action: string) => string
+  updateStatus: (newStatus: boolean) => void
 }) => {
-  const { row, type, actionTrue, actionFalse, getTooltip } = props
+  const { row, type, actionTrue, actionFalse, getTooltip, updateStatus } = props
   const [disabled, setDisabled] = useState<boolean>(false)
   const [active, setActive] = useState<boolean>(row.status)
 
@@ -49,8 +50,7 @@ const DeviceActionCell = (props: {
     const res: any = await updateDeviceAction(row.id as number, type, !active)
 
     if (!('error' in res)) {
-      // TODO Check if button actually updates with params.row.status value
-      row.status = !active
+      updateStatus(!active)
       setActive(!active)
     }
 
@@ -79,9 +79,8 @@ const DeviceActionCell = (props: {
 const paginationModel = { page: 0, pageSize: 5 }
 
 function ControlTable(props: { devices: DeviceStatus[]; type: string; title: string | undefined }) {
-  const devices = props.devices
-  const type = props.type
-  const title = props.title
+  const { devices, type, title } = props
+  const [devicesRows, setDevicesRows] = useState(devices)
 
   let actionTrue: string = 'On'
   let actionFalse: string = 'Off'
@@ -137,6 +136,11 @@ function ControlTable(props: { devices: DeviceStatus[]; type: string; title: str
           actionTrue={actionTrue}
           actionFalse={actionFalse}
           getTooltip={getTooltip}
+          updateStatus={(newStatus: boolean) => {
+            setDevicesRows(
+              devices.map(device => (device.id === params.row.id ? { ...device, status: newStatus } : device))
+            )
+          }}
         />
       )
     }
@@ -145,7 +149,7 @@ function ControlTable(props: { devices: DeviceStatus[]; type: string; title: str
   return (
     <Paper sx={{ height: 'auto', width: '100%' }}>
       <DataGrid
-        rows={devices}
+        rows={devicesRows}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5]}
