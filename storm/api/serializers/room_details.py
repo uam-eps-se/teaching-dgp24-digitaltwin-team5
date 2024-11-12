@@ -54,7 +54,6 @@ class RoomDetailSerializer(serializers.ModelSerializer):
                 data = event.timescale.filter(**query, time__gt=time).order_by("-time")
 
                 devices[key][device.id] = {
-                    "id": device.id,
                     "name": device.name,
                     "current": getattr(last, attr) if last is not None else False,
                     "times": [

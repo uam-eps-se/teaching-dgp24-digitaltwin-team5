@@ -88,11 +88,11 @@ function RoomForm(props: { room?: RoomDetailData }) {
     updateDoorsData()
   }
 
-  const getDeviceData = (devices: Record<string, RoomDevice>) => {
+  const getDeviceData = (devices: Record<number, RoomDevice>) => {
     return Object.entries(devices).map(value => {
       return {
-        id: value[1].id,
-        name: value[0]
+        id: Number(value[0]),
+        name: value[1].name
       }
     })
   }
@@ -107,8 +107,8 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
         const oldDoors = Object.entries(r.devices.doors).map(value => {
           return {
-            id: value[1].id,
-            name: value[0],
+            id: Number(value[0]),
+            name: value[1].name,
             rooms: [r.id]
           }
         })

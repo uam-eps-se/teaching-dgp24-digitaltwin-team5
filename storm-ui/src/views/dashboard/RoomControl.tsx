@@ -157,12 +157,12 @@ function ControlTable(props: { devices: DeviceStatus[]; type: string; title: str
 export default function RoomControl(props: { room: RoomDetailData }) {
   const room = props.room
 
-  const mapRoomDevices = (rd: Record<string, RoomDevice>): DeviceStatus[] =>
-    Object.entries(rd).map(([name, device]) => {
+  const mapRoomDevices = (rd: Record<number, RoomDevice>): DeviceStatus[] =>
+    Object.entries(rd).map(([deviceId, device]) => {
       return {
-        id: device.id,
-        name: name,
-        status: device.values[0]
+        id: Number(deviceId),
+        name: device.name,
+        status: device.values[0] // TODO change to device.current
       }
     })
 
