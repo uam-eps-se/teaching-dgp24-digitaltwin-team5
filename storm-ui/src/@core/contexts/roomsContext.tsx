@@ -3,11 +3,11 @@
 import type { ReactNode, Dispatch, SetStateAction } from 'react'
 import { createContext, useState } from 'react'
 
-import type { RoomSummaryRow } from '../types'
+import type { RoomSummary } from '../types'
 import { fetchRooms } from '../utils/data'
 
 type RoomsData = {
-  data: RoomSummaryRow[]
+  data: RoomSummary[]
   fetched: boolean
 }
 

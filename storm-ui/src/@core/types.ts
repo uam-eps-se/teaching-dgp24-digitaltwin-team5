@@ -17,10 +17,18 @@ export type ThemeColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' 
 
 /* ROOMS */
 
-export type RoomSummaryRow = {
+export enum SensorStatus {
+  NORMAL = 0,
+  HIGH = 1,
+  DANGER = 2
+}
+
+export type RoomSummary = {
   id: number
   name: string
   size: number
+  tempStatus: SensorStatus
+  co2Status: SensorStatus
   devices: {
     doors: {
       open: number
@@ -76,6 +84,8 @@ export type RoomDetailData = {
   id: number
   name: string
   size: number
+  tempStatus: SensorStatus
+  co2Status: SensorStatus
   devices: RoomStructureData
   metrics: RoomRealtimeData
 }
@@ -99,4 +109,24 @@ export type AvailableDevices = {
 
 export type DeviceStatus = Device & {
   status: boolean
+}
+
+/* LAYOUT CONTEXT */
+
+export enum AlertType {
+  INFO = 0,
+  WARNING = 1,
+  DANGER = 2
+}
+
+export type Alert = {
+  type: AlertType
+  content: string
+  roomId: number
+}
+
+export type RoomItem = {
+  id: number
+  name: string
+  alerts: Array<Alert>
 }

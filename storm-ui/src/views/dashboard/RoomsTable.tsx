@@ -16,7 +16,7 @@ import { mdiPencil, mdiTrashCan } from '@mdi/js'
 
 import Icon from '@mdi/react'
 
-import type { RoomSummaryRow } from '@core/types'
+import type { RoomSummary } from '@core/types'
 import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal'
 
 const colHeader = (name: string, subtitle: string) => {
@@ -48,7 +48,7 @@ const QuickSearchToolbar = () => {
   )
 }
 
-const DeleteRoomCell = (props: { row: RoomSummaryRow }) => {
+const DeleteRoomCell = (props: { row: RoomSummary }) => {
   const [openDelete, setOpenDelete] = useState(false)
   const { row } = props
 
@@ -66,7 +66,7 @@ const DeleteRoomCell = (props: { row: RoomSummaryRow }) => {
 
 const paginationModel = { page: 0, pageSize: 10 }
 
-export default function DataTable(props: { rooms: RoomSummaryRow[] }) {
+export default function DataTable(props: { rooms: RoomSummary[] }) {
   const rooms = props.rooms
   const router = useRouter()
 
