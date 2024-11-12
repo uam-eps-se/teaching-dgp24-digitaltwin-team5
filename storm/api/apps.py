@@ -5,8 +5,9 @@ automatic event and metric generation every five seconds.
 
 import decimal
 import random
-import signal
-import sys
+
+# import signal
+# import sys
 from threading import Thread, Event
 from django.utils import timezone
 from django.apps import AppConfig
@@ -39,7 +40,8 @@ class RealTimeModelUpdater(Thread):
         """
         Generates new people values for each room.
         """
-        from api.models import PeopleInRoom, Room
+        from api.models.base import Room
+        from api.models.metrics import PeopleInRoom
 
         for r in Room.objects.all():
 
@@ -79,7 +81,8 @@ class RealTimeModelUpdater(Thread):
         """
         Generates new Co2 values for each room.
         """
-        from api.models import Co2InRoom, Room
+        from api.models.base import Room
+        from api.models.metrics import Co2InRoom
 
         for r in Room.objects.all():
             # Get most recent co2 value
@@ -113,7 +116,8 @@ class RealTimeModelUpdater(Thread):
         """
         Generates new temperature values for each room.
         """
-        from api.models import TemperatureInRoom, Room
+        from api.models.base import Room
+        from api.models.metrics import TemperatureInRoom
 
         for r in Room.objects.all():
             # Get most recent temp value
@@ -158,14 +162,16 @@ class ApiConfig(AppConfig):
         """
         Graceful shutdown method for the data generation thread.
         """
-        self.thread.stopped.set()
-        sys.exit(0)
+        # self.thread.stopped.set()
+        # sys.exit(0)
+        pass
 
     def ready(self):
         """
         Creates a data-generation thread, executed at start-up time. Implies
         the need for the --no-reload flag when starting the server.
         """
-        self.thread = RealTimeModelUpdater()
-        self.thread.start()
-        signal.signal(signal.SIGINT, self.handle)
+        # self.thread = RealTimeModelUpdater()
+        # self.thread.start()
+        # signal.signal(signal.SIGINT, self.handle)
+        pass

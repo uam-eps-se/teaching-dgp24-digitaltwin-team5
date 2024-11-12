@@ -7,8 +7,12 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 
 from django.contrib import admin
 from django.urls import path
-from api.views import RoomDetailAPIView, RoomsAPIView
-from api.views import DevicesAPIView, DoorsAPIView, DataAPIView
+from api.views.data import DataAPIView
+from api.views.devices import DevicesAPIView
+from api.views.doors import DoorsAPIView
+from api.views.room_detail import RoomDetailAPIView
+from api.views.rooms import RoomsAPIView
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
