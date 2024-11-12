@@ -1,65 +1,77 @@
+"""
+This module defines the views returned by all urls in the application
+"""
+
+# regular imports
+from datetime import datetime
+from io import BytesIO
+import json
+import pandas as pd
+
+# django imports
+from django.utils import timezone
 from django.http import Http404, HttpResponse
+from django.db import models
+from django.db.models import Count
+
+# restframework imports
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.request import Request
-from api.serializers import *
-from api.models import *
-from django.db import models
-from django.db.models import Count
-import pandas as pd
-from datetime import datetime
-from io import BytesIO
-import json
-from django.utils import timezone
+
+# API imports
+from api.serializers import RoomDashboardSerializer, RoomDetailSerializer
+from api.serializers import WindowSerializer, DoorSerializer
+from api.serializers import VentilatorSerializer, LightSerializer
+from api.models import Room, Door, Ventilator, Light, Window
+from api.models import DoorConnectsRoom
+from api.models import PeopleInRoom
+from api.models import DoorOpen, VentilatorOn, LightOn, WindowOpen
 
 
 class DevicesAPIView(APIView):
+    """
+    Defines views for all end-points associated to `individual` devices,
+    which are only owned by one room.
+    """
+
     allowed_devices = ["GET", "POST", "DELETE", "PUT", "PATCH"]
 
-    def get(self, request, format=None):
+    def get(self, *_):
         """
-        Retrieves all devices (not doors) which are not associated to any  room.
+        Retrieves all `individual` devices not owned by empty room.
         A non-associated device is the product of a non-empty room deletion.
 
-        Used on both room CREATION and EDITION.
-
+        Used on room CREATION and EDITION.
         """
 
         # Dictionary with classes and serializers for all devices
         dmodels = {
-            "windows": [Window, WindowSerializer],
-            "ventilators": [Ventilator, VentilatorSerializer],
-            "lights": [Light, LightSerializer],
+            "windows": (Window, WindowSerializer),
+            "ventilators": (Ventilator, VentilatorSerializer),
+            "lights": (Light, LightSerializer),
         }
         data = {}
 
-        for key in dmodels:
-            # Search for unasigned devices
-            devs = dmodels[key][0].objects.filter(room=None)
-
-            # Serialize devices
-            data[key] = dmodels[key][1](devs, many=True).data
+        # Serialize non-associated devices
+        for key, (model, serializer) in dmodels.items():
+            devs = model.objects.filter(room=None)
+            data[key] = serializer(devs, many=True).data
 
         return Response(data)
 
     def post(self, request: Request):
         """
-        Creates a new device of a given type. This method endpoint should only
-        be called from room EDITION, and not during room CREATION.
+        Creates a new device of a given type. Used on EDITION.
 
-        This method  expects  to  receive  the  required  "name"  and  "room_id"
-        parameters to create a new device, and an additional field "type", which
-        must be one of the following:
-
-        - "window"
-        - "ventilator"
-        - "light"
+        This method expects to receive the parameters specified in
+        `jsons/devices/post.json`, where "type" can be either "window",
+        "ventilator" or "light".
 
         Args:
             request (dict): A JSON-like dictionary
         """
-
         # Dictionary with classes for all devices
         dtypes: dict[str, models.Model] = {
             "window": Window,
@@ -97,15 +109,11 @@ class DevicesAPIView(APIView):
 
     def put(self, request: Request):
         """
-        Assigns a room to a device. Used on both room CREATION and EDITION.
+        Assigns a device to a room. Used on CREATION and EDITION.
 
-        This method  expects  to  receive  the  required  "id"  and  "room_id"
-        parameters to modify a device, and an additional field "type", which
-        must be one of the following:
-
-        - "window"
-        - "ventilator"
-        - "light"
+        This method expects to receive the parameters specified in
+        `jsons/devices/put.json`, where "type" can be either "window",
+        "ventilator" or "light".
 
         Args:
             request (dict): A JSON-like dictionary
@@ -119,12 +127,12 @@ class DevicesAPIView(APIView):
         }
 
         # Obtain request parameters
-        id = request.data.get("id", None)
+        identifier = request.data.get("id", None)
         room_id = request.data.get("room_id", None)
         dtype = request.data.get("type", None)
 
         # Error Case: Missing Parameters
-        if id is None or room_id is None or dtype is None:
+        if identifier is None or room_id is None or dtype is None:
             return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Error Case: Wrong device kind
@@ -140,7 +148,7 @@ class DevicesAPIView(APIView):
         if room is None:
             return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
-        dev = dtypes[dtype].objects.filter(id=id).first()
+        dev = dtypes[dtype].objects.filter(id=identifier).first()
 
         # Error case: Invalid device
         if dev is None:
@@ -158,15 +166,11 @@ class DevicesAPIView(APIView):
 
     def delete(self, request: Request):
         """
-        Deletes a new device of a given type. This method endpoint  should  only
-        be called from room edition, and not during room creation.
+        Deletes a new device of a given type. Used on EDITION.
 
-        This method expects to receive the device's id through  an  "id"  field,
-        and an additional field "type", which must be one of the following:
-
-        - "window"
-        - "ventilator"
-        - "light"
+        This method expects to receive the parameters specified in
+        `jsons/devices/delete.json`, where "type" can be either "window",
+        "ventilator" or "light".
 
         Args:
             request (dict): A JSON-like dictionary
@@ -179,11 +183,11 @@ class DevicesAPIView(APIView):
         }
 
         # Obtain request parameters
-        id = request.data.get("id", None)
+        identifier = request.data.get("id", None)
         dtype = request.data.get("type", None)
 
         # Error Case: Missing Parameters
-        if id is None or dtype is None:
+        if identifier is None or dtype is None:
             return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Error Case: Wrong device kind
@@ -193,7 +197,7 @@ class DevicesAPIView(APIView):
             )
 
         # Remove device from the database
-        dev = dtypes[dtype].objects.filter(id=id).first()
+        dev = dtypes[dtype].objects.filter(id=identifier).first()
 
         # Error case: Invalid device
         if dev is None:
@@ -205,20 +209,15 @@ class DevicesAPIView(APIView):
 
     def patch(self, request: Request):
         """
-        Updates a device status. To be used on CONTROL PANEL.
+        Updates a device status. Used on CONTROL PANEL.
 
-        This method  expects  to  receive  the  required  "id"  and "action"
-        parameters to modify a device, and an additional field "type", which
-        must be one of the following:
-
-        - "window"
-        - "ventilator"
-        - "light"
+        This method expects to receive the parameters specified in
+        `jsons/devices/patch.json`, where "type" can be either "window",
+        "ventilator" or "light".
 
         Args:
             request (dict): A JSON-like dictionary
         """
-
         # Dictionary with classes for all devices
         dtypes: dict[str, models.Model] = {
             "window": Window,
@@ -239,12 +238,12 @@ class DevicesAPIView(APIView):
         }
 
         # Obtain request parameters
-        id = request.data.get("id", None)
+        identifier = request.data.get("id", None)
         dtype = request.data.get("type", None)
         action = request.data.get("action", None)
 
         # Error Case: Missing Parameters
-        if id is None or action is None or dtype is None:
+        if identifier is None or action is None or dtype is None:
             return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         # Error Case: Wrong device kind
@@ -254,13 +253,13 @@ class DevicesAPIView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        dev = dtypes[dtype].objects.filter(id=id).first()
+        dev = dtypes[dtype].objects.filter(id=identifier).first()
 
         # Error case: Invalid device
         if dev is None:
             return Response("Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
 
-        if type(action) is not bool:
+        if not isinstance(action, bool):
             return Response("Invalid action!", status=status.HTTP_400_BAD_REQUEST)
 
         # Create new dev status
@@ -268,16 +267,22 @@ class DevicesAPIView(APIView):
         setattr(ds, dtype, dev)
         setattr(ds, dactions[dtype], action)
         ds.save()
-        print(getattr(ds, dactions[dtype]))
         return Response(f"Device {dev.name} assigned the status {action}!")
 
 
 class DoorsAPIView(APIView):
+    """
+    Defines views for all end-points associated to doors, which chan be owned
+    by up to two rooms.
+    """
+
     allowed_methods = ["GET", "PUT", "POST", "DELETE", "PATCH"]
 
-    def get(self, request, format=None):
+    def get(self, *_):
         """
-        Retrieves all doors with less than two rooms.
+        Retrieves all doors with less than two rooms. Used on CREATION and
+        EDITION. This method expects to receive the parameters specified in
+        `jsons/doors/get.json`.
         """
         ids = (
             DoorConnectsRoom.objects.values("door")
@@ -292,11 +297,8 @@ class DoorsAPIView(APIView):
 
     def post(self, request: Request):
         """
-        Creates a new door. This method endpoint should only be called from room
-        edition, and not during room creation.
-
-        This method  expects  to  receive  the  required  "name"  and  "room_id"
-        parameters to create a new door.
+        Creates a new door. Used on EDITION. This method expects to receive the
+        parameters specified in `jsons/doors/post.json`.
 
         Args:
             request (dict): A JSON-like dictionary.
@@ -323,12 +325,20 @@ class DoorsAPIView(APIView):
         return Response(f"Door {door.name} created successfully!")
 
     def put(self, request: Request):
+        """
+        Connects a door to a room new door. Used on EDITION and CREATION.
+        This method expects to receive the parameters specified in
+        `jsons/doors/put.json`.
+
+        Args:
+            request (dict): A JSON-like dictionary.
+        """
         # Obtain request parameters
-        id = request.data.get("id", None)
+        identifier = request.data.get("id", None)
         room_id = request.data.get("room_id", None)
 
         # Error Case: Missing Parameters
-        if id is None or room_id is None:
+        if identifier is None or room_id is None:
             return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         room = Room.objects.filter(id=room_id).first()
@@ -337,7 +347,7 @@ class DoorsAPIView(APIView):
         if room is None:
             return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
-        door = Door.objects.filter(id=id).first()
+        door = Door.objects.filter(id=identifier).first()
 
         # Error Case: Invalid door
         if door is None:
@@ -352,34 +362,28 @@ class DoorsAPIView(APIView):
             return Response(
                 f"Given room id {room_id} is already connected to this door!"
             )
-        elif connected_rooms.count() >= 2:
-            return Response(f"Given door id {id} is connected to two rooms!")
-        else:
-            droom = DoorConnectsRoom(door=door, room=room)
-            droom.save()
+        if connected_rooms.count() >= 2:
+            return Response(f"Given door id {identifier} is connected to two rooms!")
+
+        droom = DoorConnectsRoom(door=door, room=room)
+        droom.save()
+
         return Response(f"Door {door.name} updated successfully!")
 
     def delete(self, request: Request):
         """
-        Deletes a new device of a given type. This method endpoint  should  only
-        be called from room edition, and not during room creation.
-
-        This method expects to receive the device's id through  an  "id"  field,
-        and an additional field "type", which must be one of the following:
-
-        - "window"
-        - "ventilator"
-        - "light"
+        Deletes a door. Used on EDITION. This method expects to receive the
+        parameters specified in `jsons/doors/put.json`.
 
         Args:
             request (dict): A JSON-like dictionary
         """
         # Obtain request parameters
-        id = request.data.get("id", None)
+        identifier = request.data.get("id", None)
         room_id = request.data.get("room_id", None)
 
         # Error Case: Missing Parameters
-        if id is None or room_id is None:
+        if identifier is None or room_id is None:
             return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         room = Room.objects.filter(id=room_id).first()
@@ -388,7 +392,7 @@ class DoorsAPIView(APIView):
         if room is None:
             return Response("Invalid room id!", status=status.HTTP_400_BAD_REQUEST)
 
-        door = Door.objects.filter(id=id).first()
+        door = Door.objects.filter(id=identifier).first()
 
         # Error Case: Invalid door
         if door is None:
@@ -412,18 +416,27 @@ class DoorsAPIView(APIView):
         return Response(f"Door {door.name} updated successfully!")
 
     def patch(self, request: Request):
+        """
+        Updates a door status. Used on CONTROL PANEL.
+
+        This method expects to receive the parameters specified in
+        `jsons/doors/patch.json`.
+
+        Args:
+            request (dict): A JSON-like dictionary
+        """
         # Obtain request parameters
-        id = request.data.get("id", None)
+        identifier = request.data.get("id", None)
         action = request.data.get("action", None)
 
         # Error Case: Missing Parameters
-        if id is None or action is None:
+        if identifier is None or action is None:
             return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
-        if type(action) is not bool:
+        if not isinstance(action, bool):
             return Response("Invalid action!", status=status.HTTP_400_BAD_REQUEST)
 
-        door = Door.objects.filter(id=id).first()
+        door = Door.objects.filter(id=identifier).first()
 
         # Error Case: Invalid door
         if door is None:
@@ -436,15 +449,32 @@ class DoorsAPIView(APIView):
 
 
 class RoomsAPIView(APIView):
+    """
+    Defines views for all end-points associated to generic room information
+    that is shown on the dashboard.
+    """
+
     allowed_methods = ["GET", "POST", "DELETE"]
 
     def get_object(self, pk):
+        """
+        Retrieves a room with the given pk.
+
+        Args:
+            pk (int): Room identifier.
+
+        Raises:
+            Http404: Room does not exist.
+
+        Returns:
+            Room: Record in the database.
+        """
         try:
             return Room.objects.get(pk=pk)
-        except Room.DoesNotExist:
-            raise Http404
+        except Exception as exc:
+            raise Http404(f"Room with id {pk} does not exist!") from exc
 
-    def get(self, request: Request):
+    def get(self, *_):
         """
         Retrieves a list of all existent rooms for the main dashboard.
         """
@@ -454,24 +484,18 @@ class RoomsAPIView(APIView):
 
     def post(self, request: Request):
         """
-        Creates a new room from the given request.
+        Creates a new room from the given request. Used on CREATION.
 
-        This method expects to receive the required "name" and "size" values
-        for creating a new room, and all initial devices from the "devices"
-        key in the dictionary.
+        This method expects to receive the parameters specified in
+        `jsons/rooms/post.json`. Devices sent via this endpoint can be either
+        of the following:
 
-        Devices sent via this endpoint should follow the following format:
+        "devices": ["type": [{"name": str}, {"id": int}, ...], ...]
 
-        "devices": [
-            "type": [
-                {"name": str},  # new device
-                {"id": int}     # existent device
-            ]
-        ]
-
-        Where an entry with the "name" field signifies the creation of a new
+        An entry with the "name" field signifies the creation of a new
         device, and an entry with the "id" field signifies the association of
-        an existent device with the room.
+        an existent device with the room. For "type", it can be "windows",
+        "ventilators", "lights" or "doors".
 
         Args:
             request (dict): A JSON-like dictionary.
@@ -509,7 +533,9 @@ class RoomsAPIView(APIView):
 
     def delete(self, request: Request):
         """
-        Removes a room from the database, from a given "id" field in the
+        Removes a room from the database. This method expects to receive
+        the parameters specified in `jsons/rooms/delete.json`.
+
         Args:
             request (dict): A JSON-like dictionary.
 
@@ -517,7 +543,7 @@ class RoomsAPIView(APIView):
         room = self.get_object(request.data.get("id", None))
         room.delete()
         return Response(
-            f"Room with id {id} successfully deleted!",
+            f"Room with id {request.data.get("id", None)} successfully deleted!",
             status=status.HTTP_204_NO_CONTENT,
         )
 
@@ -531,10 +557,10 @@ class RoomsAPIView(APIView):
         """
         # Process each door in request
         for d in doors:
-            id = d.get("id", None)
+            identifier = d.get("id", None)
             name = d.get("name", None)
             # If no id is received, create new door and connection
-            if id is None:
+            if identifier is None:
                 if name is not None:
                     d_ = Door(name=name)
                     d_.save()
@@ -543,7 +569,7 @@ class RoomsAPIView(APIView):
 
             # If an id is received, create a connection when possible
             else:
-                d_ = Door.objects.filter(id=id).first()
+                d_ = Door.objects.filter(id=identifier).first()
                 if (
                     d_ is not None
                     and DoorConnectsRoom.objects.filter(door=d_).count() < 2
@@ -561,17 +587,17 @@ class RoomsAPIView(APIView):
         """
         # Process each window in request
         for w in windows:
-            id = w.get("id", None)
+            identifier = w.get("id", None)
             name = w.get("name", None)
 
             # If no id is received, create new window for the room
-            if id is None:
+            if identifier is None:
                 if name is not None:
                     w_ = Window(name=name, room=room)
                     w_.save()
             # If an id is received, update ownership for an empty window
             else:
-                w_ = Window.objects.filter(id=id).first()
+                w_ = Window.objects.filter(id=identifier).first()
 
                 if w_ is not None:
                     w_.room = room if w_.room is None else w_.room
@@ -587,18 +613,18 @@ class RoomsAPIView(APIView):
         """
         # Process each ventilator in request
         for v in ventilators:
-            id = v.get("id", None)
+            identifier = v.get("id", None)
             name = v.get("name", None)
 
             # If no id is received, create new window for the room
-            if id is None:
+            if identifier is None:
                 if name is not None:
                     v_ = Ventilator(name=name, room=room)
                     v_.save()
             # If an id is received,
             # update ownership for an empty ventilator when possible
             else:
-                v_ = Ventilator.objects.filter(id=id).first()
+                v_ = Ventilator.objects.filter(id=identifier).first()
 
                 if v_ is not None:
                     v_.room = room if v_.room is None else v_.room
@@ -614,51 +640,69 @@ class RoomsAPIView(APIView):
         """
         # Process each light in request
         for light in lights:
-            id = light.get("id", None)
+            identifier = light.get("id", None)
             name = light.get("name", None)
 
             # If no id is received, create new window for the room
-            if id is None:
+            if identifier is None:
                 if name is not None:
                     l_ = Light(name=light["name"], room=room)
                     l_.save()
             # If an id is received,
             # update ownership for an empty ventilator when possible
             else:
-                l_ = Light.objects.filter(id=id).first()
+                l_ = Light.objects.filter(id=identifier).first()
                 if l_ is not None:
                     l_.room = room if l_.room is None else l_.room
                     l_.save()
 
 
 class RoomDetailAPIView(APIView):
+    """
+    Defines views for all end-points associated to real-time room information
+    that is shown on the room details page.
+    """
+
     allowed_methods = ["GET", "PUT"]
 
     def get_object(self, pk):
+        """
+        Retrieves a room with the given pk.
+
+        Args:
+            pk (int): Room identifier.
+
+        Raises:
+            Http404: Room does not exist.
+
+        Returns:
+            Room: Record in the database.
+        """
         try:
             return Room.objects.get(pk=pk)
-        except Room.DoesNotExist:
-            raise Http404
+        except Exception as exc:
+            raise Http404(f"Room with id {pk} does not exist!") from exc
 
-    def get(self, request, id):
+    def get(self, _, identifier):
         """
         Retrieve detailed room information.
 
         Args:
-            id (int): Room identifier.
+            identifier (int): Room identifier.
         """
-        post = self.get_object(id)
+        post = self.get_object(identifier)
         serializer = RoomDetailSerializer(post)
         return Response(serializer.data)
 
-    def put(self, request, id):
+    def put(self, request, identifier):
         """
-        Update base room information
+        Updates room information. Used on EDITION. This method expects to
+        receive the parameters specified in `jsons/rooms/put.json`.
 
         Args:
-            request (dict): A JSON-like dictionary
+            request (dict): A JSON-like dictionary.
         """
-        post = self.get_object(id)
+        post = self.get_object(identifier)
         serializer = RoomDetailSerializer(post, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -667,8 +711,16 @@ class RoomDetailAPIView(APIView):
 
 
 class DataAPIView(APIView):
-    def get(self, request: Request):
+    """
+    Defines views for all end-points associated to database import and export
+    operations done by the user.
+    """
 
+    def get(self, *_):
+        """
+        Exports the database as an Excel file with existent rooms, door and
+        devices. Metrics and events are not exported.
+        """
         mods: list[models.Model] = [
             Room,
             Window,
@@ -692,6 +744,16 @@ class DataAPIView(APIView):
         return response
 
     def post(self, request: Request):
+        """
+        Imports database entries from a given xlsx file. Expects to receive
+        rooms, devices, doors, events and people metrics.
+
+        Args:
+            request (Request): _description_
+
+        Returns:
+            _type_: _description_
+        """
         file = request.data.get("database", None)
         xls = pd.ExcelFile(file)
         room_ids = self.import_rooms(xls)
@@ -713,7 +775,7 @@ class DataAPIView(APIView):
         Args:
             xls (pd.ExcelFile): Excel File.
         Returns:
-            A dictionary with the previous room ids
+            A dictionary with the previous room ids.
         """
         room_ids = {}
 
@@ -745,8 +807,7 @@ class DataAPIView(APIView):
 
         Args:
             xls (pd.ExcelFile): Excel File.
-        Returns:
-            A dictionary with the previous room ids
+            room_ids (dict): Previous room ids in the file.
         """
         vent_ids = {}
 
@@ -787,13 +848,11 @@ class DataAPIView(APIView):
         should contain the following fields:
 
         - Window: ID, Room_Id
-        - VentilatorOn: Timestamp, Window_ID, isOpen
-
+        - WindowOpen: Timestamp, Window_ID, isOpen
 
         Args:
             xls (pd.ExcelFile): Excel File.
-        Returns:
-            A dictionary with the previous room ids
+            room_ids (dict): Previous room ids in the file.
         """
         win_ids = {}
 
@@ -833,13 +892,13 @@ class DataAPIView(APIView):
         This method expects to use the worksheets 'Door', 'DoorOpen' and
         'Door_Connects_Room', which should contain the following fields:
 
-        - Window: ID, Room_Id
-        - VentilatorOn: Timestamp, Window_ID, isOpen
+        - Door: ID, Room_Id.
+        - DoorOpen: Timestamp, Window_ID, isOpen.
+        - Door_Connects_Room: Door_ID, Room_ID.
 
         Args:
             xls (pd.ExcelFile): Excel File.
-        Returns:
-            A dictionary with the previous room ids
+            room_ids (dict): Previous room ids in the file.
         """
         door_ids = {}
 
@@ -881,6 +940,18 @@ class DataAPIView(APIView):
             door_connection.save()
 
     def import_people(self, xls: pd.ExcelFile, room_ids: dict):
+        """
+        Import people metrics from an excel worksheet in the database. All 'id'
+        fields are repurposed as names, as this worksheet will be appended to
+        an existent database.
+
+        This method expects to use the 'PeopleInRoom', which contains the
+        fields "Timestamp", "Room_Id" and "NOPeopleInRoom".
+
+        Args:
+            xls (pd.ExcelFile): Excel File.
+            room_ids (dict): Previous room ids in the file.
+        """
         # Read people worksheet
         df = pd.read_excel(xls, "PeopleInRoom")
         df.columns = df.columns.str.strip()

@@ -27,5 +27,5 @@ repos:
         types: [python]
         args: [
             storm/*,
-            "--rcfile=.pylintrc"
+            "--rcfile=.pylintrc",
         ]

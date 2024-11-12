@@ -1,26 +1,44 @@
+"""
+This module handles the initialization of the REST API and starts a thread for
+automatic event and metric generation every five seconds.
+"""
+
 import decimal
-from django.apps import AppConfig
+import random
 import signal
 import sys
 from threading import Thread, Event
-import random
 from django.utils import timezone
-
-# import pytz
+from django.apps import AppConfig
 
 
 class RealTimeModelUpdater(Thread):
+    """
+    This class is a wrapper for "real" data generation done by a dedicated
+    worker thread.
+    """
+
     def __init__(self):
+        """
+        Constructor method for this class.
+        """
         Thread.__init__(self)
         self.stopped = Event()
 
     def run(self):
+        """
+        Main loop for this class. Executes data generation every five
+        seconds for all records in the database.
+        """
         while not self.stopped.wait(5):
             self.update_people()
             self.update_co2()
             self.update_temperature()
 
     def update_people(self):
+        """
+        Generates new people values for each room.
+        """
         from api.models import PeopleInRoom, Room
 
         for r in Room.objects.all():
@@ -58,6 +76,9 @@ class RealTimeModelUpdater(Thread):
             people.save()
 
     def update_co2(self):
+        """
+        Generates new Co2 values for each room.
+        """
         from api.models import Co2InRoom, Room
 
         for r in Room.objects.all():
@@ -89,6 +110,9 @@ class RealTimeModelUpdater(Thread):
             co2.save()
 
     def update_temperature(self):
+        """
+        Generates new temperature values for each room.
+        """
         from api.models import TemperatureInRoom, Room
 
         for r in Room.objects.all():
@@ -123,14 +147,25 @@ class RealTimeModelUpdater(Thread):
 
 
 class ApiConfig(AppConfig):
+    """
+    This class specifies the configuration of storm's REST API.
+    """
+
     default_auto_field = "django.db.models.BigAutoField"
     name = "api"
 
-    def handle(self, sig, frame):
+    def handle(self, *_):
+        """
+        Graceful shutdown method for the data generation thread.
+        """
         self.thread.stopped.set()
         sys.exit(0)
 
     def ready(self):
+        """
+        Creates a data-generation thread, executed at start-up time. Implies
+        the need for the --no-reload flag when starting the server.
+        """
         self.thread = RealTimeModelUpdater()
         self.thread.start()
         signal.signal(signal.SIGINT, self.handle)
