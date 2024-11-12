@@ -1,120 +1,33 @@
-from api.models import *
-from rest_framework import serializers
-from django.utils import timezone
+"""
+This module defines the serialized representation of a room.
+"""
+
 from datetime import timedelta
-
-#
-#   BASE MODELS
-#
-
-
-class RoomSerializer(serializers.ModelSerializer):
-    devices = serializers.SerializerMethodField()
-    metrics = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Room
-        fields = ["id", "name", "size", "devices", "metrics"]
-
-    def get_devices(self, obj):
-        devs = {
-            "doors": self._get_doors,
-            "windows": self._get_windows,
-            "ventilators": self._get_ventilators,
-            "lights": self._get_lights,
-        }
-        return {k: devs[k](obj) for k in devs}
-
-    def get_metrics(self, obj):
-        mets = {
-            "people": self._get_people,
-            "co2": self._get_co2,
-            "temperature": self._get_temperature,
-        }
-        return {k: mets[k](obj) for k in mets}
-
-    def _get_doors():
-        pass
-
-    def _get_windows():
-        pass
-
-    def _get_ventilators():
-        pass
-
-    def _get_lights():
-        pass
-
-    def _get_people():
-        pass
-
-    def _get_co2():
-        pass
-
-    def _get_temperature():
-        pass
-
-
-class RoomDashboardSerializer(RoomSerializer):
-    def _get_doors(self, obj):
-        doors: dict = {"total": 0, "open": 0}
-
-        for door in DoorConnectsRoom.objects.filter(room=obj.id):
-            doors["total"] += 1
-            _ = DoorOpen.objects.filter(door=door.door).last()
-            if _ is not None and _.is_open:
-                doors["open"] += 1
-
-        return doors
-
-    def _get_windows(self, obj):
-        windows: dict = {"total": 0, "open": 0}
-
-        for window in Window.objects.filter(room=obj.id):
-            windows["total"] += 1
-            _ = WindowOpen.objects.filter(window=window).last()
-            if _ is not None and _.is_open:
-                windows["open"] += 1
-
-        return windows
-
-    def _get_ventilators(self, obj):
-        ventilators: dict = {"total": 0, "on": 0}
-
-        for ventilator in Ventilator.objects.filter(room=obj.id):
-            ventilators["total"] += 1
-            _ = VentilatorOn.objects.filter(ventilator=ventilator).last()
-            if _ is not None and _.is_on:
-                ventilators["on"] += 1
-
-        return ventilators
-
-    def _get_lights(self, obj):
-        lights: dict = {"total": 0, "on": 0}
-
-        for light in Light.objects.filter(room=obj.id):
-            lights["total"] += 1
-            _ = LightOn.objects.filter(light=light).last()
-            if _ is not None and _.is_on:
-                lights["on"] += 1
-
-        return lights
-
-    def _get_people(self, obj):
-        _ = PeopleInRoom.objects.filter(room=obj).last()
-        return 0 if _ is None else _.no_people_in_room
-
-    def _get_co2(self, obj):
-        _ = Co2InRoom.objects.filter(room=obj).last()
-        return 0 if _ is None else _.co2
-
-    def _get_temperature(self, obj):
-        _ = TemperatureInRoom.objects.filter(room=obj).last()
-        return 0 if _ is None else _.temp
+from api.models.base import Ventilator, Light, Window
+from api.models.base import DoorConnectsRoom
+from api.models.metrics import PeopleInRoom, Co2InRoom, TemperatureInRoom
+from api.models.events import DoorOpen, VentilatorOn, LightOn, WindowOpen
+from api.serializers.base import RoomSerializer
+from django.utils import timezone
 
 
 class RoomDetailSerializer(RoomSerializer):
+    """
+    This class serializes real-time room information to be shown in the room
+    details url.
+    """
+
     def _get_doors(self, obj):
+        """
+        Obtains a history of actions for every door in the room. Recorded
+        actions are within one hour of the last update.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with door information.
+        """
         doors: dict = {}
 
         for door in DoorConnectsRoom.objects.filter(room=obj):
@@ -140,6 +53,16 @@ class RoomDetailSerializer(RoomSerializer):
         return doors
 
     def _get_windows(self, obj):
+        """
+        Obtains a history of actions for every window in the room. Recorded
+        actions are within one hour of the last update.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with window information.
+        """
         windows: dict = {}
 
         for window in Window.objects.filter(room=obj):
@@ -166,6 +89,16 @@ class RoomDetailSerializer(RoomSerializer):
         return windows
 
     def _get_ventilators(self, obj):
+        """
+        Obtains a history of actions for every ventilator in the room. Recorded
+        actions are within one hour of the last update.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with ventilator information.
+        """
         ventilators: dict = {}
 
         for ventilator in Ventilator.objects.filter(room=obj):
@@ -192,6 +125,16 @@ class RoomDetailSerializer(RoomSerializer):
         return ventilators
 
     def _get_lights(self, obj):
+        """
+        Obtains a history of actions for every light in the room. Recorded
+        actions are within one hour of the last update.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with light information.
+        """
         lights: dict = {}
 
         for light in Light.objects.filter(room=obj):
@@ -218,6 +161,16 @@ class RoomDetailSerializer(RoomSerializer):
         return lights
 
     def _get_people(self, obj):
+        """
+        Obtains a history of the number of people in the room from the last
+        hour.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with people history.
+        """
         data = PeopleInRoom.timescale.filter(
             room=obj, time__gt=(timezone.now() - timedelta(hours=1))
         ).order_by("-time")
@@ -230,6 +183,15 @@ class RoomDetailSerializer(RoomSerializer):
         return people
 
     def _get_temperature(self, obj):
+        """
+        Obtains a history of temperature values in the room from the last hour.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with temperature history.
+        """
         data = TemperatureInRoom.timescale.filter(
             room=obj, time__gt=(timezone.now() - timedelta(hours=1))
         ).order_by("-time")
@@ -242,6 +204,15 @@ class RoomDetailSerializer(RoomSerializer):
         return temps
 
     def _get_co2(self, obj):
+        """
+        Obtains a history of Co2 values in the room from the last hour.
+
+        Args:
+            obj (Room): room from where the information is extracted.
+
+        Returns:
+            dict: Dictionary with Co2 history.
+        """
         data = Co2InRoom.timescale.filter(
             room=obj, time__gt=(timezone.now() - timedelta(hours=1))
         ).order_by("-time")
@@ -252,27 +223,3 @@ class RoomDetailSerializer(RoomSerializer):
         }
 
         return co2
-
-
-class WindowSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Window
-        fields = ["id", "name"]
-
-
-class LightSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Light
-        fields = ["id", "name"]
-
-
-class VentilatorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ventilator
-        fields = ["id", "name"]
-
-
-class DoorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Door
-        fields = ["id", "name", "rooms"]
