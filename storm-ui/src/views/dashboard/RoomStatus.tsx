@@ -125,12 +125,10 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
   }
 
   const getMetricData = (metrics: RoomMetric, name: string, cutoffTimestamp?: number) => {
-    let data = metrics.values
-      .map((v, idx) => [new Date(metrics.times[idx] * 1000).getTime(), Number(v)])
-      .toSorted((x, y) => x[0] - y[0])
+    let data = metrics.values.map((v, idx) => [new Date(metrics.times[idx] * 1000).getTime(), Number(v)])
 
     if (cutoffTimestamp && data.length) {
-      const lastTimestamp = data.slice(-1)[0][0]
+      const lastTimestamp = data[0][0]
       const timeCutoff = lastTimestamp - cutoffTimestamp
 
       data = data.filter(metric => metric[0] >= timeCutoff)
