@@ -26,10 +26,10 @@ const RoomSummary = () => {
     <div>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          {rooms.data.length ? (
+          {rooms.data && rooms.data.length ? (
             <RoomsTable rooms={rooms.data} />
           ) : (
-            rooms.fetched && <Typography className='text-lg'>No rooms available</Typography>
+            <Typography className='text-lg'>{rooms.fetched ? 'No rooms available' : 'Loading rooms...'}</Typography>
           )}
         </Grid>
       </Grid>

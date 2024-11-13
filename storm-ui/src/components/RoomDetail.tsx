@@ -36,7 +36,7 @@ export default function RoomDetail(props: { roomId: string }) {
 
   const updateRoomData = async () => {
     return fetchRoom(props.roomId).then(r => {
-      if (r) setRoom(r)
+      if (!r.detail) setRoom(r)
 
       if (!titleChanged && r.name) {
         setTitleChanged(true)
