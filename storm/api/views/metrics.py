@@ -38,7 +38,7 @@ class MetricsAPIView(APIView):
 
     def air_quality_control(self, room: Room, value: int, previous: Co2InRoom):
         """
-        Triggers actions for air quality control when co2 levels go over safe
+        Triggers actions for air quality control when co2 goes over safe
         levels.
 
         Args:
@@ -60,7 +60,7 @@ class MetricsAPIView(APIView):
     def energy_efficiency_control(self, room: Room, value: int, previous: PeopleInRoom):
         """
         Triggers actions for energy efficiency control when the number of
-        people inside the room change
+        people inside the room change.
 
         Args:
             room (Room): Room to trigger changes.
@@ -88,6 +88,15 @@ class MetricsAPIView(APIView):
                     VentilatorOn(time=now, ventilator=ventilator, is_on=False).save()
 
     def safety_control(self, room: Room, value: int, previous: TemperatureInRoom):
+        """
+        Triggers actions for safety control when temperature goes over safe
+        levels.
+
+        Args:
+            room (Room): Room with unusual co2 readings.
+            value (int): Current co2 reading.
+            previous (Co2InRoom): Old co2 value.
+        """
         if value >= 70 and previous.temp <= 70:
             now = timezone.now()
             for door in DoorConnectsRoom.objects.filter(room=room):
