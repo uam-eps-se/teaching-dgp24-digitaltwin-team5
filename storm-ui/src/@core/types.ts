@@ -123,6 +123,7 @@ export type Alert = {
   type: AlertType
   content: string
   roomId: number
+  time: number
 }
 
 export type RoomItem = {

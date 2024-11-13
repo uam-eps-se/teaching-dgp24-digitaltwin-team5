@@ -154,7 +154,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             <CardContent>
               <Box display='flex' alignItems='center'>
                 <StyledBadge
-                  badgeContent={peopleData.data.length && peopleData.data.slice(-1)[0][1]}
+                  badgeContent={peopleData.data.length && peopleData.data[0][1]}
                   color='primary'
                   className={peopleData.data.length ? 'mr-7' : 'mr-5'}
                   max={99999}
@@ -186,7 +186,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             <CardContent>
               <Box display='flex' alignItems='center'>
                 <StyledBadge
-                  badgeContent={tempData.data.length && tempData.data.slice(-1)[0][1]}
+                  badgeContent={tempData.data.length && tempData.data[0][1]}
                   color='warning'
                   className={tempData.data.length ? 'mr-7' : 'mr-5'}
                   max={99999}
@@ -194,14 +194,14 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
                 >
                   <Icon path={mdiThermometer} size={1} />
                 </StyledBadge>
-                <Typography variant='h4'>Temperature (ºC)</Typography>
+                <Typography variant='h4'>Temperature (°C)</Typography>
               </Box>
               {tempData.data.length ? (
                 <AppReactApexCharts
                   type='line'
                   height='140%'
                   width='100%'
-                  options={getOptions('temperature', 'ºC', 'var(--mui-palette-warning-main)')}
+                  options={getOptions('temperature', '°C', 'var(--mui-palette-warning-main)')}
                   series={[tempData]}
                 />
               ) : (
@@ -218,7 +218,7 @@ const RoomStatus = (props: { room: RoomDetailData }) => {
             <CardContent>
               <Box display='flex' alignItems='center'>
                 <StyledBadge
-                  badgeContent={co2Data.data.length && co2Data.data.slice(-1)[0][1]}
+                  badgeContent={co2Data.data.length && co2Data.data[0][1]}
                   color='success'
                   className={co2Data.data.length ? 'mr-7' : 'mr-5'}
                   max={99999}

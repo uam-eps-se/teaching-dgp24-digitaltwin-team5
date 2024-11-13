@@ -130,8 +130,9 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
   }
 
   const getDeviceData = (records: Record<number, RoomDevice>, cutoffTimestamp?: number) => {
-    return Object.entries(records).map(([_, deviceData]) => {
-      let data = deviceData.values.map((v, idx) => [new Date(deviceData.times[idx] * 1000).getTime(), Number(v)])
+    return Object.entries(records).map(deviceData => {
+      const roomDevice = deviceData[1]
+      let data = roomDevice.values.map((v, idx) => [new Date(roomDevice.times[idx] * 1000).getTime(), Number(v)])
 
       if (cutoffTimestamp && data.length) {
         const lastTimestamp = data[0][0]
@@ -141,7 +142,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
       }
 
       return {
-        name: deviceData.name,
+        name: roomDevice.name,
         data: data
       }
     })
