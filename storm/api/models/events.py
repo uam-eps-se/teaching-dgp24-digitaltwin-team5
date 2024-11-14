@@ -7,7 +7,7 @@ from django.db import models
 from timescale.db.models.models import TimescaleModel
 
 # API imports
-from api.models import Window, Door, Ventilator, Light
+from api.models.base import Window, Door, Ventilator, Light
 
 
 class WindowOpen(TimescaleModel):
