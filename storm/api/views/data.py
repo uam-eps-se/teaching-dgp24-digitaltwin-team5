@@ -18,10 +18,10 @@ from rest_framework import status
 from rest_framework.request import Request
 
 # API imports
-from api.models.base import Room, Door, Ventilator, Light, Window
-from api.models.base import DoorConnectsRoom
-from api.models.metrics import PeopleInRoom
-from api.models.events import DoorOpen, VentilatorOn, WindowOpen
+from api.models import Room, Door, Ventilator, Light, Window
+from api.models import DoorConnectsRoom
+from api.models import PeopleInRoom
+from api.models import DoorOpen, VentilatorOn, WindowOpen
 
 
 class DataAPIView(APIView):

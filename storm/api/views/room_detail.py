@@ -12,7 +12,7 @@ from rest_framework import status
 
 # API imports
 from api.serializers.room_details import RoomDetailSerializer
-from api.models.base import Room
+from api.models import Room
 
 
 class RoomDetailAPIView(APIView):

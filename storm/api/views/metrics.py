@@ -2,7 +2,12 @@
 This module defines the `v1/doors` endpoint for the API.
 """
 
+# regular imports
 from typing import NamedTuple, Dict, Callable
+
+# django imports
+from timescale.db.models.models import TimescaleModel
+from django.utils import timezone
 
 # restframework imports
 from rest_framework.response import Response
@@ -10,18 +15,11 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 
 # API imports
-from api.models.metrics import PeopleInRoom, TemperatureInRoom, Co2InRoom
-from api.models.metrics import Alert
-from api.models.base import Room, Window, Ventilator, Light
-from api.models.base import DoorConnectsRoom
-from api.models.events import WindowOpen, VentilatorOn, LightOn, DoorOpen
-
-from timescale.db.models.models import TimescaleModel
-from django.utils import timezone
-
-ROOM_EMPTY_THRESHOLD = 0
-AIR_QUALITY_THRESHOLD = 1000
-TEMP_SAFETY_THRESHOLD = 70
+from api.models import PeopleInRoom, TemperatureInRoom, Co2InRoom
+from api.models import Alert
+from api.models import Room, Window, Ventilator, Light
+from api.models import DoorConnectsRoom
+from api.models import WindowOpen, VentilatorOn, LightOn, DoorOpen
 
 
 class MetricMetadata(NamedTuple):
@@ -52,13 +50,18 @@ class MetricsAPIView(APIView):
             previous (Co2InRoom): Old co2 value.
         """
         now = timezone.now()
-        if 800 < value <= 1000 and (previous.co2 < 800 or previous.co2 > 1000):
+
+        warn = previous is None or previous.co2 < 800 or previous.co2 > 1000
+        danger = previous is None or previous.co2 < 1000
+        if 800 < value <= 1000 and warn:
             content = "Co2 levels are nearing dangerous ppm values"
             Alert(
+                time=now,
+                room=room,
                 type=Alert.AlertType.WARNING,
                 content=content,
             ).save()
-        if previous.co2 < 1000 <= value:
+        if value >= 1000 and danger:
             content = (
                 "Co2 levels too high, opening windows and turning on cooling devices"
             )
@@ -71,6 +74,8 @@ class MetricsAPIView(APIView):
                 if not last or last.is_on is False:
                     VentilatorOn(time=now, ventilator=ventilator, is_on=True).save()
             Alert(
+                time=now,
+                room=room,
                 type=Alert.AlertType.DANGER,
                 content=content,
             ).save()
@@ -86,10 +91,10 @@ class MetricsAPIView(APIView):
             previous (Co2InRoom): Old number of people.
         """
         # Room is now empty
-        turn_off = value == 0 and previous.no_people_in_room > 0
+        turn_off = value == 0 and (previous is None or previous.no_people_in_room > 0)
 
         # Room is no longer empty
-        turn_on = value > 0 and previous.no_people_in_room == 0
+        turn_on = value > 0 and (previous is None or previous.no_people_in_room == 0)
 
         now = timezone.now()
         if turn_on:
@@ -101,6 +106,8 @@ class MetricsAPIView(APIView):
                 if not last or last.is_on is False:
                     LightOn(time=now, light=light, is_on=True).save()
             Alert(
+                time=now,
+                room=room,
                 type=Alert.AlertType.INFO,
                 content=content,
             ).save()
@@ -116,6 +123,8 @@ class MetricsAPIView(APIView):
                 if not last or last.is_on is True:
                     VentilatorOn(time=now, ventilator=ventilator, is_on=False).save()
             Alert(
+                time=now,
+                room=room,
                 type=Alert.AlertType.INFO,
                 content=content,
             ).save()
@@ -130,18 +139,26 @@ class MetricsAPIView(APIView):
             value (int): Current co2 reading.
             previous (Co2InRoom): Old co2 value.
         """
-        if 40 < value < 70 and (previous.temp > 70 or previous.temp < 40):
+
+        warn = previous is None or previous.temp >= 70 or previous.temp < 40
+        danger = previous is None or previous.temp < 70
+        now = timezone.now()
+
+        if 40 < value < 70 and warn:
             Alert(
+                time=now,
+                room=room,
                 type=Alert.AlertType.WARNING,
                 content="Temperature levels are nearing dangerous values",
             ).save()
-        if previous.temp < 70 <= value:
-            now = timezone.now()
+        if value >= 70 and danger:
             for door in DoorConnectsRoom.objects.filter(room=room):
                 last = DoorOpen.objects.filter(door=door.door).last()
                 if not last or last.is_open is False:
                     DoorOpen(time=now, door=door.door, is_open=True).save()
             Alert(
+                time=now,
+                room=room,
                 type=Alert.AlertType.DANGER,
                 content="Temperature levels too high, opening doors",
             ).save()

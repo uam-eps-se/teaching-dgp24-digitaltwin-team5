@@ -105,13 +105,26 @@ try:
 
         i, _, _ = select.select([sys.stdin], [], [], DATAGEN_TIME)
         command = sys.stdin.readline().strip() if i else "default"
-        t_inject = random.randint(0, len(rooms) - 1) if command == "it" else -1
-        c_inject = random.randint(0, len(rooms) - 1) if command == "ic" else -1
-        p_inject = random.randint(0, len(rooms) - 1) if command == "ip" else -1
-        r_inject = command == "restart"
+
+        i = random.randint(0, len(rooms) - 1)
+        dt, dc, wt, dc, wc, ip, ir = -1, -1, -1, -1, -1, -1, False
+
+        match command:
+            case "dt":
+                dt = i
+            case "wt":
+                wt = i
+            case "dc":
+                dc = i
+            case "wc":
+                wc = i
+            case "ip":
+                ip = i
+            case "restart":
+                ir = True
 
         # Restart sensors for better monitoring
-        if r_inject:
+        if ir:
             for i, room in enumerate(rooms):
                 metrics[room["id"]] = {
                     "people": {"value": 5, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")},
@@ -127,18 +140,26 @@ try:
                 metrics[room["id"]] = {
                     "people": (
                         {"value": 0, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
-                        if p_inject == i
+                        if ip == i
                         else update_people(room["metrics"]["people"], now)
                     ),
                     "co2": (
                         {"value": 1001, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
-                        if c_inject == i
-                        else update_co2(room["metrics"]["co2"], now)
+                        if dc == i
+                        else (
+                            {"value": 801, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
+                            if wc == i
+                            else update_co2(room["metrics"]["co2"], now)
+                        )
                     ),
                     "temperature": (
-                        {"value": 70, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
-                        if t_inject == i
-                        else update_temperature(room["metrics"]["temperature"], now)
+                        {"value": 70.1, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
+                        if dt == i
+                        else (
+                            {"value": 40.1, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
+                            if wt == i
+                            else update_temperature(room["metrics"]["temperature"], now)
+                        )
                     ),
                 }
 
