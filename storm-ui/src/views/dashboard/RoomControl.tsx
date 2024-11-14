@@ -179,7 +179,7 @@ export default function RoomControl(props: { room: RoomDetailData }) {
       return {
         id: Number(deviceId),
         name: device.name,
-        status: device.values[0] // TODO change to device.current
+        status: device.current
       }
     })
 

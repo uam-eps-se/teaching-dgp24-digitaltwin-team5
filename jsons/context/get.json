@@ -1,0 +1,32 @@
+{
+  "rooms": [
+    { "id": 1, "name": "Cuarto de Pepe" },
+    { "id": 2, "name": "Cuarto de Pepa" }
+  ],
+  "alerts": [
+    {
+      "id": 666,
+      "type": 0,
+      "content": "Room is empty. Lights and Cooling devices turned off.",
+      "time": 1782024,
+      "roomId": 1,
+      "roomName": "Cuarto de Pepe"
+    },
+    {
+      "id": 829,
+      "type": 1,
+      "content": "Co2 at over 800ppm",
+      "time": 1782029,
+      "roomId": 1,
+      "roomName": "Cuarto de Pepe"
+    },
+    {
+      "id": 911,
+      "type": 2,
+      "content": "Room temperature has reached dangerous levels (>70ºC)",
+      "time": 1782045,
+      "roomId": 1,
+      "roomName": "Cuarto de Pepe"
+    }
+  ]
+}

@@ -75,6 +75,6 @@ class RoomDashboardSerializer(serializers.ModelSerializer):
 
         for key, (model, attr) in mets.items():
             _ = model.objects.filter(room=obj).last()
-            metrics[key] = 0 if _ is None else getattr(_, attr)
+            metrics[key] = getattr(_, attr, 0)
 
         return metrics

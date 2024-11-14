@@ -58,6 +58,7 @@ export type RoomSummary = {
 
 export type RoomDevice = {
   name: string
+  current: boolean
   values: Array<boolean>
   times: Array<number>
 }

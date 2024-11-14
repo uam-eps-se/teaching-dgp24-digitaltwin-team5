@@ -55,7 +55,7 @@ class RoomDetailSerializer(serializers.ModelSerializer):
 
                 devices[key][device.id] = {
                     "name": device.name,
-                    "current": getattr(last, attr) if last is not None else False,
+                    "current": getattr(last, attr, False),
                     "times": [
                         date.timestamp() for date in data.values_list("time", flat=True)
                     ],
