@@ -142,7 +142,7 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
 
       return {
         name: deviceData.name,
-        data: data
+        data: data.toReversed()
       }
     })
   }

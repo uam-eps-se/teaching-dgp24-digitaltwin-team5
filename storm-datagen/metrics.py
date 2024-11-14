@@ -152,3 +152,7 @@ try:
         print("Generated data!")
 except requests.exceptions.Timeout:
     print("Request timed out, closing...")
+except requests.exceptions.ConnectionError:
+    print("Backend unreachable, closing...")
+except KeyboardInterrupt:
+    print("\nScript interrupted, closing...")
