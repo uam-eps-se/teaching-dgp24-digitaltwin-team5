@@ -122,16 +122,16 @@ class MetricsAPIView(APIView):
             ),
         }
 
-        for key, data in request.data.items():
+        for key, metrics in request.data.items():
             room = Room.objects.filter(id=int(key)).first()
 
-            for metric, readings in data.items():
+            for metric, data in metrics.items():
                 model, attr, action = mets[metric]
                 last = model.objects.filter(room=room).last()
 
-                for time, value in zip(readings["times"], readings["values"]):
-                    model(**{"time": time, attr: value, "room": room}).save()
-
-                action(room, readings["values"], last)
+                model(
+                    **{"time": data["time"], "room": room, attr: data["value"]}
+                ).save()
+                action(room, data["value"], last)
 
         return Response("Metrics updated successfully!")
