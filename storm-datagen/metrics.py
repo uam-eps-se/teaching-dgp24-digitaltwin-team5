@@ -4,8 +4,9 @@ from the storm app.
 """
 
 import os
+import sys
+import select
 import random
-from time import sleep
 from datetime import datetime, timezone, timedelta
 import requests
 from dotenv import load_dotenv
@@ -22,32 +23,17 @@ def update_people(pp, time) -> dict:
     Returns:
         dict: one to three new people values.
     """
-    people = {"times": [], "values": []}
-    nvals = random.randint(1, 3)
+    people = {}
 
-    seconds = sorted(random.sample(range(DATAGEN_TIME + 1), nvals))
+    people["time"] = (
+        time - timedelta(seconds=random.randint(1, DATAGEN_TIME))
+    ).strftime("%Y-%m-%dT%H:%M:%S%z")
 
-    # Create N readings
-    people["times"] = sorted(
-        [
-            (time - timedelta(seconds=seconds[i])).strftime("%Y-%m-%dT%H:%M:%S%z")
-            for i in range(nvals)
-        ]
-    )
-
-    # Values for first reading, uses value read from API
     np = random.choices(
         population=[-3, -2, -1, 0, 1, 2, 3], weights=[1, 2, 3, 5, 3, 2, 1]
     )[0]
-    people["values"].append(0 if np + pp < 0 else 30 if np + pp > 30 else np + pp)
 
-    # N-1 values, uses previous updated value
-    for _ in range(1, nvals):
-        np = random.choices(
-            population=[-3, -2, -1, 0, 1, 2, 3], weights=[1, 2, 3, 5, 3, 2, 1]
-        )[0]
-        pp = people["values"][-1]
-        people["values"].append(0 if np + pp < 0 else 30 if np + pp > 30 else np + pp)
+    people["value"] = 0 if np + pp < 0 else 30 if np + pp > 30 else np + pp
 
     return people
 
@@ -63,34 +49,17 @@ def update_co2(cc, time) -> dict:
     Returns:
         dict: one to three new co2 values.
     """
-    co2 = {"times": [], "values": []}
-    nvals = random.randint(1, 3)
+    co2 = {}
 
-    seconds = sorted(random.sample(range(DATAGEN_TIME + 1), nvals))
-
-    # Create N readings
-    co2["times"] = sorted(
-        [
-            (time - timedelta(seconds=seconds[i])).strftime("%Y-%m-%dT%H:%M:%S%z")
-            for i in range(nvals)
-        ]
+    co2["time"] = (time - timedelta(seconds=random.randint(1, DATAGEN_TIME))).strftime(
+        "%Y-%m-%dT%H:%M:%S%z"
     )
 
-    # Values for first reading, uses value read from API
     nc = random.choices(
-        population=[-60, -30, -15, 0, 15, 30, 60], weights=[1, 2, 5, 3, 5, 2, 1]
+        population=[-20, -15, -10, 0, 10, 15, 20], weights=[1, 2, 5, 3, 5, 2, 1]
     )[0]
-    co2["values"].append(300 if nc + cc < 300 else 1200 if nc + cc > 1200 else nc + cc)
 
-    # N-1 values, uses previous updated value
-    for _ in range(1, nvals):
-        nc = random.choices(
-            population=[-60, -30, -15, 0, 15, 30, 60], weights=[1, 2, 5, 3, 5, 2, 1]
-        )[0]
-        cc = co2["values"][-1]
-        co2["values"].append(
-            300 if nc + cc < 300 else 1200 if nc + cc > 1200 else nc + cc
-        )
+    co2["value"] = 300 if nc + cc < 300 else 1200 if nc + cc > 1200 else nc + cc
 
     return co2
 
@@ -106,40 +75,19 @@ def update_temperature(tt, time) -> dict:
     Returns:
         dict: one to three new temperature values.
     """
-    temps = {"times": [], "values": []}
-    nvals = random.randint(1, 3)
+    temp = {}
 
-    seconds = sorted(random.sample(range(DATAGEN_TIME + 1), nvals))
-
-    # Create N readings
-    temps["times"] = sorted(
-        [
-            (time - timedelta(seconds=seconds[i])).strftime("%Y-%m-%dT%H:%M:%S%z")
-            for i in range(nvals)
-        ]
+    temp["time"] = (time - timedelta(seconds=random.randint(1, DATAGEN_TIME))).strftime(
+        "%Y-%m-%dT%H:%M:%S%z"
     )
 
-    # Values for first reading, uses value read from API
     nt = random.choices(
         population=[-0.7, -0.3, -0.1, 0, 0.1, 0.3, 0.7],
         weights=[1, 2, 3, 5, 5, 4, 2],
     )[0]
-    temps["values"].append(
-        -20 if nt + tt < -20 else 80 if nt + tt > 80 else round(nt + tt, 2)
-    )
+    temp["value"] = -20 if nt + tt < -20 else 80 if nt + tt > 80 else round(nt + tt, 2)
 
-    # N-1 values, uses previous updated value
-    for _ in range(1, nvals):
-        nt = random.choices(
-            population=[-0.7, -0.3, -0.1, 0, 0.1, 0.3, 0.7],
-            weights=[1, 2, 3, 5, 5, 4, 2],
-        )[0]
-        tt = temps["values"][-1]
-        temps["values"].append(
-            -20 if nt + tt < -20 else 80 if nt + tt > 80 else round(nt + tt, 2)
-        )
-
-    return temps
+    return temp
 
 
 load_dotenv(".env")
@@ -149,29 +97,58 @@ ROOMS_URL = os.getenv("ROOMS_ENDPOINT")
 DATAGEN_TIME = 5
 
 
-while True:
-    try:
-        rooms = requests.get(ROOMS_URL, timeout=60).json()  # 10 seconds
-    except requests.exceptions.Timeout:
-        break
-    metrics = {}
-    now = datetime.now(timezone.utc).astimezone()
+try:
+    while True:
+        rooms = requests.get(ROOMS_URL, timeout=60).json()
+        metrics = {}
+        now = datetime.now(timezone.utc).astimezone()
 
-    for room in rooms:
-        metrics[room["id"]] = {
-            "people": update_people(room["metrics"]["people"], now),
-            "co2": update_co2(room["metrics"]["co2"], now),
-            "temperature": update_temperature(room["metrics"]["temperature"], now),
-        }
-    try:
+        i, _, _ = select.select([sys.stdin], [], [], DATAGEN_TIME)
+        command = sys.stdin.readline().strip() if i else "default"
+        t_inject = random.randint(0, len(rooms) - 1) if command == "it" else -1
+        c_inject = random.randint(0, len(rooms) - 1) if command == "ic" else -1
+        p_inject = random.randint(0, len(rooms) - 1) if command == "ip" else -1
+        r_inject = command == "restart"
+
+        # Restart sensors for better monitoring
+        if r_inject:
+            for i, room in enumerate(rooms):
+                metrics[room["id"]] = {
+                    "people": {"value": 5, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")},
+                    "co2": {"value": 500, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")},
+                    "temperature": {
+                        "value": 23,
+                        "time": now.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                    },
+                }
+        # Create new random values or inject a value
+        else:
+            for i, room in enumerate(rooms):
+                metrics[room["id"]] = {
+                    "people": (
+                        {"value": 0, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
+                        if p_inject == i
+                        else update_people(room["metrics"]["people"], now)
+                    ),
+                    "co2": (
+                        {"value": 1001, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
+                        if c_inject == i
+                        else update_co2(room["metrics"]["co2"], now)
+                    ),
+                    "temperature": (
+                        {"value": 70, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")}
+                        if t_inject == i
+                        else update_temperature(room["metrics"]["temperature"], now)
+                    ),
+                }
+
         requests.post(
             METRICS_URL,
             json=metrics,
             headers={"Content-Type": "application/json"},
             timeout=60,
         )
-    except requests.exceptions.Timeout:
-        break
 
-    print("Generated data!")
-    sleep(DATAGEN_TIME)
+        print("Generated data!")
+except requests.exceptions.Timeout:
+    print("Request timed out, closing...")
