@@ -13,6 +13,7 @@ from api.views.doors import DoorsAPIView
 from api.views.room_detail import RoomDetailAPIView
 from api.views.rooms import RoomsAPIView
 from api.views.metrics import MetricsAPIView
+from api.views.context import ContextAPIView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -21,6 +22,7 @@ urlpatterns = [
 app_name = "api"
 
 urlpatterns += [
+    path("v1/context", ContextAPIView.as_view()),
     path("v1/data", DataAPIView.as_view()),
     path("v1/devices", DevicesAPIView.as_view()),
     path("v1/doors", DoorsAPIView.as_view()),
