@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import RoomSummary from '@/components/RoomSummary'
+import RoomSummary from '@views/dashboard/RoomSummary'
 
 export const metadata: Metadata = {
   title: 'Rooms Summary'

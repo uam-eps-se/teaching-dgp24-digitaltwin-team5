@@ -9,7 +9,7 @@ import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
 import { mdiPlus, mdiWindowClose, mdiTrashCan, mdiHomeEdit } from '@mdi/js'
 import Icon from '@mdi/react'
 
-import type { RoomDetailData } from '@/@core/types'
+import type { RoomDetailData } from '@core/types'
 import DeleteRoomModal from './DeleteRoomModal'
 
 const actions = (roomId: number) => [

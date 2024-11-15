@@ -10,7 +10,7 @@ import { Chip } from '@mui/material'
 import type { RoomDetailData } from '@core/types'
 
 import { fetchRoom } from '@core/utils/data'
-import RoomForm from '@/views/dashboard/RoomForm'
+import RoomForm from '@views/dashboard/RoomForm'
 
 const RoomEdit = (props: { roomId: string }) => {
   const [room, setRoom] = useState<RoomDetailData>()

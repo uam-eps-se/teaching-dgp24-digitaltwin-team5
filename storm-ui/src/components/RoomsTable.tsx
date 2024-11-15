@@ -17,7 +17,7 @@ import { mdiPencil, mdiTrashCan } from '@mdi/js'
 import Icon from '@mdi/react'
 
 import type { RoomSummary } from '@core/types'
-import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal'
+import DeleteRoomModal from '@components/actionButtons/DeleteRoomModal'
 
 const colHeader = (name: string, subtitle: string) => {
   return (
@@ -89,8 +89,8 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       renderHeader: () => colHeader('Doors', 'open'),
-      valueGetter: (value, row) => row.devices.doors.open,
-      valueFormatter: (value, row) => `${value}/${row.devices.doors.total}`
+      valueGetter: (_value, row: RoomSummary) => row.devices.doors.open,
+      valueFormatter: (value, row: RoomSummary) => `${value}/${row.devices.doors.total}`
     },
     {
       field: 'windows',
@@ -99,8 +99,8 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       renderHeader: () => colHeader('Windows', 'open'),
-      valueGetter: (value, row) => row.devices.windows.open,
-      valueFormatter: (value, row) => `${value}/${row.devices.windows.total}`
+      valueGetter: (_value, row: RoomSummary) => row.devices.windows.open,
+      valueFormatter: (value, row: RoomSummary) => `${value}/${row.devices.windows.total}`
     },
     {
       field: 'lights',
@@ -109,8 +109,8 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       renderHeader: () => colHeader('Lights', 'on'),
-      valueGetter: (value, row) => row.devices.lights.on,
-      valueFormatter: (value, row) => `${value}/${row.devices.lights.total}`
+      valueGetter: (_value, row: RoomSummary) => row.devices.lights.on,
+      valueFormatter: (value, row: RoomSummary) => `${value}/${row.devices.lights.total}`
     },
     {
       field: 'ventilators',
@@ -119,8 +119,8 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       renderHeader: () => colHeader('Cooling Devices', 'on'),
-      valueGetter: (value, row) => row.devices.ventilators.on,
-      valueFormatter: (value, row) => `${value}/${row.devices.ventilators.total}`
+      valueGetter: (_value, row: RoomSummary) => row.devices.ventilators.on,
+      valueFormatter: (value, row: RoomSummary) => `${value}/${row.devices.ventilators.total}`
     },
     {
       field: 'people',
@@ -129,7 +129,7 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       type: 'number',
-      valueGetter: (value, row) => row.metrics.people
+      valueGetter: (_value, row: RoomSummary) => row.metrics.people
     },
     {
       field: 'co2',
@@ -138,7 +138,7 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       type: 'number',
-      valueGetter: (value, row) => row.metrics.co2
+      valueGetter: (_value, row: RoomSummary) => row.metrics.co2
     },
     {
       field: 'temperature',
@@ -147,7 +147,7 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
       align: 'center',
       flex: 0.1,
       type: 'number',
-      valueGetter: (value, row) => row.metrics.temperature
+      valueGetter: (_value, row: RoomSummary) => row.metrics.temperature
     },
     {
       field: 'edit',

@@ -10,9 +10,9 @@ import { useInterval } from 'react-use'
 
 import { Typography } from '@mui/material'
 
-import RoomsTable from '@/views/dashboard/RoomsTable'
+import RoomsTable from '@components/RoomsTable'
 
-import RoomSummaryButtons from './actionButtons/RoomSummaryButtons'
+import RoomSummaryButtons from '@components/actionButtons/RoomSummaryButtons'
 
 import { RoomsContext } from '@core/contexts/roomsContext'
 

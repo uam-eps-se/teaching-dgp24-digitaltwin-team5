@@ -11,7 +11,7 @@ import { Box, Button, Grid, Tooltip, Typography } from '@mui/material'
 import { useDebouncedCallback } from 'use-debounce'
 
 import type { DeviceStatus, RoomDetailData, RoomDevice } from '@core/types'
-import { updateDeviceAction } from '@/@core/utils/actions'
+import { updateDeviceAction } from '@core/utils/actions'
 
 const QuickSearchFooter = () => {
   return (

@@ -19,11 +19,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import { fetchRoom } from '@core/utils/data'
 import type { RoomDetailData } from '@core/types'
 
-import RoomDetailButtons from './actionButtons/RoomDetailButtons'
+import RoomDetailButtons from '@components/actionButtons/RoomDetailButtons'
 
-import RoomStructure from '@views/dashboard/RoomStructure'
-import RoomStatus from '@views/dashboard/RoomStatus'
-import RoomControl from '@views/dashboard/RoomControl'
+import RoomStructure from '@components/RoomStructure'
+import RoomStatus from '@components/RoomStatus'
+import RoomControl from '@components/RoomControl'
 
 export default function RoomDetail(props: { roomId: string }) {
   const [room, setRoom] = useState<RoomDetailData>()

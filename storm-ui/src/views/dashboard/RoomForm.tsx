@@ -18,11 +18,11 @@ import type { AvailableDevices, Device, Door, RoomDetailData, RoomDevice } from 
 
 import CreateDevicesDial from '@components/actionButtons/CreateDevicesButtons'
 
-import { fetchFreeDevices, fetchFreeDoors } from '@/@core/utils/data'
+import { fetchFreeDevices, fetchFreeDoors } from '@core/utils/data'
 
 import { assignDevice, createDevice, createRoom, deleteDevice, deleteDoor, editRoom } from '@core/utils/actions'
 import { RoomsContext } from '@core/contexts/roomsContext'
-import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal'
+import DeleteRoomModal from '@components/actionButtons/DeleteRoomModal'
 
 const RoomFormSchema = z.object({
   name: z.string().min(1, 'Room name is required'),
@@ -267,6 +267,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
           if ('error' in res) console.error(res.error)
           else {
+            // TODO updateContext()
             await updateRooms()
             if (isEdit) router.back()
             else router.push('/rooms')

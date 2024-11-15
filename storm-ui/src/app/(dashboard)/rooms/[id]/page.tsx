@@ -1,4 +1,4 @@
-import RoomDetail from '@components/RoomDetail'
+import RoomDetail from '@views/dashboard/RoomDetail'
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   return {
