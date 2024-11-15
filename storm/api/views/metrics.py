@@ -52,8 +52,8 @@ class MetricsAPIView(APIView):
         now = timezone.now()
 
         warn = previous is None or previous.co2 < 800 or previous.co2 > 1000
-        danger = previous is None or previous.co2 < 1000
-        if 800 < value <= 1000 and warn:
+        danger = previous is None or previous.co2 <= 1000
+        if 800 <= value <= 1000 and warn:
             content = "Co2 levels are nearing dangerous ppm values"
             Alert(
                 time=now,
@@ -61,7 +61,7 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.WARNING,
                 content=content,
             ).save()
-        if value >= 1000 and danger:
+        if value > 1000 and danger:
             content = (
                 "Co2 levels too high, opening windows and turning on cooling devices"
             )
@@ -141,17 +141,17 @@ class MetricsAPIView(APIView):
         """
 
         warn = previous is None or previous.temp >= 70 or previous.temp < 40
-        danger = previous is None or previous.temp < 70
+        danger = previous is None or previous.temp <= 70
         now = timezone.now()
 
-        if 40 < value < 70 and warn:
+        if 40 <= value <= 70 and warn:
             Alert(
                 time=now,
                 room=room,
                 type=Alert.AlertType.WARNING,
                 content="Temperature levels are nearing dangerous values",
             ).save()
-        if value >= 70 and danger:
+        if value > 70 and danger:
             for door in DoorConnectsRoom.objects.filter(room=room):
                 last = DoorOpen.objects.filter(door=door.door).last()
                 if not last or last.is_open is False:

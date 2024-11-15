@@ -61,10 +61,16 @@ class RoomDetailSerializer(RoomSerializer):
         """
 
         metrics = {}
-        time = timezone.now() - timedelta(hours=1)
 
-        for key, (model, attr) in self.mets.items():
-            data = model.timescale.filter(room=obj, time__gt=time).order_by("-time")
+        for key, (metric, attr) in self.mets.items():
+            last = metric.timescale.filter(room=obj).last()
+            time = (
+                (last.time - timedelta(hours=1))
+                if last is not None
+                else timezone.now() - timedelta(hours=1)
+            )
+
+            data = metric.timescale.filter(room=obj, time__gt=time).order_by("-time")
             metrics[key] = {
                 "times": [
                     date.timestamp() for date in data.values_list("time", flat=True)
