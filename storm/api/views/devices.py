@@ -15,8 +15,8 @@ from rest_framework.request import Request
 # API imports
 from api.serializers.devices import WindowSerializer
 from api.serializers.devices import VentilatorSerializer, LightSerializer
-from api.models.base import Room, Ventilator, Light, Window
-from api.models.events import VentilatorOn, LightOn, WindowOpen
+from api.models import Room, Ventilator, Light, Window
+from api.models import VentilatorOn, LightOn, WindowOpen
 
 
 class DevicesAPIView(APIView):

@@ -2,9 +2,12 @@
 This module defines models for metrics events related to rooms.
 """
 
-from api.models.base import Room
+# django imports
 from django.db import models
 from timescale.db.models.models import TimescaleModel
+
+# API imports
+from api.models.base import Room
 
 
 class PeopleInRoom(TimescaleModel):
@@ -32,3 +35,24 @@ class Co2InRoom(TimescaleModel):
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     co2 = models.IntegerField(default=0)
+
+
+class Alert(TimescaleModel):
+    """
+    Model representation for alerts related to various metrics.
+    """
+
+    class AlertType(models.IntegerChoices):  # pylint: disable=too-many-ancestors
+        """
+        Model to represent alert types.
+        """
+
+        INFO = 0
+        WARNING = 1
+        DANGER = 2
+
+    id = models.AutoField(primary_key=True)
+    type = models.IntegerField(choices=AlertType)
+    content = models.TextField(max_length=200)
+    received = models.BooleanField(default=False)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)

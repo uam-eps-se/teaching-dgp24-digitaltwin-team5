@@ -2,9 +2,12 @@
 This module defines models for events related to devices.
 """
 
-from api.models.base import Window, Door, Ventilator, Light
+# django imports
 from django.db import models
 from timescale.db.models.models import TimescaleModel
+
+# API imports
+from api.models.base import Window, Door, Ventilator, Light
 
 
 class WindowOpen(TimescaleModel):

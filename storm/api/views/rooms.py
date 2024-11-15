@@ -16,8 +16,8 @@ from rest_framework.request import Request
 
 # API imports
 from api.serializers.room_dashboard import RoomDashboardSerializer
-from api.models.base import Room, Door, Ventilator, Light, Window
-from api.models.base import DoorConnectsRoom
+from api.models import Room, Door, Ventilator, Light, Window
+from api.models import DoorConnectsRoom
 
 
 class RoomsAPIView(APIView):

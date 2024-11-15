@@ -2,8 +2,11 @@
 This module defines the serialized representation of devices.
 """
 
-from api.models.base import Door, Ventilator, Light, Window
+# restframework imports
 from rest_framework import serializers
+
+# API imports
+from api.models import Door, Ventilator, Light, Window
 
 
 class WindowSerializer(serializers.ModelSerializer):

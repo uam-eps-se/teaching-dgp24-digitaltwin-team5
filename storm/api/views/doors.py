@@ -14,9 +14,9 @@ from rest_framework.request import Request
 
 # API imports
 from api.serializers.devices import DoorSerializer
-from api.models.base import Room, Door
-from api.models.base import DoorConnectsRoom
-from api.models.events import DoorOpen
+from api.models import Room, Door
+from api.models import DoorConnectsRoom
+from api.models import DoorOpen
 
 
 class DoorsAPIView(APIView):
