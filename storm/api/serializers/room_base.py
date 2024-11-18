@@ -47,8 +47,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
     devices = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
-    temperatureStatus = serializers.SerializerMethodField()
-    co2Status = serializers.SerializerMethodField()
+    temperature_status = serializers.SerializerMethodField()
+    co2_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
@@ -86,20 +86,26 @@ class RoomSerializer(serializers.ModelSerializer):
         """
         Obtains the last temperature status for this rooom.
         """
-        _ = TemperatureInRoom.objects.filter(room=obj).last().temp
+        _ = TemperatureInRoom.objects.filter(room=obj).last()
         return (
             Alert.AlertType.INFO
-            if (_ is None or _ < 40)
-            else Alert.AlertType.WARNING if 40 <= _ < 70 else Alert.AlertType.DANGER
+            if (_ is None or _.temp < 40)
+            else (
+                Alert.AlertType.WARNING if 40 <= _.temp < 70 else Alert.AlertType.DANGER
+            )
         )
 
     def get_co2_status(self, obj: Room):
         """
         Obtains the last co2 status for this rooom.
         """
-        _ = TemperatureInRoom.objects.filter(room=obj).last().temp
+        _ = TemperatureInRoom.objects.filter(room=obj).last()
         return (
             Alert.AlertType.INFO
-            if (_ is None or _ < 800)
-            else Alert.AlertType.WARNING if 800 < _ <= 1000 else Alert.AlertType.DANGER
+            if (_ is None or _.co2 < 800)
+            else (
+                Alert.AlertType.WARNING
+                if 800 < _.co2 <= 1000
+                else Alert.AlertType.DANGER
+            )
         )
