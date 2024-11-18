@@ -17,6 +17,7 @@ from api.models import Room, Ventilator, Light, Window
 from api.models import DoorConnectsRoom
 from api.models import PeopleInRoom, Co2InRoom, TemperatureInRoom
 from api.models import DoorOpen, VentilatorOn, LightOn, WindowOpen
+from api.models import Alert
 
 
 class DeviceMeta(NamedTuple):
@@ -46,13 +47,26 @@ class RoomSerializer(serializers.ModelSerializer):
 
     devices = serializers.SerializerMethodField()
     metrics = serializers.SerializerMethodField()
+    temperatureStatus = serializers.SerializerMethodField()
+    co2Status = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
         abstract = True
-        fields = ["id", "name", "size", "devices", "metrics"]
+        fields = [
+            "id",
+            "name",
+            "size",
+            "temperature_status",
+            "co2_status",
+            "devices",
+            "metrics",
+        ]
 
     def __init__(self, *args, **kwargs):
+        """
+        Constructor method for this class.
+        """
         self.devs: Dict[str, DeviceMeta] = {
             "doors": DeviceMeta(model=DoorConnectsRoom, event=DoorOpen, attr="is_open"),
             "windows": DeviceMeta(model=Window, event=WindowOpen, attr="is_open"),
@@ -67,3 +81,25 @@ class RoomSerializer(serializers.ModelSerializer):
             "temperature": MetricMeta(metric=TemperatureInRoom, attr="temp"),
         }
         super().__init__(*args, **kwargs)
+
+    def get_temperature_status(self, obj: Room):
+        """
+        Obtains the last temperature status for this rooom.
+        """
+        _ = TemperatureInRoom.objects.filter(room=obj).last().temp
+        return (
+            Alert.AlertType.INFO
+            if (_ is None or _ < 40)
+            else Alert.AlertType.WARNING if 40 <= _ < 70 else Alert.AlertType.DANGER
+        )
+
+    def get_co2_status(self, obj: Room):
+        """
+        Obtains the last co2 status for this rooom.
+        """
+        _ = TemperatureInRoom.objects.filter(room=obj).last().temp
+        return (
+            Alert.AlertType.INFO
+            if (_ is None or _ < 800)
+            else Alert.AlertType.WARNING if 800 < _ <= 1000 else Alert.AlertType.DANGER
+        )

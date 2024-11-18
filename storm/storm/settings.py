@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+import dotenv
+
+dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,15 +86,12 @@ WSGI_APPLICATION = "storm.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "timescale.db.backends.postgresql",
-        "OPTIONS": {
-            "service": "storm-db",
-            "passfile": ".pgpass",
-        },
-    }
-}
+DATABASES = {}
+
+DATABASES["default"] = dj_database_url.config(
+    conn_max_age=600,
+    conn_health_checks=True,
+)
 
 
 # Password validation
