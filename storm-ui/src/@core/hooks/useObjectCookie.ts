@@ -12,7 +12,7 @@ export const useObjectCookie = <T>(key: string, fallback?: T | null): [T, (newVa
   const value = useMemo<T>(() => (valStr ? JSON.parse(valStr) : fallback), [valStr])
 
   const updateValue = (newVal: T) => {
-    updateCookie(JSON.stringify(newVal))
+    updateCookie(JSON.stringify(newVal), { sameSite: 'Lax' })
   }
 
   return [value, updateValue]
