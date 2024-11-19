@@ -6,6 +6,7 @@ This module defines the `v1/devices` endpoint for the API.
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.request import Request
+from rest_framework import status
 
 # API imports
 from api.models import Room, Alert
@@ -52,10 +53,12 @@ class ContextAPIView(APIView):
             request (dict): A JSON-like dictionary
         """
 
-        ids = request.data.get("ids")
+        ids = request.data.get("ids", None)
+
+        if ids is None:
+            return Response("Missing field!", status=status.HTTP_400_BAD_REQUEST)
 
         alerts = Alert.objects.filter(id__in=ids)
-
         for alert in alerts:
             alert.received = True
             alert.save()
