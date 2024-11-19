@@ -7,6 +7,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 
 import { deleteRoom } from '@core/utils/actions'
 import { RoomsContext } from '@core/contexts/roomsContext'
+import { LayoutContext } from '@/@core/contexts/layoutContext'
 
 export default function DeleteRoomModal(props: {
   roomId: number
@@ -16,6 +17,7 @@ export default function DeleteRoomModal(props: {
 }) {
   const handleClose = () => props.setOpen(false)
   const { setDeleting, rooms, setRooms } = useContext(RoomsContext)
+  const { updateContext } = useContext(LayoutContext)
   const router = useRouter()
   const pathName = usePathname()
 
@@ -52,11 +54,13 @@ export default function DeleteRoomModal(props: {
               if (!('error' in res)) {
                 const idx = rooms.data.findIndex(x => x.id == props.roomId)
 
-                if (idx !== -1)
+                if (idx !== -1) {
+                  updateContext()
                   setRooms({
                     data: [...rooms.data.slice(0, idx), ...rooms.data.slice(idx + 1)],
                     fetched: true
                   })
+                }
               } else {
                 console.error(res) // Show error on UI?
               }

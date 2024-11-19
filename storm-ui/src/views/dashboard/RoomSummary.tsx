@@ -10,9 +10,9 @@ import { useInterval } from 'react-use'
 
 import { Typography } from '@mui/material'
 
-import RoomsTable from '@/views/dashboard/RoomsTable'
+import RoomsTable from '@components/RoomsTable'
 
-import RoomSummaryButtons from './actionButtons/RoomSummaryButtons'
+import RoomSummaryButtons from '@components/actionButtons/RoomSummaryButtons'
 
 import { RoomsContext } from '@core/contexts/roomsContext'
 
@@ -26,10 +26,10 @@ const RoomSummary = () => {
     <div>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          {rooms.data.length ? (
+          {rooms.data && rooms.data.length ? (
             <RoomsTable rooms={rooms.data} />
           ) : (
-            rooms.fetched && <Typography className='text-lg'>No rooms available</Typography>
+            <Typography className='text-lg'>{rooms.fetched ? 'No rooms available' : 'Loading rooms...'}</Typography>
           )}
         </Grid>
       </Grid>

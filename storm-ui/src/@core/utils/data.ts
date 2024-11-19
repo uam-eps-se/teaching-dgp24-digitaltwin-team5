@@ -39,3 +39,12 @@ export async function fetchFreeDoors() {
       console.error(err)
     })
 }
+
+export async function fetchContext() {
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/context`, requestOptions)
+    .then(async res => res.json())
+    .catch(err => {
+      console.error(`API Error: Failed to Get Context.`)
+      console.error(err)
+    })
+}

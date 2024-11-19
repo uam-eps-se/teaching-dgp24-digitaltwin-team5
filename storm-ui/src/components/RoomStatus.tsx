@@ -12,43 +12,41 @@ import type { ApexOptions } from 'apexcharts'
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
-import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiWindowClosedVariant } from '@mdi/js'
+import { mdiAccountGroup, mdiMoleculeCo2, mdiThermometer } from '@mdi/js'
 import Icon from '@mdi/react'
 import type { BadgeProps } from '@mui/material'
 import { Badge, Box, Grid, styled } from '@mui/material'
 
-import type { RoomDetailData, RoomDevice } from '@core/types'
+import type { RoomDetailData, RoomMetric } from '@core/types'
 import { useSettings } from '@core/hooks/useSettings'
 
-const RoomStructure = (props: { room: RoomDetailData }) => {
+const RoomStatus = (props: { room: RoomDetailData }) => {
   const room = props.room
   const settings = useSettings()
 
   const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
     '& .MuiBadge-badge': {
-      right: -3,
+      right: -6,
+      top: -3,
       border: `2px solid ${theme.palette.background.paper}`,
-      padding: '0 4px'
+      padding: '0 5px'
     }
   }))
 
-  const getOptions = (chartId: string, trueLabel: string = 'Open', falseLabel: string = 'Closed'): ApexOptions => {
+  const getOptions = (chartId: string, unit: string, color?: string): ApexOptions => {
     let zoom: any[] | undefined = undefined
 
     return {
       chart: {
         id: chartId,
         parentHeightOffset: 0,
+        height: '100%',
         toolbar: {
           show: true,
           offsetY: -25
         },
-        animations: {
-          enabled: true,
-          easing: 'easeinout',
-          dynamicAnimation: {
-            speed: 500
-          }
+        zoom: {
+          enabled: true
         },
         events: {
           beforeResetZoom: chart => {
@@ -73,18 +71,14 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
               })
             }
           }
-        },
-        zoom: {
-          enabled: true,
-          type: 'x'
         }
       },
       tooltip: {
         enabled: true,
-        followCursor: true,
+        followCursor: false,
         shared: false,
         y: {
-          formatter: (val: number) => (val === 1 ? trueLabel : falseLabel)
+          formatter: (val: number) => `${val} ${unit}`
         },
         theme: settings.settings.mode
       },
@@ -104,10 +98,11 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
           bottom: 5
         }
       },
+      colors: [color ? color : 'var(--mui-palette-primary-main)'],
       stroke: {
         width: 3,
         lineCap: 'butt',
-        curve: 'stepline'
+        curve: 'smooth'
       },
       xaxis: {
         type: 'datetime',
@@ -117,66 +112,69 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
         }
       },
       yaxis: {
-        labels: { show: false },
-        tickAmount: 2,
-        min: -0.01,
-        max: 1.01
+        labels: {
+          style: { colors: 'var(--mui-palette-text-primary)' },
+          offsetX: -16
+        },
+        tickAmount: 4
       },
       legend: {
-        showForSingleSeries: true,
         labels: { colors: 'var(--mui-palette-text-main)' }
       }
     }
   }
 
-  const getDeviceData = (records: Record<number, RoomDevice>, cutoffTimestamp?: number) => {
-    return Object.entries(records).map(([_, deviceData]) => {
-      let data = deviceData.values.map((v, idx) => [new Date(deviceData.times[idx] * 1000).getTime(), Number(v)])
+  const getMetricData = (metrics: RoomMetric, name: string, cutoffTimestamp?: number) => {
+    let data = metrics.values.map((v, idx) => [new Date(metrics.times[idx] * 1000).getTime(), Number(v)])
 
-      if (cutoffTimestamp && data.length) {
-        const lastTimestamp = data[0][0]
-        const timeCutoff = lastTimestamp - cutoffTimestamp
+    if (cutoffTimestamp && data.length) {
+      const lastTimestamp = data[0][0]
+      const timeCutoff = lastTimestamp - cutoffTimestamp
 
-        data = data.filter(metric => metric[0] >= timeCutoff)
-      }
+      data = data.filter(metric => metric[0] >= timeCutoff)
+    }
 
-      return {
-        name: deviceData.name,
-        data: data.toReversed()
-      }
-    })
+    return {
+      name: name,
+      data: data
+    }
   }
 
-  // const cutoff = 3600000
+  const cutoff = 3600000
 
-  const doorData = getDeviceData(room.devices.doors)
-  const windowData = getDeviceData(room.devices.windows)
-  const lightData = getDeviceData(room.devices.lights)
-  const coolingData = getDeviceData(room.devices.ventilators)
+  const peopleData = getMetricData(room.metrics.people, 'People', cutoff)
+  const tempData = getMetricData(room.metrics.temperature, 'Temperature', cutoff)
+  const co2Data = getMetricData(room.metrics.co2, 'CO₂', cutoff)
 
   return (
     <div>
       <Grid container rowSpacing={4} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <Card>
             <CardContent>
               <Box display='flex' alignItems='center'>
-                <StyledBadge badgeContent={doorData.length} color='secondary' className='mr-5'>
-                  <Icon path={mdiDoorOpen} size={1} />
+                <StyledBadge
+                  badgeContent={peopleData.data.length && peopleData.data[0][1]}
+                  color='primary'
+                  className={peopleData.data.length ? 'mr-7' : 'mr-5'}
+                  max={99999}
+                  showZero
+                >
+                  <Icon path={mdiAccountGroup} size={1} />
                 </StyledBadge>
-                <Typography variant='h4'>Doors</Typography>
+                <Typography variant='h4'>Number of People</Typography>
               </Box>
-              {doorData.length ? (
+              {peopleData.data.length ? (
                 <AppReactApexCharts
                   type='line'
                   height='140%'
                   width='100%'
-                  options={getOptions('doors')}
-                  series={doorData}
+                  options={getOptions('people', '')}
+                  series={[peopleData]}
                 />
               ) : (
                 <Typography variant='h5' className='mt-4'>
-                  No doors available
+                  People data unavailable
                 </Typography>
               )}
             </CardContent>
@@ -187,22 +185,28 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
           <Card>
             <CardContent>
               <Box display='flex' alignItems='center'>
-                <StyledBadge badgeContent={windowData.length} color='secondary' className='mr-5'>
-                  <Icon path={mdiWindowClosedVariant} size={1} />
+                <StyledBadge
+                  badgeContent={tempData.data.length && tempData.data[0][1]}
+                  color='warning'
+                  className={tempData.data.length ? 'mr-7' : 'mr-5'}
+                  max={99999}
+                  showZero
+                >
+                  <Icon path={mdiThermometer} size={1} />
                 </StyledBadge>
-                <Typography variant='h4'>Windows</Typography>
+                <Typography variant='h4'>Temperature (°C)</Typography>
               </Box>
-              {windowData.length ? (
+              {tempData.data.length ? (
                 <AppReactApexCharts
                   type='line'
                   height='140%'
                   width='100%'
-                  options={getOptions('windows')}
-                  series={windowData}
+                  options={getOptions('temperature', '°C', 'var(--mui-palette-warning-main)')}
+                  series={[tempData]}
                 />
               ) : (
                 <Typography variant='h5' className='mt-4'>
-                  No windows available
+                  Temperature data unavailable
                 </Typography>
               )}
             </CardContent>
@@ -213,48 +217,28 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
           <Card>
             <CardContent>
               <Box display='flex' alignItems='center'>
-                <StyledBadge badgeContent={lightData.length} color='secondary' className='mr-5'>
-                  <Icon path={mdiLightbulbOn} size={1} />
+                <StyledBadge
+                  badgeContent={co2Data.data.length && co2Data.data[0][1]}
+                  color='success'
+                  className={co2Data.data.length ? 'mr-7' : 'mr-5'}
+                  max={99999}
+                  showZero
+                >
+                  <Icon path={mdiMoleculeCo2} size={1} />
                 </StyledBadge>
-                <Typography variant='h4'>Lights</Typography>
+                <Typography variant='h4'>CO₂ (ppm)</Typography>
               </Box>
-              {lightData.length ? (
+              {co2Data.data.length ? (
                 <AppReactApexCharts
                   type='line'
                   height='140%'
                   width='100%'
-                  options={getOptions('lights', 'On', 'Off')}
-                  series={lightData}
+                  options={getOptions('co2', 'ppm', 'var(--mui-palette-success-main)')}
+                  series={[co2Data]}
                 />
               ) : (
                 <Typography variant='h5' className='mt-4'>
-                  No lights available
-                </Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Box display='flex' alignItems='center'>
-                <StyledBadge badgeContent={coolingData.length} color='secondary' className='mr-5'>
-                  <Icon path={mdiFan} size={1} />
-                </StyledBadge>
-                <Typography variant='h4'>Cooling Devices</Typography>
-              </Box>
-              {coolingData.length ? (
-                <AppReactApexCharts
-                  type='line'
-                  height='140%'
-                  width='100%'
-                  options={getOptions('cooling', 'On', 'Off')}
-                  series={coolingData}
-                />
-              ) : (
-                <Typography variant='h5' className='mt-4'>
-                  No cooling devices available
+                  CO₂ data unavailable
                 </Typography>
               )}
             </CardContent>
@@ -265,4 +249,4 @@ const RoomStructure = (props: { room: RoomDetailData }) => {
   )
 }
 
-export default RoomStructure
+export default RoomStatus

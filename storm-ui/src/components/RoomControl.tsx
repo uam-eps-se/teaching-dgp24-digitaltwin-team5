@@ -11,9 +11,9 @@ import { Box, Button, Grid, Tooltip, Typography } from '@mui/material'
 import { useDebouncedCallback } from 'use-debounce'
 
 import type { DeviceStatus, RoomDetailData, RoomDevice } from '@core/types'
-import { updateDeviceAction } from '@/@core/utils/actions'
+import { updateDeviceAction } from '@core/utils/actions'
 
-function QuickSearchFooter() {
+const QuickSearchFooter = () => {
   return (
     <Box
       sx={{
@@ -34,12 +34,53 @@ function QuickSearchFooter() {
   )
 }
 
+const DeviceActionCell = (props: {
+  row: DeviceStatus
+  type: string
+  actionTrue: string
+  actionFalse: string
+  getTooltip: (name: string, action: string) => string
+  updateStatus: (newStatus: boolean) => void
+}) => {
+  const { row, type, actionTrue, actionFalse, getTooltip, updateStatus } = props
+  const [disabled, setDisabled] = useState<boolean>(false)
+  const [active, setActive] = useState<boolean>(row.status)
+
+  const handleAction = useDebouncedCallback(async () => {
+    const res: any = await updateDeviceAction(row.id as number, type, !active)
+
+    if (!('error' in res)) {
+      updateStatus(!active)
+      setActive(!active)
+    }
+
+    setDisabled(false)
+  }, 500)
+
+  return (
+    <Tooltip title={getTooltip(row.name, active ? actionFalse : actionTrue)} enterDelay={500} enterNextDelay={500}>
+      <Button
+        variant='outlined'
+        size='small'
+        disabled={disabled}
+        onClick={() => {
+          setDisabled(true)
+          handleAction()
+        }}
+        color={active ? 'error' : 'success'}
+        className='h-3/5 rounded'
+      >
+        {active ? actionFalse : actionTrue}
+      </Button>
+    </Tooltip>
+  )
+}
+
 const paginationModel = { page: 0, pageSize: 5 }
 
 function ControlTable(props: { devices: DeviceStatus[]; type: string; title: string | undefined }) {
-  const devices = props.devices
-  const type = props.type
-  const title = props.title
+  const { devices, type, title } = props
+  const [devicesRows, setDevicesRows] = useState(devices)
 
   let actionTrue: string = 'On'
   let actionFalse: string = 'Off'
@@ -88,51 +129,27 @@ function ControlTable(props: { devices: DeviceStatus[]; type: string; title: str
       flex: 0.3,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: params => {
-        const [disabled, setDisabled] = useState<boolean>(false)
-        const [active, setActive] = useState<boolean>(params.row.status)
-
-        const handleAction = useDebouncedCallback(async () => {
-          const res: any = await updateDeviceAction(params.row.id as number, type, !active)
-
-          if (!('error' in res)) {
-            // TODO Check if button actually updates with params.row.status value
-            params.row.status = !active
-            setActive(!active)
-          }
-
-          setDisabled(false)
-        }, 500)
-
-        return (
-          <Tooltip
-            title={getTooltip(params.row.name, active ? actionFalse : actionTrue)}
-            enterDelay={500}
-            enterNextDelay={500}
-          >
-            <Button
-              variant='outlined'
-              size='small'
-              disabled={disabled}
-              onClick={() => {
-                setDisabled(true)
-                handleAction()
-              }}
-              color={active ? 'error' : 'success'}
-              className='h-3/5 rounded'
-            >
-              {active ? actionFalse : actionTrue}
-            </Button>
-          </Tooltip>
-        )
-      }
+      renderCell: params => (
+        <DeviceActionCell
+          row={params.row}
+          type={type}
+          actionTrue={actionTrue}
+          actionFalse={actionFalse}
+          getTooltip={getTooltip}
+          updateStatus={(newStatus: boolean) => {
+            setDevicesRows(
+              devices.map(device => (device.id === params.row.id ? { ...device, status: newStatus } : device))
+            )
+          }}
+        />
+      )
     }
   ]
 
   return (
     <Paper sx={{ height: 'auto', width: '100%' }}>
       <DataGrid
-        rows={devices}
+        rows={devicesRows}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5]}

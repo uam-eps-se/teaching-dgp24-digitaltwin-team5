@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { useInterval } from 'react-use'
+import { useEffectOnce, useInterval } from 'react-use'
 
 import { Box, Chip, Fab } from '@mui/material'
 
@@ -19,11 +19,11 @@ import { useDebouncedCallback } from 'use-debounce'
 import { fetchRoom } from '@core/utils/data'
 import type { RoomDetailData } from '@core/types'
 
-import RoomDetailButtons from './actionButtons/RoomDetailButtons'
+import RoomDetailButtons from '@components/actionButtons/RoomDetailButtons'
 
-import RoomStructure from '@views/dashboard/RoomStructure'
-import RoomStatus from '@views/dashboard/RoomStatus'
-import RoomControl from '@views/dashboard/RoomControl'
+import RoomStructure from '@components/RoomStructure'
+import RoomStatus from '@components/RoomStatus'
+import RoomControl from '@components/RoomControl'
 
 export default function RoomDetail(props: { roomId: string }) {
   const [room, setRoom] = useState<RoomDetailData>()
@@ -36,7 +36,13 @@ export default function RoomDetail(props: { roomId: string }) {
 
   const updateRoomData = async () => {
     return fetchRoom(props.roomId).then(r => {
-      if (r) setRoom(r)
+      if (!r.detail) {
+        r.temperatureStatus = r.temperature_status
+        r.co2Status = r.co2_status
+        delete r.temperature_status, r.co2_status
+
+        setRoom(r)
+      }
 
       if (!titleChanged && r.name) {
         setTitleChanged(true)
@@ -45,13 +51,13 @@ export default function RoomDetail(props: { roomId: string }) {
     })
   }
 
-  useEffect(() => {
+  useEffectOnce(() => {
     updateRoomData().then(() => {
       const routeTab = searchParams.get('tab')
 
       if (routeTab) setTab(routeTab)
     })
-  }, [])
+  })
 
   useInterval(() => updateRoomData(), intervalDelay as number)
 
