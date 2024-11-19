@@ -23,11 +23,14 @@ export enum SensorStatus {
   DANGER = 2
 }
 
-export type RoomSummary = {
+export type Room = {
   id: number
   name: string
+}
+
+export type RoomSummary = Room & {
   size: number
-  tempStatus: SensorStatus
+  temperatureStatus: SensorStatus
   co2Status: SensorStatus
   devices: {
     doors: {
@@ -85,7 +88,7 @@ export type RoomDetailData = {
   id: number
   name: string
   size: number
-  tempStatus: SensorStatus
+  temperatureStatus: SensorStatus
   co2Status: SensorStatus
   devices: RoomStructureData
   metrics: RoomRealtimeData
@@ -121,14 +124,15 @@ export enum AlertType {
 }
 
 export type Alert = {
+  id: number
   type: AlertType
   content: string
   roomId: number
+  roomName: string
   time: number
 }
 
-export type RoomItem = {
-  id: number
-  name: string
+export type Context = {
+  rooms: Array<Room>
   alerts: Array<Alert>
 }

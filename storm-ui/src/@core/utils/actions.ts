@@ -1,9 +1,13 @@
 'use server'
 
+const jsonHeaders = {
+  'Content-Type': 'application/json'
+}
+
 export async function deleteRoom(roomId: number) {
   const requestOptions = {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
+    headers: jsonHeaders,
     body: JSON.stringify({
       id: roomId
     })
@@ -37,7 +41,7 @@ export async function importRooms(formData: FormData) {
 async function manageDevice(roomId: number, type: string, deviceId?: number, name?: string, errorMsg?: string) {
   const requestOptions = {
     method: deviceId ? 'PUT' : 'POST',
-    headers: { 'Content-Type': 'application/json' }
+    headers: jsonHeaders
   }
 
   const data: any = {
@@ -107,7 +111,7 @@ export async function editRoom(roomId: string, formData: FormData) {
 export async function deleteDevice(deviceId: number, type: string) {
   const requestOptions = {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
+    headers: jsonHeaders,
     body: JSON.stringify({
       id: deviceId,
       type: type
@@ -126,7 +130,7 @@ export async function deleteDevice(deviceId: number, type: string) {
 export async function deleteDoor(doorId: number, roomId: number) {
   const requestOptions = {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
+    headers: jsonHeaders,
     body: JSON.stringify({
       id: doorId,
       room_id: roomId
@@ -145,7 +149,7 @@ export async function deleteDoor(doorId: number, roomId: number) {
 export async function updateDeviceAction(deviceId: number, type: string, action: boolean) {
   const requestOptions = {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' }
+    headers: jsonHeaders
   }
 
   const data: any = {
@@ -169,5 +173,23 @@ export async function updateDeviceAction(deviceId: number, type: string, action:
     })
     .catch(err => {
       return { message: `API Error: Failed to Set ${type} Action.`, error: err }
+    })
+}
+
+export async function confirmAlerts(alertIds: number[]) {
+  const requestOptions = {
+    method: 'PUT',
+    headers: jsonHeaders,
+    body: JSON.stringify({
+      ids: alertIds
+    })
+  }
+
+  return fetch(`${process.env.NEXT_PUBLIC_API_URL}/context`, requestOptions)
+    .then(async () => {
+      return { message: `Confirmed Alerts: ${alertIds}.` }
+    })
+    .catch(err => {
+      return { message: 'API Error: Failed to Confirm Alerts.', error: err }
     })
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -10,7 +10,7 @@ import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiTrashCan, mdiWindowClosedVarian
 
 import Icon from '@mdi/react'
 
-import { useInterval } from 'react-use'
+import { useEffectOnce, useInterval } from 'react-use'
 
 import { z } from 'zod'
 
@@ -23,6 +23,7 @@ import { fetchFreeDevices, fetchFreeDoors } from '@core/utils/data'
 import { assignDevice, createDevice, createRoom, deleteDevice, deleteDoor, editRoom } from '@core/utils/actions'
 import { RoomsContext } from '@core/contexts/roomsContext'
 import DeleteRoomModal from '@components/actionButtons/DeleteRoomModal'
+import { LayoutContext } from '@core/contexts/layoutContext'
 
 const RoomFormSchema = z.object({
   name: z.string().min(1, 'Room name is required'),
@@ -49,6 +50,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
   const [inputVentilators, setInputVentilators] = useState<Array<Device>>([])
 
   const { rooms, updateRooms } = useContext(RoomsContext)
+  const { updateContext } = useContext(LayoutContext)
 
   const [newDevices, setNewDevices] = useState<{
     doors: Array<Door>
@@ -105,7 +107,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
     })
   }
 
-  useEffect(() => {
+  useEffectOnce(() => {
     updateDevicesData().then(() => {
       if (isEdit) {
         const r = props.room as RoomDetailData
@@ -138,8 +140,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
         setInputVentilators(oldVentilators)
       }
     })
-    // eslint-disable-next-line
-  }, [])
+  })
 
   useInterval(() => updateDevicesData(), intervalDelay)
 
@@ -267,7 +268,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
           if ('error' in res) console.error(res.error)
           else {
-            // TODO updateContext()
+            updateContext()
             await updateRooms()
             if (isEdit) router.back()
             else router.push('/rooms')

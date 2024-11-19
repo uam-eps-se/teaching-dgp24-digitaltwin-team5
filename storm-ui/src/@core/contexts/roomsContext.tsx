@@ -41,7 +41,17 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
 
   const updateRooms = async () => {
     return fetchRooms().then(rs => {
-      if (rs && !deleting) setRooms({ data: rs, fetched: true })
+      if (rs && !deleting)
+        setRooms({
+          data: rs.map((r: any) => {
+            r.temperatureStatus = r.temperature_status
+            r.co2Status = r.co2_status
+            delete r.temperature_status, r.co2_status
+
+            return r
+          }),
+          fetched: true
+        })
     })
   }
 

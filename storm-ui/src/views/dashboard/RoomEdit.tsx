@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { mdiHomeOutline, mdiIdentifier } from '@mdi/js'
 
 import Icon from '@mdi/react'
 import { Chip } from '@mui/material'
+
+import { useEffectOnce } from 'react-use'
 
 import type { RoomDetailData } from '@core/types'
 
@@ -15,12 +17,11 @@ import RoomForm from '@views/dashboard/RoomForm'
 const RoomEdit = (props: { roomId: string }) => {
   const [room, setRoom] = useState<RoomDetailData>()
 
-  useEffect(() => {
+  useEffectOnce(() => {
     fetchRoom(props.roomId).then(r => {
       if (r) setRoom(r)
     })
-    // eslint-disable-next-line
-  }, [])
+  })
 
   return (
     <div>

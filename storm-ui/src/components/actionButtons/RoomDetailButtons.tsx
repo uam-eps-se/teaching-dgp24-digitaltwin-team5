@@ -33,7 +33,8 @@ const RoomDetailActions = (props: { room: RoomDetailData }) => {
           bottom: '50px',
           right: '50px',
           display: 'flex',
-          alignItems: 'flex-end'
+          alignItems: 'flex-end',
+          maxHeight: '0px'
         }}
       >
         {room && (

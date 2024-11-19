@@ -97,7 +97,7 @@ const RoomSummaryActions = () => {
           display: 'flex',
           gap: '25px',
           alignItems: 'flex-end',
-          maxHeight: '56px'
+          maxHeight: '0px'
         }}
       >
         <Tooltip title='Export Rooms to CSV' placement='top'>
