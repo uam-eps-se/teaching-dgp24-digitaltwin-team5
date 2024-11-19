@@ -207,7 +207,7 @@ class DevicesTest(Base):
         )
 
     def test05_patch(self):
-        """Test Case 04: Devices DELETE Request"""
+        """Test Case 05: Devices PATCH Request"""
         url = "/v1/devices"
 
         # Missing parameters

@@ -4,7 +4,7 @@ This module defines the `v1/doors` endpoint for the API.
 
 # django imports
 from django.utils import timezone
-from django.db.models import Count
+from django.db.models import Count, Q
 
 # restframework imports
 from rest_framework.response import Response
@@ -33,13 +33,9 @@ class DoorsAPIView(APIView):
         EDITION. This method expects to receive the parameters specified in
         `jsons/doors/get.json`.
         """
-        ids = (
-            DoorConnectsRoom.objects.values("door")
-            .annotate(rc=Count("room"))
-            .filter(rc__lt=2)
-            .values("door")
-        )
-        doors = Door.objects.filter(id__in=ids)
+        doors = Door.objects.annotate(
+            connection_count=Count("doorconnectsroom")
+        ).filter(Q(connection_count__lt=2) | Q(connection_count=0))
 
         serializer = DoorSerializer(doors, many=True)
         return Response(serializer.data)
@@ -109,10 +105,14 @@ class DoorsAPIView(APIView):
         # Error Case: Invalid connections
         if room_id in connected_rooms:
             return Response(
-                f"Given room id {room_id} is already connected to this door!"
+                f"Given room id {room_id} is already connected to this door!",
+                status=status.HTTP_406_NOT_ACCEPTABLE,
             )
         if connected_rooms.count() >= 2:
-            return Response(f"Given door id {identifier} is connected to two rooms!")
+            return Response(
+                f"Given door id {identifier} is connected to two rooms!",
+                status=status.HTTP_406_NOT_ACCEPTABLE,
+            )
 
         droom = DoorConnectsRoom(door=door, room=room)
         droom.save()
@@ -148,7 +148,7 @@ class DoorsAPIView(APIView):
             return Response("Invalid door id!", status=status.HTTP_400_BAD_REQUEST)
 
         connected_rooms = DoorConnectsRoom.objects.filter(door=door).values()
-        droom = DoorConnectsRoom.objects.filter(door=door, room=room)
+        droom = DoorConnectsRoom.objects.filter(door=door, room=room).first()
 
         # Error Case: Not connected door
         if droom is None:
