@@ -107,7 +107,7 @@ try:
         command = sys.stdin.readline().strip() if i else "default"
 
         i = random.randint(0, len(rooms) - 1)
-        dt, dc, wt, dc, wc, ip, ir = -1, -1, -1, -1, -1, -1, False
+        dt, wt, dc, wc, ip, RESTART = -1, -1, -1, -1, -1, False
 
         match command:
             case "dt":
@@ -121,10 +121,10 @@ try:
             case "ip":
                 ip = i
             case "restart":
-                ir = True
+                RESTART = True
 
         # Restart sensors for better monitoring
-        if ir:
+        if RESTART:
             for i, room in enumerate(rooms):
                 metrics[room["id"]] = {
                     "people": {"value": 5, "time": now.strftime("%Y-%m-%dT%H:%M:%S%z")},
