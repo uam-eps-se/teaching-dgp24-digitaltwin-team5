@@ -8,16 +8,71 @@ import { useRouter } from 'next/navigation'
 
 import type { GridCellParams, GridColDef, GridEventListener } from '@mui/x-data-grid'
 import { DataGrid, GridToolbarQuickFilter } from '@mui/x-data-grid'
-import Paper from '@mui/material/Paper'
 
-import { Box, IconButton, Tooltip } from '@mui/material'
+import type { Theme } from '@mui/material/styles'
+import { lighten, darken, styled } from '@mui/material/styles'
+
+import { Box, IconButton, Tooltip, Paper } from '@mui/material'
 
 import { mdiPencil, mdiTrashCan } from '@mdi/js'
 
 import Icon from '@mdi/react'
 
-import type { RoomSummary } from '@core/types'
-import DeleteRoomModal from '@components/actionButtons/DeleteRoomModal'
+import { SensorStatus, type RoomSummary } from '@core/types'
+import DeleteRoomModal from '@/components/actionButtons/DeleteRoomModal'
+
+const getBackgroundColor = (color: string, theme: Theme, coefficient: number) => ({
+  backgroundColor: darken(color, coefficient),
+  ...theme.applyStyles('light', {
+    backgroundColor: lighten(color, coefficient)
+  })
+})
+
+const getColor = (color: string, theme: Theme, coefficient: number) => ({
+  color: darken(color, coefficient),
+  ...theme.applyStyles('dark', {
+    color: lighten(color, coefficient)
+  })
+})
+
+const childrenHoverStyle = (theme: Theme) => ({
+  '&:hover > .storm-status--0': {
+    ...getBackgroundColor(theme.palette.success.main, theme, 0.6)
+  },
+  '&:hover > .storm-status--1': {
+    ...getBackgroundColor(theme.palette.warning.main, theme, 0.6)
+  },
+  '&:hover > .storm-status--2': {
+    ...getBackgroundColor(theme.palette.error.main, theme, 0.6)
+  }
+})
+
+// Custom DataGrid with row/cell colors by Status
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  '& .storm-status--0': {
+    ...getBackgroundColor(theme.palette.success.main, theme, 0.7),
+    ...getColor(theme.palette.success.main, theme, 0.55),
+    '&:hover': {
+      ...getBackgroundColor(theme.palette.success.main, theme, 0.6)
+    }
+  },
+  '& .storm-status--1': {
+    ...getBackgroundColor(theme.palette.warning.main, theme, 0.7),
+    ...getColor(theme.palette.warning.main, theme, 0.55),
+    '&:hover': {
+      ...getBackgroundColor(theme.palette.warning.main, theme, 0.6)
+    }
+  },
+  '& .storm-status--2': {
+    ...getBackgroundColor(theme.palette.error.main, theme, 0.7),
+    ...getColor(theme.palette.error.main, theme, 0.55),
+    '&:hover': {
+      ...getBackgroundColor(theme.palette.error.main, theme, 0.6)
+    },
+    ...childrenHoverStyle(theme)
+  },
+  '& .MuiDataGrid-row': childrenHoverStyle(theme)
+}))
 
 const colHeader = (name: string, subtitle: string) => {
   return (
@@ -183,7 +238,7 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
 
   return (
     <Paper sx={{ height: '100%', width: '100%' }}>
-      <DataGrid
+      <StyledDataGrid
         rows={rooms}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
@@ -193,6 +248,20 @@ export default function DataTable(props: { rooms: RoomSummary[] }) {
         onCellClick={handleCellClick}
         disableColumnMenu
         slots={{ toolbar: QuickSearchToolbar }}
+        getCellClassName={params => {
+          // Show sensor cell in corresponding colors
+          if (params.field === 'co2') return `storm-status--${params.row.co2Status}`
+          else if (params.field === 'temperature') return `storm-status--${params.row.temperatureStatus}`
+
+          return ''
+        }}
+        getRowClassName={params => {
+          // If CO2 or Temperature in dangerous level, show row in red
+          if ([params.row.co2Status, params.row.temperatureStatus].includes(SensorStatus.DANGER))
+            return `storm-status--${SensorStatus.DANGER}`
+
+          return ''
+        }}
       />
     </Paper>
   )
