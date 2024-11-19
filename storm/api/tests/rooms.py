@@ -1,5 +1,5 @@
 """
-This module defines unit tests for the application.
+This module defines unit tests for the `v1/rooms` endpoint.
 """
 
 import decimal
@@ -14,11 +14,10 @@ from api.models import DoorConnectsRoom, Alert
 
 class RoomsTest(Base):
     """
-    This class defines a series of unit tests to be performed on various REST
-    API endpoints.
+    Class representation of unit tests to run.
     """
 
-    def test01_rooms_get(self):
+    def test01_get(self):
         """Test Case 01: Rooms GET request"""
         url = "/v1/rooms"
         response = self.client.get(url)
@@ -51,7 +50,7 @@ class RoomsTest(Base):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, response_)
 
-    def test02_rooms_post_fail(self):
+    def test02_post_fail(self):
         """Test Case 02: Rooms failed POST request"""
         url = "/v1/rooms"
 
@@ -73,7 +72,7 @@ class RoomsTest(Base):
             self.client.post(url, {"name": 101, "size": 101})
             self.client.post(url, {"name": "Room IV", "size": "pepe"})
 
-    def test03_rooms_post_empty(self):
+    def test03_post_empty(self):
         """Test Case 03: Rooms POST request with no devices"""
         url = "/v1/rooms"
 
@@ -82,7 +81,7 @@ class RoomsTest(Base):
             status.HTTP_200_OK,
         )
 
-    def test04_rooms_post_devices_fail(self):
+    def test04_post_devices_fail(self):
         """Test Case 04: Rooms POST request with incorrect device info"""
         url = "/v1/rooms"
         data = {"name": "Room IV", "size": 104}
@@ -99,7 +98,7 @@ class RoomsTest(Base):
             status.HTTP_400_BAD_REQUEST,
         )
 
-    def test05_rooms_post_add_doors(self):
+    def test05_post_add_doors(self):
         """Test Case 05: Rooms POST request with doors"""
         url = "/v1/rooms"
         data = {"name": "Room IV", "size": 104}
@@ -108,6 +107,7 @@ class RoomsTest(Base):
         with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"doors": ["uh-oh", "this-wrong"]})
             self.client.post(url, data, format="json")
+        with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"doors": "uh-oh"})
             self.client.post(url, data, format="json")
 
@@ -140,7 +140,7 @@ class RoomsTest(Base):
         )
         self.assertEqual(DoorConnectsRoom.objects.filter(door=door).count(), conns + 1)
 
-    def test06_rooms_post_add_windows(self):
+    def test06_post_add_windows(self):
         """Test Case 06: Rooms POST request with windows"""
         url = "/v1/rooms"
         data = {"name": "Room IV", "size": 104}
@@ -149,6 +149,7 @@ class RoomsTest(Base):
         with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"windows": ["uh-oh", "this-wrong"]})
             self.client.post(url, data, format="json")
+        with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"windows": "uh-oh"})
             self.client.post(url, data, format="json")
 
@@ -186,7 +187,7 @@ class RoomsTest(Base):
             data["name"], Window.objects.filter(id=window.id).first().room.name
         )
 
-    def test07_rooms_post_add_ventilators(self):
+    def test07_post_add_ventilators(self):
         """Test Case 07: Rooms POST request with ventilators"""
         url = "/v1/rooms"
         data = {"name": "Room IV", "size": 104}
@@ -195,6 +196,7 @@ class RoomsTest(Base):
         with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"ventilators": ["uh-oh", "this-wrong"]})
             self.client.post(url, data, format="json")
+        with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"ventilators": "uh-oh"})
             self.client.post(url, data, format="json")
 
@@ -233,7 +235,7 @@ class RoomsTest(Base):
             data["name"], Ventilator.objects.filter(id=ventilator.id).first().room.name
         )
 
-    def test08_rooms_post_add_lights(self):
+    def test08_post_add_lights(self):
         """Test Case 08: Rooms POST request with lights"""
         url = "/v1/rooms"
         data = {"name": "Room IV", "size": 104}
@@ -242,6 +244,7 @@ class RoomsTest(Base):
         with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"lights": ["uh-oh", "this-wrong"]})
             self.client.post(url, data, format="json")
+        with self.assertRaises(AttributeError):
             data["devices"] = json.dumps({"lights": "uh-oh"})
             self.client.post(url, data, format="json")
 
@@ -279,7 +282,7 @@ class RoomsTest(Base):
             data["name"], Light.objects.filter(id=light.id).first().room.name
         )
 
-    def test09_rooms_delete(self):
+    def test09_delete(self):
         """Test Case 09: Rooms DELETE request"""
         url = "/v1/rooms"
         room = Room(name="API TestRoom")

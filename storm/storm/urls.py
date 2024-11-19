@@ -26,7 +26,7 @@ urlpatterns += [
     path("v1/data", DataAPIView.as_view()),
     path("v1/devices", DevicesAPIView.as_view()),
     path("v1/doors", DoorsAPIView.as_view()),
-    path("v1/room/<identifier>/", RoomDetailAPIView.as_view()),
+    path("v1/room/<identifier>/", RoomDetailAPIView.as_view(), name="room"),
     path("v1/rooms", RoomsAPIView.as_view()),
     path("v1/metrics", MetricsAPIView.as_view()),
 ]

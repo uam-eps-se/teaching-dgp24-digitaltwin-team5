@@ -24,7 +24,7 @@ class Base(APITestCase):
         """
         Populates the test database.
         """
-        now = timezone.now()
+        cls.time = timezone.now()
 
         # Create Rooms
         cls.rooms = [Room(name=f"Room {i}", size=100 + i) for i in range(ROOMS)]
@@ -62,10 +62,10 @@ class Base(APITestCase):
 
         # Create random metrics
         for room in cls.rooms:
-            TemperatureInRoom(room=room, time=now, temp=22.1).save()
-            PeopleInRoom(room=room, time=now, no_people_in_room=3).save()
-            Co2InRoom(room=room, time=now, co2=500).save()
+            TemperatureInRoom(room=room, time=cls.time, temp=22.1).save()
+            PeopleInRoom(room=room, time=cls.time, no_people_in_room=3).save()
+            Co2InRoom(room=room, time=cls.time, co2=500).save()
 
-        WindowOpen(time=now, window=cls.windows[0], is_open=True).save()
+        WindowOpen(time=cls.time, window=cls.windows[0], is_open=True).save()
 
         super().setUpTestData()
