@@ -95,11 +95,18 @@ class RoomsAPIView(APIView):
         room = Room(name=name, size=size)
         room.save()
 
-        devices = json.loads(devices)
-
         # Append devices to room
-        for key in devices:
-            device_manager[key](devices[key], room)
+        if devices is not None:
+            devices = json.loads(devices)
+
+            for key in devices:
+                func = device_manager.get(key, None)
+                if not func:
+                    return Response(
+                        f"Incorrect device type: {key}",
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                func(devices[key], room)
 
         return Response(f"Room {room.name} created successfully with id {room.id}!")
 
@@ -127,27 +134,26 @@ class RoomsAPIView(APIView):
             doors (list[dict]): List of doors associated to room.
             room: Room which contains doors.
         """
-        # Process each door in request
+
         for d in doors:
             identifier = d.get("id", None)
             name = d.get("name", None)
-            # If no id is received, create new door and connection
-            if identifier is None:
-                if name is not None:
-                    d_ = Door(name=name)
-                    d_.save()
-                    d__ = DoorConnectsRoom(door=d_, room=room)
-                    d__.save()
 
-            # If an id is received, create a connection when possible
-            else:
-                d_ = Door.objects.filter(id=identifier).first()
+            if identifier is None:  # New door and connection
+                if name is not None:
+                    door = Door(name=name)
+                    door.save()
+                    conn = DoorConnectsRoom(door=door, room=room)
+                    conn.save()
+
+            else:  # Create connection if possible
+                door = Door.objects.filter(id=identifier).first()
                 if (
-                    d_ is not None
-                    and DoorConnectsRoom.objects.filter(door=d_).count() < 2
+                    door is not None
+                    and DoorConnectsRoom.objects.filter(door=door).count() < 2
                 ):
-                    d__ = DoorConnectsRoom(door=d_, room=room)
-                    d__.save()
+                    conn = DoorConnectsRoom(door=door, room=room)
+                    conn.save()
 
     def _add_windows(self, windows: list[dict], room):
         """
@@ -157,23 +163,20 @@ class RoomsAPIView(APIView):
             windows (list[dict]): List of windows associated to room.
             room: Room which contains windows.
         """
-        # Process each window in request
         for w in windows:
             identifier = w.get("id", None)
             name = w.get("name", None)
 
-            # If no id is received, create new window for the room
-            if identifier is None:
+            if identifier is None:  # New window
                 if name is not None:
-                    w_ = Window(name=name, room=room)
-                    w_.save()
-            # If an id is received, update ownership for an empty window
-            else:
-                w_ = Window.objects.filter(id=identifier).first()
+                    window = Window(name=name, room=room)
+                    window.save()
 
-                if w_ is not None:
-                    w_.room = room if w_.room is None else w_.room
-                    w_.save()
+            else:  # Update ownership on unassigned window
+                window = Window.objects.filter(id=identifier).first()
+                if window is not None:
+                    window.room = room if window.room is None else window.room
+                    window.save()
 
     def _add_ventilators(self, ventilators: list[dict], room):
         """
@@ -183,24 +186,20 @@ class RoomsAPIView(APIView):
             ventilators (list[dict]): List of ventilators associated to room.
             room: Room which contains ventilators.
         """
-        # Process each ventilator in request
         for v in ventilators:
             identifier = v.get("id", None)
             name = v.get("name", None)
 
-            # If no id is received, create new window for the room
-            if identifier is None:
+            if identifier is None:  # New ventilator
                 if name is not None:
-                    v_ = Ventilator(name=name, room=room)
-                    v_.save()
-            # If an id is received,
-            # update ownership for an empty ventilator when possible
-            else:
-                v_ = Ventilator.objects.filter(id=identifier).first()
+                    vent = Ventilator(name=name, room=room)
+                    vent.save()
 
-                if v_ is not None:
-                    v_.room = room if v_.room is None else v_.room
-                    v_.save()
+            else:  # Update ownership on unassigned ventilator
+                vent = Ventilator.objects.filter(id=identifier).first()
+                if vent is not None:
+                    vent.room = room if vent.room is None else vent.room
+                    vent.save()
 
     def _add_lights(self, lights: list[dict], room):
         """
