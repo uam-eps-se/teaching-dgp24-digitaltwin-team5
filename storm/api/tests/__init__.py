@@ -9,3 +9,4 @@ from .context import ContextTest
 from .devices import DevicesTest
 from .doors import DoorsTest
 from .metrics import MetricsTest
+from .data import DataTest
