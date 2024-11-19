@@ -8,6 +8,7 @@ from rest_framework.test import APITestCase
 from api.models import Room, Ventilator, Light, Window, Door
 from api.models import TemperatureInRoom, Co2InRoom, PeopleInRoom
 from api.models import DoorConnectsRoom
+from api.models import WindowOpen
 
 ROOMS = 3
 DEVS_PER_ROOM = 3
@@ -64,5 +65,7 @@ class Base(APITestCase):
             TemperatureInRoom(room=room, time=now, temp=22.1).save()
             PeopleInRoom(room=room, time=now, no_people_in_room=3).save()
             Co2InRoom(room=room, time=now, co2=500).save()
+
+        WindowOpen(time=now, window=cls.windows[0], is_open=True).save()
 
         super().setUpTestData()

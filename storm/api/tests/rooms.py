@@ -46,6 +46,8 @@ class RoomsTest(Base):
                 }
             )
 
+        response_[0]["devices"]["windows"]["open"] = 1
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, response_)
 
