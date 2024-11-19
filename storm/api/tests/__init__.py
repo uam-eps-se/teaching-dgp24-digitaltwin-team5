@@ -8,3 +8,4 @@ from .room_detail import RoomDetailTest
 from .context import ContextTest
 from .devices import DevicesTest
 from .doors import DoorsTest
+from .metrics import MetricsTest
