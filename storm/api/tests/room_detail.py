@@ -122,7 +122,7 @@ class RoomDetailTest(Base):
         self.assertEqual(response.data, response_)
 
     def test02_put(self):
-        """Test Case 01: Room PUT request"""
+        """Test Case 02: Room PUT request"""
         url = f"/v1/room/{self.rooms[0].id}/"
         self.assertEqual(
             self.client.put(url, {"name": "RoomRoom", "size": 90}).status_code,
