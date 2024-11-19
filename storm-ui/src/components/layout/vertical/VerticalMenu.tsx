@@ -1,8 +1,8 @@
 // MUI Imports
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import Chip from '@mui/material/Chip'
-import { useTheme } from '@mui/material/styles'
+import { useTheme, alpha } from '@mui/material/styles'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -11,6 +11,11 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import Icon from '@mdi/react'
 
 import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
+
+import type { SnackbarCloseReason } from '@mui/material'
+import { Paper, Snackbar } from '@mui/material'
+
+import { useEffectOnce, useInterval } from 'react-use'
 
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
@@ -27,7 +32,11 @@ import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNav
 import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
-import { RoomsContext } from '@core/contexts/roomsContext'
+import StormAlert from '@components/StormAlert'
+
+import { AlertType, type Alert } from '@core/types'
+
+import { LayoutContext } from '@core/contexts/layoutContext'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -41,18 +50,50 @@ const RenderExpandIcon = ({ open, transitionDuration }: RenderExpandIconProps) =
 )
 
 const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectScrollbar: boolean) => void }) => {
-  // Hooks
+  const ignoredReasons = ['clickaway', 'escapeKeyDown']
+
   const theme = useTheme()
   const { isBreakpointReached, transitionDuration } = useVerticalNav()
 
-  const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
+  const { context, storedAlerts, setStoredAlerts, updateContext, setAlerts } = useContext(LayoutContext)
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
+  const [currentAlert, setCurrentAlert] = useState<Alert>()
 
-  const { rooms, updateRooms } = useContext(RoomsContext)
+  const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
+  const intervalDelay = Number(process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000)
+
+  const showNextAlert = () => {
+    if (context.alerts.length) {
+      setCurrentAlert(context.alerts[0])
+      setOpenSnackbar(true)
+
+      // Remove current alert from queue
+      if (context.alerts.length) setAlerts(context.alerts.slice(1))
+    } else setCurrentAlert(undefined)
+  }
+
+  const handleCloseSnackbar = (reason: SnackbarCloseReason) => {
+    if (!ignoredReasons.includes(reason)) {
+      setOpenSnackbar(false)
+
+      // Cycle through alerts
+      setTimeout(() => showNextAlert(), 500)
+    }
+  }
+
+  useEffectOnce(() => {
+    updateContext()
+  })
 
   useEffect(() => {
-    updateRooms()
+    // Show new alerts
+    if (!currentAlert) showNextAlert()
     // eslint-disable-next-line
-  }, [])
+  }, [context.alerts])
+
+  useInterval(() => {
+    updateContext()
+  }, intervalDelay)
 
   return (
     // eslint-disable-next-line lines-around-comment
@@ -81,10 +122,12 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
           icon={<i className='ri-home-smile-line' />}
           defaultOpen
           suffix={
-            rooms.data.length > 0 && <Chip label={rooms.data.length} size='small' color='primary' variant='tonal' />
+            context.rooms.length > 0 && (
+              <Chip label={context.rooms.length} size='small' color='primary' variant='tonal' />
+            )
           }
         >
-          {rooms.data
+          {context.rooms
             .toSorted((a, b) => a.id - b.id)
             .slice(0, 10)
             .map(room => (
@@ -92,7 +135,7 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
                 {room.name}
               </MenuItem>
             ))}
-          {rooms.data.length > 10 && (
+          {context.rooms.length > 10 && (
             <MenuItem disabled>
               <Icon path={mdiDotsHorizontal} size={1} />
             </MenuItem>
@@ -102,6 +145,38 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
         <MenuItem href='/rooms/create' prefix={<Icon path={mdiHomePlus} size={1} />}>
           Create Room
         </MenuItem>
+        {currentAlert && (
+          <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            open={openSnackbar}
+            onClose={(_event, reason) => handleCloseSnackbar(reason)}
+            autoHideDuration={
+              currentAlert.type === AlertType.DANGER
+                ? 60000 // 1 minute timeout for DANGER
+                : 30000 // 30 second timeout for WARNING
+            }
+          >
+            <Paper
+              className='max-w-2xl w-full max-h-full backdrop-blur'
+              sx={{
+                backgroundColor: alpha(theme.palette.background.paper, 0.5)
+              }}
+            >
+              <StormAlert
+                title={currentAlert.roomName}
+                alert={currentAlert}
+                showTime={false}
+                onDeleteAlert={() => {
+                  if (currentAlert) {
+                    setStoredAlerts(storedAlerts?.filter(alert => alert.id !== currentAlert.id))
+                  }
+
+                  handleCloseSnackbar('timeout')
+                }}
+              ></StormAlert>
+            </Paper>
+          </Snackbar>
+        )}
       </Menu>
     </ScrollWrapper>
   )

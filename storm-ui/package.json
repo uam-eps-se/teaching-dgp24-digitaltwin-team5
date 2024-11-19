@@ -36,7 +36,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.272",
+    "@iconify/json": "^2.2.274",
     "@iconify/tools": "^4.0.7",
     "@iconify/types": "^2.0.0",
     "@iconify/utils": "^2.1.33",
@@ -51,7 +51,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
-    "knip": "^5.37.0",
+    "knip": "^5.37.1",
     "postcss": "^8.4.49",
     "postcss-styled-syntax": "^0.6.4",
     "prettier": "^3.3.3",
