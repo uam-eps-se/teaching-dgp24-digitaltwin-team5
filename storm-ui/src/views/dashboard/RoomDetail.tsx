@@ -6,24 +6,31 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { useEffectOnce, useInterval } from 'react-use'
 
-import { Box, Chip, Fab } from '@mui/material'
+import { Alert, Box, Chip, Fab } from '@mui/material'
 
 import Icon from '@mdi/react'
 
-import { mdiChartLine, mdiCog, mdiFloorPlan, mdiHomeOutline, mdiIdentifier } from '@mdi/js'
+import {
+  mdiChartLine,
+  mdiCog,
+  mdiFloorPlan,
+  mdiHomeOutline,
+  mdiIdentifier,
+  mdiThermometerAlert,
+  mdiMoleculeCo2
+} from '@mdi/js'
 
 import { TabContext, TabPanel } from '@mui/lab'
 
 import { useDebouncedCallback } from 'use-debounce'
 
 import { fetchRoom } from '@core/utils/data'
-import type { RoomDetailData } from '@core/types'
-
-import RoomDetailButtons from '@components/actionButtons/RoomDetailButtons'
+import { SensorStatus, type RoomDetailData } from '@core/types'
 
 import RoomStructure from '@components/RoomStructure'
 import RoomStatus from '@components/RoomStatus'
 import RoomControl from '@components/RoomControl'
+import RoomDetailButtons from '@components/actionButtons/RoomDetailButtons'
 
 export default function RoomDetail(props: { roomId: string }) {
   const [room, setRoom] = useState<RoomDetailData>()
@@ -49,6 +56,17 @@ export default function RoomDetail(props: { roomId: string }) {
         document.title = document.title.replace(`Room ${props.roomId}`, r.name)
       }
     })
+  }
+
+  const getAlertContent = (status: SensorStatus, isCo2: boolean) => {
+    switch (status) {
+      case SensorStatus.HIGH:
+        return `High ${isCo2 ? 'CO₂' : 'Temperature'} (> ${isCo2 ? '800 ppm' : '40°C'})`
+      case SensorStatus.DANGER:
+        return `Critical ${isCo2 ? 'CO₂' : 'Temperature'} (> ${isCo2 ? '1000 ppm' : '70°C'})`
+      default:
+        return ''
+    }
   }
 
   useEffectOnce(() => {
@@ -112,8 +130,28 @@ export default function RoomDetail(props: { roomId: string }) {
     <div>
       {room ? (
         <>
-          <h1 className='mb-5 flex justify-between items-center'>
+          <h1 className='mb-5 flex flex-wrap justify-between items-center'>
             {room.name}
+            <div className='flex flex-wrap gap-2'>
+              {!room.temperatureStatus || (
+                <Alert
+                  severity={room.temperatureStatus === SensorStatus.DANGER ? 'error' : 'warning'}
+                  icon={<Icon path={mdiThermometerAlert} size={1} />}
+                  className='mr-2 p-2.5'
+                >
+                  {getAlertContent(room.temperatureStatus, false)}
+                </Alert>
+              )}
+              {!room.co2Status || (
+                <Alert
+                  severity={room.co2Status === SensorStatus.DANGER ? 'error' : 'warning'}
+                  icon={<Icon path={mdiMoleculeCo2} size={1} />}
+                  className='p-2.5'
+                >
+                  {getAlertContent(room.co2Status, true)}
+                </Alert>
+              )}
+            </div>
             <div>
               <Chip label={`${room.size} m²`} icon={<Icon path={mdiHomeOutline} size={1} />} className='mr-4' />
               <Chip label={room.id} icon={<Icon path={mdiIdentifier} size={1} />} />
