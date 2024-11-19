@@ -44,7 +44,7 @@ const StormAlert = (
         {alert.content}
         {(showTime === undefined || showTime) && (
           <Typography fontSize={'0.8rem'} color='inherit'>
-            {new Date(alert.time).toLocaleString(undefined, {
+            {new Date(alert.time * 1000).toLocaleString(undefined, {
               dateStyle: 'short',
               timeStyle: 'short'
             })}
