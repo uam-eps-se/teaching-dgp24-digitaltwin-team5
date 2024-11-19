@@ -99,7 +99,7 @@ class RoomSerializer(serializers.ModelSerializer):
         """
         Obtains the last co2 status for this rooom.
         """
-        _ = TemperatureInRoom.objects.filter(room=obj).last()
+        _ = Co2InRoom.objects.filter(room=obj).last()
         return (
             Alert.AlertType.INFO
             if (_ is None or _.co2 < 800)
