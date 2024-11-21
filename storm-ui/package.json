@@ -14,9 +14,9 @@
     "postinstall": "npm run build:icons"
   },
   "dependencies": {
-    "@emotion/cache": "^11.13.1",
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/cache": "^11.13.5",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@mui/lab": "5.0.0-alpha.170",
