@@ -98,9 +98,7 @@ class MetricsAPIView(APIView):
 
         now = timezone.now()
         if turn_on:
-            content = (
-                "People have entered the room. Turning lights and cooling devices on"
-            )
+            content = "People have entered the room. Turning lights on"
             for light in Light.objects.filter(room=room):
                 last = LightOn.objects.filter(light=light).last()
                 if not last or last.is_on is False:
