@@ -43,15 +43,21 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
     return fetchContext()
       .then((c: Context) => {
         if (c) {
-          const sortedNewAlerts = c.alerts.toSorted((a, b) => b.time - a.time)
+          if (c.alerts.length) {
+            const sortedNewAlerts = c.alerts.toSorted((a, b) => b.time - a.time)
 
-          if (c.alerts.length) confirmAlerts(c.alerts.map(alert => alert.id))
-
-          setContext({
-            rooms: c.rooms,
-            alerts: [...context.alerts, ...sortedNewAlerts.filter(alert => alert.type !== AlertType.INFO)]
-          })
-          setStoredAlerts([...sortedNewAlerts, ...(storedAlerts || [])].slice(0, maxAlerts))
+            confirmAlerts(c.alerts.map(alert => alert.id))
+            setContext({
+              rooms: c.rooms,
+              alerts: [...context.alerts, ...sortedNewAlerts.filter(alert => alert.type !== AlertType.INFO)]
+            })
+            setStoredAlerts([...sortedNewAlerts, ...(storedAlerts || [])].slice(0, maxAlerts))
+          } else {
+            setContext({
+              rooms: c.rooms,
+              alerts: context.alerts
+            })
+          }
         }
       })
       .catch(error => console.error(error))

@@ -41,6 +41,8 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "django_eventstream",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -80,8 +82,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "storm.wsgi.application"
+ASGI_APPLICATION = "storm.asgi.application"
 
+WSGI_APPLICATION = "storm.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
