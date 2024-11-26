@@ -18,6 +18,7 @@
 
 [data-mui-color-scheme='dark'] {
   --backdrop-color: rgb(21 16 43 / 0.6);
+  color-scheme: dark;
 }
 
 *,
@@ -50,22 +51,26 @@ ul:not([class]) {
 .ps__rail-y {
   inset-inline-end: 0 !important;
   inset-inline-start: auto !important;
+
   & .ps__thumb-y {
     inset-inline-end: 3px !important;
     inset-inline-start: auto !important;
     background-color: var(--mui-palette-divider);
     inline-size: 6px;
+
     &:hover,
     &:focus,
     &.ps--clicking {
       background-color: var(--mui-palette-action-disabled) !important;
     }
   }
+
   &:hover,
   &:focus,
   &.ps--clicking {
     background-color: var(--mui-palette-action-hover) !important;
   }
+
   &:hover,
   &:focus,
   &.ps--clicking {
@@ -78,18 +83,22 @@ ul:not([class]) {
 .ts-vertical-nav-root {
   .ps__thumb-y {
     inline-size: 4px;
+
     &:hover,
     &:focus,
     &.ps--clicking {
       inline-size: 6px;
     }
   }
+
   .ps__rail-y {
     inline-size: 10px;
+
     &:hover,
     &:focus,
     &.ps--clicking {
       background-color: transparent !important;
+
       .ps__thumb-y {
         inline-size: 6px;
       }

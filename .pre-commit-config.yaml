@@ -1,0 +1,31 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+    -   id: black
+-   repo: https://github.com/PyCQA/flake8
+    rev: 7.1.1
+    hooks:
+    -   id: flake8
+-   repo: local
+    hooks:
+    -   id: frontend-prettier-eslint
+        name: frontend-prettier-eslint
+        entry: storm-ui/format_lint.sh
+        language: script
+        types_or: [javascript, jsx, ts, tsx, css]
+    -   id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args: [
+            storm/*,
+            "--rcfile=.pylintrc",
+        ]

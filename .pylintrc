@@ -1,0 +1,6 @@
+[MAIN]
+
+ignore-paths=storm/api/migrations/.*$,storm-ui,storm/manage.py
+fail-under=10
+load-plugins=pylint_django
+django-settings-module=storm.settings

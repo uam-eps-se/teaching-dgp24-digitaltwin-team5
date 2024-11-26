@@ -17,31 +17,42 @@ export type ThemeColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' 
 
 /* ROOMS */
 
-export type RoomSummaryRow = {
-  id: number,
-  name: string,
-  size: number,
+export enum SensorStatus {
+  NORMAL = 0,
+  HIGH = 1,
+  DANGER = 2
+}
+
+export type Room = {
+  id: number
+  name: string
+}
+
+export type RoomSummary = Room & {
+  size: number
+  temperatureStatus: SensorStatus
+  co2Status: SensorStatus
   devices: {
     doors: {
-      open: number,
-      total: number
-    },
-    windows: {
-      open: number,
-      total: number
-    },
-    lights: {
-      on: number,
-      total: number
-    },
-    ventilators: {
-      on: number,
+      open: number
       total: number
     }
-  },
+    windows: {
+      open: number
+      total: number
+    }
+    lights: {
+      on: number
+      total: number
+    }
+    ventilators: {
+      on: number
+      total: number
+    }
+  }
   metrics: {
-    people: number,
-    co2: number,
+    people: number
+    co2: number
     temperature: number
   }
 }
@@ -49,33 +60,36 @@ export type RoomSummaryRow = {
 /* ROOM DETAIL */
 
 export type RoomDevice = {
-  id: number,
-  values: Array<boolean>,
+  name: string
+  current: boolean
+  values: Array<boolean>
   times: Array<number>
 }
 
 export type RoomMetric = {
-  values: Array<number>,
+  values: Array<number>
   times: Array<number>
 }
 
 export type RoomStructureData = {
-  doors: Record<string, RoomDevice>;
-  windows: Record<string, RoomDevice>;
-  ventilators: Record<string, RoomDevice>;
-  lights: Record<string, RoomDevice>;
+  doors: Record<number, RoomDevice>
+  windows: Record<number, RoomDevice>
+  ventilators: Record<number, RoomDevice>
+  lights: Record<number, RoomDevice>
 }
 
 export type RoomRealtimeData = {
-  people: RoomMetric,
-  co2: RoomMetric,
+  people: RoomMetric
+  co2: RoomMetric
   temperature: RoomMetric
 }
 
 export type RoomDetailData = {
-  id: number,
-  name: string,
-  size: number,
+  id: number
+  name: string
+  size: number
+  temperatureStatus: SensorStatus
+  co2Status: SensorStatus
   devices: RoomStructureData
   metrics: RoomRealtimeData
 }
@@ -83,7 +97,7 @@ export type RoomDetailData = {
 /* DEVICES */
 
 export type Device = {
-  id: number | undefined,
+  id: number | undefined
   name: string
 }
 
@@ -92,7 +106,33 @@ export type Door = Device & {
 }
 
 export type AvailableDevices = {
-  windows: Array<Device>,
-  lights: Array<Device>,
+  windows: Array<Device>
+  lights: Array<Device>
   ventilators: Array<Device>
+}
+
+export type DeviceStatus = Device & {
+  status: boolean
+}
+
+/* LAYOUT CONTEXT */
+
+export enum AlertType {
+  INFO = 0,
+  WARNING = 1,
+  DANGER = 2
+}
+
+export type Alert = {
+  id: number
+  type: AlertType
+  content: string
+  roomId: number
+  roomName: string
+  time: number
+}
+
+export type Context = {
+  rooms: Array<Room>
+  alerts: Array<Alert>
 }

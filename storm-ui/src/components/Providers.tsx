@@ -9,6 +9,7 @@ import ThemeProvider from '@components/theme'
 
 // Util Imports
 import { getMode, getSettingsFromCookie } from '@core/utils/serverHelpers'
+import { LayoutProvider } from '@core/contexts/layoutContext'
 
 type Props = ChildrenType & {
   direction: Direction
@@ -26,9 +27,9 @@ const Providers = (props: Props) => {
     <VerticalNavProvider>
       <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
         <ThemeProvider direction={direction}>
-          <RoomsProvider>
-            {children}
-          </RoomsProvider>
+          <LayoutProvider>
+            <RoomsProvider>{children}</RoomsProvider>
+          </LayoutProvider>
         </ThemeProvider>
       </SettingsProvider>
     </VerticalNavProvider>
