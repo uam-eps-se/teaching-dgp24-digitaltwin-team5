@@ -45,7 +45,8 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
         if (c) {
           const sortedNewAlerts = c.alerts.toSorted((a, b) => b.time - a.time)
 
-          confirmAlerts(c.alerts.map(alert => alert.id))
+          if (c.alerts.length) confirmAlerts(c.alerts.map(alert => alert.id))
+
           setContext({
             rooms: c.rooms,
             alerts: [...context.alerts, ...sortedNewAlerts.filter(alert => alert.type !== AlertType.INFO)]
