@@ -5,20 +5,21 @@ import { createContext } from 'react'
 
 import ReconnectingEventSource from 'reconnecting-eventsource'
 
-import type { EventMessage } from '../types'
-
 interface EventContextType {
   getOrCreateEventSource: () => ReconnectingEventSource | void
-  setEventAction: (action: (msg: EventMessage) => void, typeFilter?: string) => EventSource | void
+  addEventAction: (event: string, action: (msgEvent: MessageEvent) => any) => void
+  removeEventHandlers: (eventTypes: string[]) => ReconnectingEventSource | void
 }
 
 export const EventContext = createContext<EventContextType>({
   getOrCreateEventSource: () => {},
-  setEventAction: () => {}
+  addEventAction: () => {},
+  removeEventHandlers: () => {}
 })
 
 // EventProvider component to provide context
 export const EventProvider = ({ children }: { children: ReactNode }) => {
+  const eventHandlers: Map<string, Array<(ev: MessageEvent) => any>> = new Map()
   let eventSource: ReconnectingEventSource | null = null
 
   const getOrCreateEventSource = () => {
@@ -27,22 +28,38 @@ export const EventProvider = ({ children }: { children: ReactNode }) => {
     return eventSource
   }
 
-  const setEventAction = (action: (msg: EventMessage) => void, typeFilter?: string) => {
+  const addEventAction = (event: string, action: (msgEvent: MessageEvent) => any) => {
     const evtSource = getOrCreateEventSource()
+    const prevHandlers = eventHandlers.get(event)
 
-    if (evtSource && action)
-      evtSource.onmessage = (msgEvent: MessageEvent) => {
-        const msg = JSON.parse(msgEvent.data)
+    console.log('ADDED HANDLER FOR', event)
 
-        typeFilter ? msg.type === typeFilter && action(msg) : action(msg)
-      }
+    const handler = (msgEvent: MessageEvent) => action({ ...msgEvent, data: JSON.parse(msgEvent.data) })
+
+    evtSource.addEventListener(event, handler)
+    if (!prevHandlers) eventHandlers.set(event, [handler])
+    else prevHandlers!.push(handler)
+  }
+
+  const removeEventHandlers = (eventTypes: string[]) => {
+    if (eventSource) {
+      eventTypes.forEach(event => {
+        eventHandlers.get(event)?.forEach(handler => {
+          eventSource?.removeEventListener(event, handler)
+        })
+        eventHandlers.delete(event)
+      })
+    }
+
+    return getOrCreateEventSource()
   }
 
   return (
     <EventContext.Provider
       value={{
         getOrCreateEventSource,
-        setEventAction
+        addEventAction,
+        removeEventHandlers
       }}
     >
       {children}

@@ -136,10 +136,3 @@ export type Context = {
   rooms: Array<Room>
   alerts: Array<Alert>
 }
-
-/* EVENTS */
-
-export type EventMessage = {
-  type: string
-  content: any
-}
