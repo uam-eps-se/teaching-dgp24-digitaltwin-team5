@@ -30,5 +30,5 @@ urlpatterns += [
     path("v1/room/<identifier>/", RoomDetailAPIView.as_view(), name="room"),
     path("v1/rooms", RoomsAPIView.as_view()),
     path("v1/metrics", MetricsAPIView.as_view()),
-    path("v1/events/", include(django_eventstream.urls), {"channels": ["main"]}),
+    path("v1/events", include(django_eventstream.urls)),
 ]
