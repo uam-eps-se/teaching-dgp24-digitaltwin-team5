@@ -17,5 +17,17 @@ def send_storm_event(channel: str, event: str, data: object, **send_kwargs: dict
     """
 
     # Check if there are listeners in channel
-    if get_listener_manager().listeners_by_channel.get(channel, False):
+    if get_listeners_by_channel(channel):
         send_event(channel, event, data, **send_kwargs)
+
+
+def get_listeners_by_channel(channel: str) -> set | bool:
+    """Gets listeners from a given `channel`
+
+    Args:
+        channel (str): Channel to get listeners from
+
+    Returns:
+        set | bool: Set of unique listeners or False if channel doesn't exist
+    """
+    return get_listener_manager().listeners_by_channel.get(channel, False)
