@@ -21,7 +21,6 @@ export const useEventSource = (channels: string[], configuration?: ReconnectingE
       const prevHandlers = eventHandlers.current.get(event)
       const action = (msgEvent: MessageEvent) => handler({ ...msgEvent, data: JSON.parse(msgEvent.data) })
 
-      console.log('ADDED HANDLER FOR', event)
       eventSource.current.addEventListener(event, action)
       prevHandlers ? prevHandlers.push(action) : eventHandlers.current.set(event, [action])
     } else {
@@ -47,7 +46,6 @@ export const useEventSource = (channels: string[], configuration?: ReconnectingE
 
   const closeEventSource = () => {
     if (eventSource.current) {
-      console.log('EVENTSOURCE CLEANED UP')
       eventHandlers.current.forEach((handlers, event) => _removeEventHandlers(event, handlers))
       eventHandlers.current.clear()
 

@@ -14,7 +14,7 @@ interface LayoutContextType {
   storedAlerts: Alert[] | undefined
   setContext: Dispatch<SetStateAction<Context>>
   setStoredAlerts: Dispatch<SetStateAction<Alert[] | undefined>>
-  updateContext: () => Promise<void>
+  updateContext: (newContext?: Context) => Promise<void>
   setAlerts: (newAlerts: Alert[]) => void
 }
 
@@ -39,28 +39,26 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
     setContext({ rooms: context.rooms, alerts: newAlerts })
   }
 
-  const updateContext = async () => {
-    return fetchContext()
-      .then((c: Context) => {
-        if (c) {
-          if (c.alerts.length) {
-            const sortedNewAlerts = c.alerts.toSorted((a, b) => b.time - a.time)
+  const updateContext = async (newContext?: Context) => {
+    const c: Context = newContext || (await fetchContext())
 
-            confirmAlerts(c.alerts.map(alert => alert.id))
-            setContext({
-              rooms: c.rooms,
-              alerts: [...context.alerts, ...sortedNewAlerts.filter(alert => alert.type !== AlertType.INFO)]
-            })
-            setStoredAlerts([...sortedNewAlerts, ...(storedAlerts || [])].slice(0, maxAlerts))
-          } else {
-            setContext({
-              rooms: c.rooms,
-              alerts: context.alerts
-            })
-          }
-        }
-      })
-      .catch(error => console.error(error))
+    if (c) {
+      if (c.alerts.length) {
+        const sortedNewAlerts = c.alerts.toSorted((a, b) => b.time - a.time)
+
+        confirmAlerts(c.alerts.map(alert => alert.id))
+        setContext({
+          rooms: c.rooms,
+          alerts: [...context.alerts, ...sortedNewAlerts.filter(alert => alert.type !== AlertType.INFO)]
+        })
+        setStoredAlerts([...sortedNewAlerts, ...(storedAlerts || [])].slice(0, maxAlerts))
+      } else {
+        setContext({
+          rooms: c.rooms,
+          alerts: context.alerts
+        })
+      }
+    }
   }
 
   return (

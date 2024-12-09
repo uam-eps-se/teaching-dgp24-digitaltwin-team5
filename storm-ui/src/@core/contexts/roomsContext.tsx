@@ -13,10 +13,8 @@ type RoomsData = {
 
 interface RoomsContextType {
   rooms: RoomsData
-  deleting: boolean
   setRooms: Dispatch<SetStateAction<RoomsData>>
-  setDeleting: Dispatch<SetStateAction<boolean>>
-  updateRooms: () => Promise<void>
+  updateRooms: (newRooms?: any) => Promise<void>
 }
 
 export const RoomsContext = createContext<RoomsContextType>({
@@ -24,9 +22,7 @@ export const RoomsContext = createContext<RoomsContextType>({
     data: [],
     fetched: false
   },
-  deleting: false,
   setRooms: () => {},
-  setDeleting: () => {},
   updateRooms: async () => {}
 })
 
@@ -37,27 +33,21 @@ export const RoomsProvider = ({ children }: { children: ReactNode }) => {
     fetched: false
   })
 
-  const [deleting, setDeleting] = useState(false)
+  const updateRooms = async (newRooms?: any) => {
+    const rs = newRooms || (await fetchRooms())
 
-  const updateRooms = async () => {
-    return fetchRooms().then(rs => {
-      if (rs && !deleting)
-        setRooms({
-          data: rs.map((r: any) => {
-            r.temperatureStatus = r.temperature_status
-            r.co2Status = r.co2_status
-            delete r.temperature_status, r.co2_status
+    if (rs)
+      setRooms({
+        data: rs.map((r: any) => {
+          r.temperatureStatus = r.temperature_status
+          r.co2Status = r.co2_status
+          delete r.temperature_status, r.co2_status
 
-            return r
-          }),
-          fetched: true
-        })
-    })
+          return r
+        }),
+        fetched: true
+      })
   }
 
-  return (
-    <RoomsContext.Provider value={{ rooms, deleting, setRooms, setDeleting, updateRooms }}>
-      {children}
-    </RoomsContext.Provider>
-  )
+  return <RoomsContext.Provider value={{ rooms, setRooms, updateRooms }}>{children}</RoomsContext.Provider>
 }

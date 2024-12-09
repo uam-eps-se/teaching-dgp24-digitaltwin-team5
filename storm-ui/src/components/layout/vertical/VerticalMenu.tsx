@@ -1,7 +1,6 @@
 // MUI Imports
 import { useContext, useEffect, useState } from 'react'
 
-import Chip from '@mui/material/Chip'
 import { useTheme, alpha } from '@mui/material/styles'
 
 // Third-party Imports
@@ -13,9 +12,9 @@ import Icon from '@mdi/react'
 import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
 
 import type { SnackbarCloseReason } from '@mui/material'
-import { Paper, Snackbar } from '@mui/material'
+import { Chip, Paper, Snackbar } from '@mui/material'
 
-import { useEffectOnce, useInterval } from 'react-use'
+import { useEffectOnce } from 'react-use'
 
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
@@ -37,6 +36,7 @@ import StormAlert from '@components/StormAlert'
 import { AlertType, type Alert } from '@core/types'
 
 import { LayoutContext } from '@core/contexts/layoutContext'
+import { useEventSource } from '@core/hooks/useEventSource'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -56,11 +56,12 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
   const { isBreakpointReached, transitionDuration } = useVerticalNav()
 
   const { context, storedAlerts, setStoredAlerts, updateContext, setAlerts } = useContext(LayoutContext)
+  const { addEventHandler } = useEventSource(['context'])
+
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
   const [currentAlert, setCurrentAlert] = useState<Alert>()
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
-  const intervalDelay = Number(process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000)
 
   const showNextAlert = () => {
     if (context.alerts.length) {
@@ -82,7 +83,9 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
   }
 
   useEffectOnce(() => {
-    updateContext()
+    updateContext().then(() => {
+      addEventHandler('message', msgEvent => updateContext(msgEvent.data))
+    })
   })
 
   useEffect(() => {
@@ -90,10 +93,6 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
     if (!currentAlert) showNextAlert()
     // eslint-disable-next-line
   }, [context.alerts])
-
-  useInterval(() => {
-    updateContext()
-  }, intervalDelay)
 
   return (
     // eslint-disable-next-line lines-around-comment

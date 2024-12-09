@@ -3,24 +3,26 @@
 // MUI Imports
 import { useContext } from 'react'
 
-import Grid from '@mui/material/Grid'
+import { useEffectOnce } from 'react-use'
 
-// Components Imports
-import { useInterval } from 'react-use'
-
-import { Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 
 import RoomsTable from '@components/RoomsTable'
 
 import RoomSummaryButtons from '@components/actionButtons/RoomSummaryButtons'
 
 import { RoomsContext } from '@core/contexts/roomsContext'
+import { useEventSource } from '@core/hooks/useEventSource'
 
 const RoomSummary = () => {
-  const { deleting, rooms, updateRooms } = useContext(RoomsContext)
-  const intervalDelay = process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000
+  const { rooms, updateRooms } = useContext(RoomsContext)
+  const { addEventHandler } = useEventSource(['summary'])
 
-  useInterval(() => !deleting && updateRooms(), intervalDelay as number)
+  useEffectOnce(() => {
+    updateRooms().then(() => {
+      addEventHandler('message', msgEvent => updateRooms(msgEvent.data))
+    })
+  })
 
   return (
     <div>
