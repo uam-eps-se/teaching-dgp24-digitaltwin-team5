@@ -32,14 +32,14 @@ class ContextAPIView(APIView):
                 ],
                 "alerts": [
                     {
-                        "id": a.id,
-                        "type": a.type,
-                        "content": a.content,
-                        "time": a.time.timestamp(),
-                        "roomId": a.room.id,
-                        "roomName": a.room.name,
+                        "id": alert.id,
+                        "type": alert.type,
+                        "content": alert.content,
+                        "time": alert.time.timestamp(),
+                        "roomId": alert.room.id,
+                        "roomName": alert.room.name,
                     }
-                    for a in Alert.objects.filter(received=False)
+                    for alert in Alert.objects.filter(received=False)
                 ],
             }
         )

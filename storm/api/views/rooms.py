@@ -18,6 +18,9 @@ from rest_framework.request import Request
 from api.serializers.room_dashboard import RoomDashboardSerializer
 from api.models import Room, Door, Ventilator, Light, Window
 from api.models import DoorConnectsRoom
+from api.views.utils import send
+from api.views.utils import CHANNEL_CONTEXT, CHANNEL_SUMMARY, CHANNEL_DEVICES
+from api.views.utils import DEVS, DOORS
 
 
 class RoomsAPIView(APIView):
@@ -108,6 +111,9 @@ class RoomsAPIView(APIView):
                     )
                 func(devices[key], room)
 
+        send(CHANNEL_SUMMARY)
+        send(CHANNEL_CONTEXT)
+
         return Response(f"Room {room.name} created successfully with id {room.id}!")
 
     def delete(self, request: Request):
@@ -121,6 +127,12 @@ class RoomsAPIView(APIView):
         """
         room = self.get_object(request.data.get("id", None))
         room.delete()
+
+        send(CHANNEL_SUMMARY)
+        send(CHANNEL_CONTEXT)
+        send(CHANNEL_DEVICES, event=DEVS)
+        send(CHANNEL_DEVICES, event=DOORS)
+
         return Response(
             f"Room with id {request.data.get("id", None)} successfully deleted!",
             status=status.HTTP_204_NO_CONTENT,

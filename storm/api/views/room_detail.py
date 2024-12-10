@@ -13,6 +13,8 @@ from rest_framework import status
 # API imports
 from api.serializers.room_details import RoomDetailSerializer
 from api.models import Room
+from api.views.utils import send
+from api.views.utils import CHANNEL_CONTEXT, CHANNEL_ROOM, CHANNEL_SUMMARY
 
 
 class RoomDetailAPIView(APIView):
@@ -65,4 +67,7 @@ class RoomDetailAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        send(CHANNEL_SUMMARY)
+        send(CHANNEL_CONTEXT)
+        send(f"{CHANNEL_ROOM}-{post.id}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -20,6 +20,8 @@ from api.models import Alert
 from api.models import Room, Window, Ventilator, Light
 from api.models import DoorConnectsRoom
 from api.models import WindowOpen, VentilatorOn, LightOn, DoorOpen
+from api.views.utils import send
+from api.views.utils import CHANNEL_CONTEXT, CHANNEL_ROOM, CHANNEL_SUMMARY
 
 
 class MetricMetadata(NamedTuple):
@@ -61,6 +63,8 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.WARNING,
                 content=content,
             ).save()
+            return True
+
         if value > 1000 and danger:
             content = (
                 "Co2 levels too high, opening windows and turning on cooling devices"
@@ -79,6 +83,8 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.DANGER,
                 content=content,
             ).save()
+            return True
+        return False
 
     def energy_efficiency_control(self, room: Room, value: int, previous: PeopleInRoom):
         """
@@ -109,6 +115,7 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.INFO,
                 content=content,
             ).save()
+            return True
         if turn_off:
             content = "Room is empty. Lights and Cooling devices turned off"
             for light in Light.objects.filter(room=room):
@@ -126,6 +133,8 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.INFO,
                 content=content,
             ).save()
+            return True
+        return False
 
     def safety_control(self, room: Room, value: int, previous: TemperatureInRoom):
         """
@@ -149,6 +158,7 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.WARNING,
                 content="Temperature levels are nearing dangerous values",
             ).save()
+            return True
         if value > 70 and danger:
             for door in DoorConnectsRoom.objects.filter(room=room):
                 last = DoorOpen.objects.filter(door=door.door).last()
@@ -160,6 +170,8 @@ class MetricsAPIView(APIView):
                 type=Alert.AlertType.DANGER,
                 content="Temperature levels too high, opening doors",
             ).save()
+            return True
+        return False
 
     def post(self, request: Request):
         """
@@ -178,7 +190,7 @@ class MetricsAPIView(APIView):
                 TemperatureInRoom, "temp", self.safety_control
             ),
         }
-
+        new_alerts = False
         for key, metrics in request.data.items():
             room = Room.objects.filter(id=int(key)).first()
 
@@ -189,6 +201,12 @@ class MetricsAPIView(APIView):
                 model(
                     **{"time": data["time"], "room": room, attr: data["value"]}
                 ).save()
-                action(room, data["value"], last)
+                new_alerts |= action(room, data["value"], last)
+
+            send(f"{CHANNEL_ROOM}-{room.id}")
+
+        if new_alerts:
+            send(CHANNEL_CONTEXT)
+        send(CHANNEL_SUMMARY)
 
         return Response("Metrics updated successfully!")

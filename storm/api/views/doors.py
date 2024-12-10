@@ -17,6 +17,9 @@ from api.serializers.devices import DoorSerializer
 from api.models import Room, Door
 from api.models import DoorConnectsRoom
 from api.models import DoorOpen
+from api.views.utils import send
+from api.views.utils import CHANNEL_ROOM, CHANNEL_SUMMARY, CHANNEL_DEVICES
+from api.views.utils import DOORS
 
 
 class DoorsAPIView(APIView):
@@ -67,6 +70,9 @@ class DoorsAPIView(APIView):
         droom = DoorConnectsRoom(door=door, room=room)
         droom.save()
 
+        send(CHANNEL_DEVICES, event=DOORS)
+        send(CHANNEL_SUMMARY)
+        send(f"{CHANNEL_ROOM}-{room.id}")
         return Response(f"Door {door.name} created successfully!")
 
     def put(self, request: Request):
@@ -117,6 +123,9 @@ class DoorsAPIView(APIView):
         droom = DoorConnectsRoom(door=door, room=room)
         droom.save()
 
+        send(CHANNEL_DEVICES, event=DOORS)
+        send(CHANNEL_SUMMARY)
+        send(f"{CHANNEL_ROOM}-{room.id}")
         return Response(f"Door {door.name} updated successfully!")
 
     def delete(self, request: Request):
@@ -162,6 +171,11 @@ class DoorsAPIView(APIView):
             door.delete()
         else:
             droom.delete()
+
+        send(CHANNEL_DEVICES, DOORS)
+        send(CHANNEL_SUMMARY)
+        for droom in connected_rooms:
+            send(f"{CHANNEL_ROOM}-{droom['room_id']}")
         return Response(f"Door {door.name} updated successfully!")
 
     def patch(self, request: Request):
@@ -194,4 +208,9 @@ class DoorsAPIView(APIView):
         door_open = DoorOpen(door=door, time=timezone.now(), is_open=action)
         door_open.save()
 
+        connected_rooms = DoorConnectsRoom.objects.filter(door=door).values()
+
+        send(CHANNEL_SUMMARY)
+        for droom in connected_rooms:
+            send(f"{CHANNEL_ROOM}-{droom['room_id']}")
         return Response(f"Door {door.name} assigned the status {action}!")
