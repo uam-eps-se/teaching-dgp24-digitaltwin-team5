@@ -1,0 +1,82 @@
+version: 2.1
+orbs:
+  python: circleci/python@3.0.0
+  node: circleci/node@7.0.0
+  docker: circleci/docker@2.8.1
+
+jobs:
+  back-lint-and-test:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pip-dependency-file: requirements.txt
+          pkg-manager: pip
+      - run:
+          name: Lint backend code (Python)
+          working_directory: storm
+          command: pylint storm/* --rcfile=.pylintrc
+      - run:
+          name: Run Django tests
+          working_directory: storm
+          command: python3 manage.py test
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - storm
+
+  front-lint-and-build:
+    executor: node/default
+    steps:
+      - checkout
+      - run:
+          working_directory: storm-ui
+          command: sudo npm install -g npm@latest
+      - node/install-packages:
+          working_directory: storm-ui
+          override-ci-command: pnpm i
+          pkg-manager: pnpm
+      - run:
+          name: Lint frontend code (React TS)
+          working_directory: storm-ui
+          command: pnpm lint
+      - run:
+          name: Build app
+          working_directory: storm-ui
+          command: pnpm build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - storm-ui/.next
+
+  deploy:
+    executor: docker/default
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Prepare files for deployment
+          command: |
+            ls ~/project/storm
+            ls ~/project/storm-ui/.next
+      - docker/publish: # build image & publish to Dockerhub
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          update-description: true
+          dockerfile: Dockerfile # TODO hacerlo lmao
+      - run:
+          name: Redeploy on Render
+          command: | # TODO cambiar con el nuestro
+            curl -X POST "https://api.render.com/deploy/srv-XXYYZZ?key=AABBCC&imgURL=docker.io%2Flibrary%2Fnginx%401.24"
+
+workflows:
+  continuous_deployment:
+    jobs:
+      - back-lint-and-test
+      - front-lint-and-build
+      - deploy:
+          requires:
+            - back-lint-and-test
+            - front-lint-and-build
+          filters:
+            branches:
+              only: main # only deploy when on main
