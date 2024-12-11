@@ -2,7 +2,10 @@
 This module defines unit tests for the `v1/metrics` endpoint.
 """
 
+# restframework imports
 from rest_framework import status
+
+# API imports
 from api.tests.base import Base
 
 

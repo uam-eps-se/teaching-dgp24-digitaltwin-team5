@@ -20,8 +20,8 @@ from api.models import Alert
 from api.models import Room, Window, Ventilator, Light
 from api.models import DoorConnectsRoom
 from api.models import WindowOpen, VentilatorOn, LightOn, DoorOpen
-from api.views.utils import send
-from api.views.utils import CHANNEL_CONTEXT, CHANNEL_ROOM, CHANNEL_SUMMARY
+
+import api.views.utils as sse
 
 
 class MetricMetadata(NamedTuple):
@@ -203,10 +203,10 @@ class MetricsAPIView(APIView):
                 ).save()
                 new_alerts |= action(room, data["value"], last)
 
-            send(f"{CHANNEL_ROOM}-{room.id}")
+            sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
 
         if new_alerts:
-            send(CHANNEL_CONTEXT)
-        send(CHANNEL_SUMMARY)
+            sse.send(sse.CHANNEL_CONTEXT)
+        sse.send(sse.CHANNEL_SUMMARY)
 
         return Response("Metrics updated successfully!")

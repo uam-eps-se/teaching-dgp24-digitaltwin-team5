@@ -16,9 +16,8 @@ from rest_framework.request import Request
 from api.serializers import DataSerializer
 from api.models import Room, Ventilator, Light, Window
 from api.models import VentilatorOn, LightOn, WindowOpen
-from api.views.utils import send
-from api.views.utils import CHANNEL_ROOM, CHANNEL_SUMMARY, CHANNEL_DEVICES
-from api.views.utils import DEVS
+
+import api.views.utils as sse
 
 
 class DevicesAPIView(APIView):
@@ -82,8 +81,8 @@ class DevicesAPIView(APIView):
         dev = dtypes[dtype](name=name, room=room)
         dev.save()
 
-        send(CHANNEL_SUMMARY)
-        send(f"{CHANNEL_ROOM}-{room.id}")
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
         return Response(f"Device {name} for room {room.name} succesfully created!")
 
     def put(self, request: Request):
@@ -141,9 +140,9 @@ class DevicesAPIView(APIView):
         dev.room = room
         dev.save()
 
-        send(CHANNEL_DEVICES, event=DEVS)
-        send(CHANNEL_SUMMARY)
-        send(f"{CHANNEL_ROOM}-{room.id}")
+        sse.send(sse.CHANNEL_DEVICES, event=sse.DEVS)
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
         return Response(f"Device {dev.name} assigned to room {room.name}!")
 
     def delete(self, request: Request):
@@ -188,8 +187,8 @@ class DevicesAPIView(APIView):
         room_id = dev.room.id
         dev.delete()
 
-        send(CHANNEL_SUMMARY)
-        send(f"{CHANNEL_ROOM}-{room_id}")
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room_id}")
         return Response("Device succesfully removed!")
 
     def patch(self, request: Request):
@@ -253,6 +252,6 @@ class DevicesAPIView(APIView):
         setattr(ds, dactions[dtype], action)
         ds.save()
 
-        send(CHANNEL_SUMMARY)
-        send(f"{CHANNEL_ROOM}-{dev.room.id}")
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{dev.room.id}")
         return Response(f"Device {dev.name} assigned the status {action}!")

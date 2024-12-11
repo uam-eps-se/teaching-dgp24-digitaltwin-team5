@@ -2,15 +2,16 @@
 This module defines a base serializer class.
 """
 
+# django imports
 from django.db.models import Count, Q
 
+# API IMPORTS
 from api.models import Room, Alert
 from api.models import Window, Ventilator, Door, Light
-
-from .devices import WindowSerializer, DoorSerializer
-from .devices import VentilatorSerializer, LightSerializer
-from .room_dashboard import RoomDashboardSerializer
-from .room_details import RoomDetailSerializer
+from api.serializers.devices import WindowSerializer, DoorSerializer
+from api.serializers.devices import VentilatorSerializer, LightSerializer
+from api.serializers.room_dashboard import RoomDashboardSerializer
+from api.serializers.room_details import RoomDetailSerializer
 
 
 class DataSerializer:

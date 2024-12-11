@@ -2,8 +2,10 @@
 This module defines unit tests for the `v1/context` endpoint.
 """
 
+# restframework imports
 from rest_framework import status
 
+# API imports
 from api.tests.base import Base, ROOMS
 from api.models import Alert
 

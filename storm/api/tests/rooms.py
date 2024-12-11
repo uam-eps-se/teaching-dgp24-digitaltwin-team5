@@ -2,11 +2,14 @@
 This module defines unit tests for the `v1/rooms` endpoint.
 """
 
+# regular imports
 import decimal
 import json
 
+# restframework imports
 from rest_framework import status
 
+# API imports
 from api.tests.base import Base, ROOMS
 from api.models import Room, Ventilator, Light, Window, Door
 from api.models import DoorConnectsRoom, Alert

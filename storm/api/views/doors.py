@@ -16,9 +16,8 @@ from api.serializers import DataSerializer
 from api.models import Room, Door
 from api.models import DoorConnectsRoom
 from api.models import DoorOpen
-from api.views.utils import send
-from api.views.utils import CHANNEL_ROOM, CHANNEL_SUMMARY, CHANNEL_DEVICES
-from api.views.utils import DOORS
+
+import api.views.utils as sse
 
 
 class DoorsAPIView(APIView):
@@ -64,9 +63,9 @@ class DoorsAPIView(APIView):
         droom = DoorConnectsRoom(door=door, room=room)
         droom.save()
 
-        send(CHANNEL_DEVICES, event=DOORS)
-        send(CHANNEL_SUMMARY)
-        send(f"{CHANNEL_ROOM}-{room.id}")
+        sse.send(sse.CHANNEL_DEVICES, event=sse.DOORS)
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
         return Response(f"Door {door.name} created successfully!")
 
     def put(self, request: Request):
@@ -117,9 +116,9 @@ class DoorsAPIView(APIView):
         droom = DoorConnectsRoom(door=door, room=room)
         droom.save()
 
-        send(CHANNEL_DEVICES, event=DOORS)
-        send(CHANNEL_SUMMARY)
-        send(f"{CHANNEL_ROOM}-{room.id}")
+        sse.send(sse.CHANNEL_DEVICES, event=sse.DOORS)
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
         return Response(f"Door {door.name} updated successfully!")
 
     def delete(self, request: Request):
@@ -166,10 +165,10 @@ class DoorsAPIView(APIView):
         else:
             droom.delete()
 
-        send(CHANNEL_DEVICES, DOORS)
-        send(CHANNEL_SUMMARY)
+        sse.send(sse.CHANNEL_DEVICES, sse.DOORS)
+        sse.send(sse.CHANNEL_SUMMARY)
         for droom in connected_rooms:
-            send(f"{CHANNEL_ROOM}-{droom['room_id']}")
+            sse.send(f"{sse.CHANNEL_ROOM}-{droom['room_id']}")
         return Response(f"Door {door.name} updated successfully!")
 
     def patch(self, request: Request):
@@ -204,7 +203,7 @@ class DoorsAPIView(APIView):
 
         connected_rooms = DoorConnectsRoom.objects.filter(door=door).values()
 
-        send(CHANNEL_SUMMARY)
+        sse.send(sse.CHANNEL_SUMMARY)
         for droom in connected_rooms:
-            send(f"{CHANNEL_ROOM}-{droom['room_id']}")
+            sse.send(f"{sse.CHANNEL_ROOM}-{droom['room_id']}")
         return Response(f"Door {door.name} assigned the status {action}!")

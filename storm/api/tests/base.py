@@ -2,9 +2,13 @@
 This module defines a base class used to populate the teest database.
 """
 
+# django imports
 from django.utils import timezone
+
+# restframework imports
 from rest_framework.test import APITestCase
 
+# API imports
 from api.models import Room, Ventilator, Light, Window, Door
 from api.models import TemperatureInRoom, Co2InRoom, PeopleInRoom
 from api.models import DoorConnectsRoom
