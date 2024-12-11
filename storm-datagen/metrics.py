@@ -103,6 +103,10 @@ try:
         metrics = {}
         now = datetime.now(timezone.utc).astimezone()
 
+        if not rooms:
+            print("No rooms available to generate data, closing...")
+            break
+
         i, _, _ = select.select([sys.stdin], [], [], DATAGEN_TIME)
         command = sys.stdin.readline().strip() if i else "default"
 
