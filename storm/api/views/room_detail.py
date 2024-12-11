@@ -34,9 +34,6 @@ class RoomDetailAPIView(APIView):
 
         Raises:
             Http404: Room does not exist.
-
-        Returns:
-            Room: Record in the database.
         """
         try:
             return Room.objects.get(pk=pk)

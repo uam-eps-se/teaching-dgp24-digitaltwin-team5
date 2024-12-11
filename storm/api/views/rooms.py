@@ -15,7 +15,7 @@ from rest_framework import status
 from rest_framework.request import Request
 
 # API imports
-from api.serializers.room_dashboard import RoomDashboardSerializer
+from api.serializers import DataSerializer
 from api.models import Room, Door, Ventilator, Light, Window
 from api.models import DoorConnectsRoom
 from api.views.utils import send
@@ -40,9 +40,6 @@ class RoomsAPIView(APIView):
 
         Raises:
             Http404: Room does not exist.
-
-        Returns:
-            Room: Record in the database.
         """
         try:
             return Room.objects.get(pk=pk)
@@ -53,9 +50,7 @@ class RoomsAPIView(APIView):
         """
         Retrieves a list of all existent rooms for the main dashboard.
         """
-        rooms = Room.objects.all()
-        serializer = RoomDashboardSerializer(rooms, many=True)
-        return Response(serializer.data)
+        return Response(DataSerializer.rooms())
 
     def post(self, request: Request):
         """

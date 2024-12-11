@@ -13,8 +13,7 @@ from rest_framework import status
 from rest_framework.request import Request
 
 # API imports
-from api.serializers.devices import WindowSerializer
-from api.serializers.devices import VentilatorSerializer, LightSerializer
+from api.serializers import DataSerializer
 from api.models import Room, Ventilator, Light, Window
 from api.models import VentilatorOn, LightOn, WindowOpen
 from api.views.utils import send
@@ -37,21 +36,7 @@ class DevicesAPIView(APIView):
 
         Used on room CREATION and EDITION.
         """
-
-        # Dictionary with classes and serializers for all devices
-        dmodels = {
-            "windows": (Window, WindowSerializer),
-            "ventilators": (Ventilator, VentilatorSerializer),
-            "lights": (Light, LightSerializer),
-        }
-        data = {}
-
-        # Serialize non-associated devices
-        for key, (model, serializer) in dmodels.items():
-            devs = model.objects.filter(room=None)
-            data[key] = serializer(devs, many=True).data
-
-        return Response(data)
+        return Response(DataSerializer.devices())
 
     def post(self, request: Request):
         """

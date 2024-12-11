@@ -4,7 +4,6 @@ This module defines the `v1/doors` endpoint for the API.
 
 # django imports
 from django.utils import timezone
-from django.db.models import Count, Q
 
 # restframework imports
 from rest_framework.response import Response
@@ -13,7 +12,7 @@ from rest_framework import status
 from rest_framework.request import Request
 
 # API imports
-from api.serializers.devices import DoorSerializer
+from api.serializers import DataSerializer
 from api.models import Room, Door
 from api.models import DoorConnectsRoom
 from api.models import DoorOpen
@@ -36,12 +35,7 @@ class DoorsAPIView(APIView):
         EDITION. This method expects to receive the parameters specified in
         `jsons/doors/get.json`.
         """
-        doors = Door.objects.annotate(
-            connection_count=Count("doorconnectsroom")
-        ).filter(Q(connection_count__lt=2) | Q(connection_count=0))
-
-        serializer = DoorSerializer(doors, many=True)
-        return Response(serializer.data)
+        return Response(DataSerializer.doors())
 
     def post(self, request: Request):
         """
