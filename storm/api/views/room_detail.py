@@ -7,11 +7,12 @@ from django.http import Http404
 
 # restframework imports
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework import status
 
 # API imports
-from api.serializers.room_details import RoomDetailSerializer
+from api.serializers import DataSerializer
 from api.models import Room
 
 import api.views.utils as sse
@@ -32,8 +33,6 @@ class RoomDetailAPIView(APIView):
         Args:
             pk (int): Room identifier.
 
-        Raises:
-            Http404: Room does not exist.
         """
         try:
             return Room.objects.get(pk=pk)
@@ -46,12 +45,16 @@ class RoomDetailAPIView(APIView):
 
         Args:
             identifier (int): Room identifier.
-        """
-        post = self.get_object(identifier)
-        serializer = RoomDetailSerializer(post)
-        return Response(serializer.data)
 
-    def put(self, request, identifier):
+        Raises:
+            Http404: Room does not exist.
+        """
+        try:
+            return Response(DataSerializer.room(identifier=identifier))
+        except Exception as exc:
+            raise Http404(f"Room with id {identifier} does not exist!") from exc
+
+    def put(self, request: Request, identifier):
         """
         Updates room information. Used on EDITION. This method expects to
         receive the parameters specified in `jsons/rooms/put.json`.
@@ -59,12 +62,16 @@ class RoomDetailAPIView(APIView):
         Args:
             request (dict): A JSON-like dictionary.
         """
-        post = self.get_object(identifier)
-        serializer = RoomDetailSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+        room = self.get_object(identifier)
+
+        name = request.data.get("name", None)
+        size = request.data.get("size", None)
+
+        room.name = name if name is not None else room.name
+        room.size = size if size is not None else room.size
+        room.save()
         sse.send(sse.CHANNEL_SUMMARY)
         sse.send(sse.CHANNEL_CONTEXT)
-        sse.send(f"{sse.CHANNEL_ROOM}-{post.id}")
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
+
+        return Response(status=status.HTTP_200_OK)

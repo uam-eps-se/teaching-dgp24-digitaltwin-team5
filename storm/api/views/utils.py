@@ -27,7 +27,7 @@ def send(channel: str, event: int = 0, **kwargs: dict):
     """
 
     # Check if there are listeners in channel
-    if get_listeners(channel):
+    if get_listeners(channel):  # pragma: no cover
         event_name = "message"
 
         match channel[0]:

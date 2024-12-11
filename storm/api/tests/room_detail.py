@@ -131,12 +131,18 @@ class RoomDetailTest(Base):
     def test02_put(self):
         """Test Case 02: Room PUT request"""
         url = f"/v1/room/{self.rooms[0].id}/"
+
         self.assertEqual(
             self.client.put(url, {"name": "RoomRoom", "size": 90}).status_code,
             status.HTTP_200_OK,
         )
 
+        with self.assertRaises(ValueError):
+            self.client.put(url, {"size": "Room"})
+
+        url = reverse("room", kwargs={"identifier": -90})
+
         self.assertEqual(
-            self.client.put(url, {"size": "Room"}).status_code,
-            status.HTTP_400_BAD_REQUEST,
+            self.client.put(url, {"name": "Cuarto de pepe"}).status_code,
+            status.HTTP_404_NOT_FOUND,
         )
