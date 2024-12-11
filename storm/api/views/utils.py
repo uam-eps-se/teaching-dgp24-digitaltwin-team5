@@ -22,8 +22,8 @@ def send(channel: str, event: int = 0, **kwargs: dict):
 
     Args:
         channel (str): Channel to which the event is sent
-        event (str): Event name, default may be "message"
-        data (object): Data to send
+        event (int): Event type, only used on channels with more
+        than one event.
     """
 
     # Check if there are listeners in channel
