@@ -28,7 +28,7 @@ def send(channel: str, event: int = 0, **kwargs: dict):
 
     # Check if there are listeners in channel
     if get_listeners(channel):
-        event = "message"
+        event_name = "message"
 
         match channel[0]:
             case "s":
@@ -41,13 +41,13 @@ def send(channel: str, event: int = 0, **kwargs: dict):
                     if event == DEVS
                     else DataSerializer.doors()
                 )
-                event = "devices" if event == DEVS else "doors"
+                event_name = "devices" if event == DEVS else "doors"
             case "c":
                 data = DataSerializer.context()
             case _:
                 raise ValueError(f"channel {channel} is not supported!")
 
-        send_event(channel, event, data, **kwargs)
+        send_event(channel, event_name, data, **kwargs)
 
 
 def get_listeners(channel: str) -> set | bool:
