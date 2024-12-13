@@ -9,6 +9,7 @@ import { useEffectOnce } from 'react-use'
 
 import StormAlert from '@components/StormAlert'
 import { LayoutContext } from '@core/contexts/layoutContext'
+import { confirmAlerts } from '@core/utils/actions'
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -36,11 +37,13 @@ const AlertsMenu = () => {
   }
 
   const handleDeleteAlert = (alertId: number) => {
+    confirmAlerts([alertId])
     setAlerts(context.alerts.filter(alert => alert.id !== alertId))
     setStoredAlerts(storedAlerts?.filter(alert => alert.id !== alertId))
   }
 
   const handleClearAlerts = () => {
+    storedAlerts && confirmAlerts(storedAlerts?.map(alert => alert.id))
     setAlerts([])
     setStoredAlerts([])
   }
@@ -52,7 +55,12 @@ const AlertsMenu = () => {
   return (
     <>
       <Tooltip title='Latest Alerts'>
-        <StyledBadge badgeContent={isClient ? storedAlerts?.length : null} color='primary' max={20} className='p-1'>
+        <StyledBadge
+          badgeContent={isClient ? storedAlerts?.length : null}
+          color='primary'
+          max={Number(process.env.NEXT_PUBLIC_MAX_STORED_ALERTS || 99)}
+          className='p-1'
+        >
           <IconButton className='text-textPrimary' onClick={handleClick}>
             <i className='ri-notification-2-line' />
           </IconButton>

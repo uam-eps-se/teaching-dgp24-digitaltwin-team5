@@ -14,6 +14,9 @@ from api.serializers.room_dashboard import RoomDashboardSerializer
 from api.serializers.room_details import RoomDetailSerializer
 
 
+MAX_ALERTS = 99
+
+
 class DataSerializer:
     """
     Wrapper class for serializing functions.
@@ -87,6 +90,8 @@ class DataSerializer:
                     "roomId": a.room.id,
                     "roomName": a.room.name,
                 }
-                for a in Alert.objects.filter(received=False)
+                for a in Alert.objects.filter(received=False).order_by("-time")[
+                    :MAX_ALERTS
+                ]
             ],
         }

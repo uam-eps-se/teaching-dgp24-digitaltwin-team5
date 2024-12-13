@@ -33,10 +33,12 @@ import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
 import StormAlert from '@components/StormAlert'
 
-import { AlertType, type Alert } from '@core/types'
+import type { Alert } from '@core/types'
+import { AlertType } from '@core/types'
 
 import { LayoutContext } from '@core/contexts/layoutContext'
 import { useEventSource } from '@core/hooks/useEventSource'
+import { confirmAlerts } from '@core/utils/actions'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -55,7 +57,7 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
   const theme = useTheme()
   const { isBreakpointReached, transitionDuration } = useVerticalNav()
 
-  const { context, storedAlerts, setStoredAlerts, updateContext, setAlerts } = useContext(LayoutContext)
+  const { context, storedAlerts, setStoredAlerts, setContext, updateContext, setAlerts } = useContext(LayoutContext)
   const { addEventHandler } = useEventSource(['context'])
 
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
@@ -67,9 +69,6 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
     if (context.alerts.length) {
       setCurrentAlert(context.alerts[0])
       setOpenSnackbar(true)
-
-      // Remove current alert from queue
-      if (context.alerts.length) setAlerts(context.alerts.slice(1))
     } else setCurrentAlert(undefined)
   }
 
@@ -77,20 +76,31 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
     if (!ignoredReasons.includes(reason)) {
       setOpenSnackbar(false)
 
-      // Cycle through alerts
-      setTimeout(() => showNextAlert(), 500)
+      // Remove current alert from queue
+      if (context.alerts.length) setAlerts(context.alerts.slice(1))
     }
   }
 
   useEffectOnce(() => {
+    const pendingAlerts: Alert[] = JSON.parse(localStorage.getItem('pending-alerts') || '[]')
+
+    setContext(prevContext => ({
+      rooms: prevContext.rooms,
+      alerts: pendingAlerts
+    }))
     updateContext().then(() => {
       addEventHandler('message', msgEvent => updateContext(msgEvent.data))
     })
   })
 
   useEffect(() => {
-    // Show new alerts
-    if (!currentAlert) showNextAlert()
+    // Cycle through alerts
+    if (!openSnackbar && context.alerts.length) {
+      setTimeout(() => showNextAlert(), 500)
+    }
+
+    // Store pending alerts
+    localStorage.setItem('pending-alerts', JSON.stringify(context.alerts))
     // eslint-disable-next-line
   }, [context.alerts])
 
@@ -144,7 +154,7 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
         <MenuItem href='/rooms/create' prefix={<Icon path={mdiHomePlus} size={1} />}>
           Create Room
         </MenuItem>
-        {currentAlert && (
+        {!currentAlert || (
           <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             open={openSnackbar}
@@ -166,8 +176,9 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
                 alert={currentAlert}
                 showTime={false}
                 onDeleteAlert={() => {
-                  if (currentAlert) {
-                    setStoredAlerts(storedAlerts?.filter(alert => alert.id !== currentAlert.id))
+                  if (currentAlert && storedAlerts?.length) {
+                    setStoredAlerts(storedAlerts.filter(alert => alert.id !== currentAlert.id))
+                    confirmAlerts([currentAlert.id])
                   }
 
                   handleCloseSnackbar('timeout')
