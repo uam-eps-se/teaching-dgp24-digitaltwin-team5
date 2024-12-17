@@ -17,6 +17,10 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@iconify/json": "^2.2.285",
+    "@iconify/tools": "^4.1.1",
+    "@iconify/types": "^2.0.0",
+    "@iconify/utils": "^2.2.1",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@mui/lab": "5.0.0-alpha.170",
@@ -43,10 +47,6 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.285",
-    "@iconify/tools": "^4.1.1",
-    "@iconify/types": "^2.0.0",
-    "@iconify/utils": "^2.2.1",
     "@types/node": "^20.17.10",
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
