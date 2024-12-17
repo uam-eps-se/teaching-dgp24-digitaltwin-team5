@@ -30,14 +30,10 @@ SECRET_KEY = "django-insecure-f!yly4o0hy6nk2+qi%a#witt4wfa_(oxxyz_ehf26!kaey9frp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG") == "True"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "storm-app.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://storm-app.onrender.com:3000"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://storm-app.onrender.com:3000"]
 
 # Application definition
 

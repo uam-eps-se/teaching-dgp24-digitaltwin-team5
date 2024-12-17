@@ -40,7 +40,7 @@ jobs:
           command: pnpm lint
       - run:
           name: Build app
-          command: cp prod.env .env && pnpm build
+          command: cp .env.production .env && pnpm build
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -62,8 +62,8 @@ jobs:
           dockerfile: Dockerfile
       - run:
           name: Redeploy on Render
-          command: | # TODO cambiar con el nuestro
-            curl -X POST "https://api.render.com/deploy/srv-XXYYZZ?key=AABBCC&imgURL=docker.io%2Flibrary%2Fnginx%401.24"
+          command: |
+            curl -X POST "https://api.render.com/deploy/srv-ctgql28gph6c73cjr740?key=_7QeoMrjUK8"
 
 workflows:
   continuous_deployment:
