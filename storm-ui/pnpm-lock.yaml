@@ -41,6 +41,9 @@ importers:
       apexcharts:
         specifier: ^3.54.1
         version: 3.54.1
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.4.20(postcss@8.4.49)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -74,6 +77,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.16
         version: 3.4.16
+      tsx:
+        specifier: ^4.19.2
+        version: 4.19.2
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
@@ -111,9 +117,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^7.18.0
         version: 7.18.0(eslint@8.57.1)(typescript@5.7.2)
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.4.20(postcss@8.4.49)
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
@@ -150,9 +153,6 @@ importers:
       tailwindcss-logical:
         specifier: ^3.0.1
         version: 3.0.1(postcss@8.4.49)
-      tsx:
-        specifier: ^4.19.2
-        version: 4.19.2
 
 packages:
 
