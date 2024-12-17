@@ -77,6 +77,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.16
         version: 3.4.16
+      tailwindcss-logical:
+        specifier: ^3.0.1
+        version: 3.0.1(postcss@8.4.49)
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -150,9 +153,6 @@ importers:
       stylelint-use-logical-spec:
         specifier: ^5.0.1
         version: 5.0.1(stylelint@16.12.0(typescript@5.7.2))
-      tailwindcss-logical:
-        specifier: ^3.0.1
-        version: 3.0.1(postcss@8.4.49)
 
 packages:
 
