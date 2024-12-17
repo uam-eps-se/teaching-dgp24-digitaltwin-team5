@@ -27,27 +27,24 @@ jobs:
 
   front-lint-and-build:
     executor: node/default
+    working_directory: storm-ui
     steps:
       - checkout
       - run:
-          working_directory: storm-ui
           command: sudo npm install -g npm@latest
       - node/install-packages:
-          working_directory: storm-ui
           override-ci-command: pnpm i
           pkg-manager: pnpm
       - run:
           name: Lint frontend code (React TS)
-          working_directory: storm-ui
           command: pnpm lint
       - run:
           name: Build app
-          working_directory: storm-ui
-          command: pnpm build
+          command: cp prod.env .env && pnpm build
       - persist_to_workspace:
           root: ~/project
           paths:
-            - storm-ui/.next
+            - ./.next
 
   deploy:
     executor: docker/default
@@ -62,7 +59,7 @@ jobs:
       - docker/publish: # build image & publish to Dockerhub
           image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           update-description: true
-          dockerfile: Dockerfile # TODO hacerlo lmao
+          dockerfile: Dockerfile
       - run:
           name: Redeploy on Render
           command: | # TODO cambiar con el nuestro
