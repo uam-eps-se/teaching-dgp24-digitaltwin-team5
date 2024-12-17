@@ -90,7 +90,16 @@ def update_temperature(tt, time) -> dict:
     return temp
 
 
-load_dotenv(".env")
+if len(sys.argv) == 1:
+    load_dotenv(".env")
+elif sys.argv[1] == "--prod":
+    load_dotenv(".env.production")
+else:
+    print(
+        f"Usage: python3 {sys.argv[0]}\n",
+        "\t--prod (optional): Generate data for deployed application",
+    )
+    sys.exit()
 
 METRICS_URL = os.getenv("METRICS_ENDPOINT")
 ROOMS_URL = os.getenv("ROOMS_ENDPOINT")
