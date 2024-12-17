@@ -25,15 +25,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f!yly4o0hy6nk2+qi%a#witt4wfa_(oxxyz_ehf26!kaey9frp"
+SECRET_KEY = (
+    os.getenv("DJANGO_SECRETKEY")
+    or "django-insecure-f!yly4o0hy6nk2+qi%a#witt4wfa_(oxxyz_ehf26!kaey9frp"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG") == "True"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "storm-app.onrender.com"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://storm-app.onrender.com:3000"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "storm-api-dyjp.onrender.com"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "https://teaching-dgp24-digitaltwin-team5.onrender.com",
+]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://storm-app.onrender.com:3000"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://teaching-dgp24-digitaltwin-team5.onrender.com",
+]
 
 # Application definition
 

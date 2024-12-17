@@ -61,9 +61,13 @@ jobs:
           update-description: true
           dockerfile: Dockerfile
       - run:
-          name: Redeploy on Render
+          name: Redeploy API on Render
           command: |
-            curl -X POST "https://api.render.com/deploy/srv-ctgql28gph6c73cjr740?key=_7QeoMrjUK8"
+            curl -X POST "https://api.render.com/deploy/srv-ctgr8gjgbbvc738um9v0?key=80u2Lsut3f8"
+      - run:
+          name: Redeploy Frontend on Render
+          command: |
+            curl -X POST "https://api.render.com/deploy/srv-ctgr3fij1k6c73a60ufg?key=UhLS7GPU0A0"
 
 workflows:
   continuous_deployment:
