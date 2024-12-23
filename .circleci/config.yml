@@ -20,12 +20,8 @@ jobs:
           name: Run Django tests
           working_directory: storm
           command: python3 manage.py test
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - storm
 
-  front-lint-and-build:
+  front-lint:
     executor: node/default
     working_directory: storm-ui
     steps:
@@ -38,13 +34,6 @@ jobs:
       - run:
           name: Lint frontend code (React TS)
           command: pnpm lint
-      - run:
-          name: Build app
-          command: cp .env.production .env && pnpm build
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - ./.next
 
   deploy:
     executor: docker/default
@@ -55,9 +44,8 @@ jobs:
           name: Prepare files for deployment
           command: |
             ls ~/project/storm
-            ls ~/project/storm-ui/.next
       - docker/publish: # build image & publish to Dockerhub
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: acervans/storm-api
           update-description: true
           dockerfile: Dockerfile
       - run:
