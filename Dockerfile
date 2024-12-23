@@ -24,7 +24,7 @@ ADD requirements.txt /app/
 # Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# --- Final Stage: Run DB, Backend and Frontend servers ---
+# --- Final Stage: Run DB and Backend servers ---
 FROM deps AS final
 
 # Initialize database
@@ -38,7 +38,7 @@ USER root
 # Volume for DB data
 VOLUME ["/var/lib/postgresql/data"]
 
-# Expose ports
+# Expose port
 EXPOSE 8000
 
 # Entry script

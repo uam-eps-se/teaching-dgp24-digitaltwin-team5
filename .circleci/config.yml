@@ -61,11 +61,11 @@ workflows:
   continuous_deployment:
     jobs:
       - back-lint-and-test
-      - front-lint-and-build
+      - front-lint
       - deploy:
           requires:
             - back-lint-and-test
-            - front-lint-and-build
+            - front-lint
           filters:
             branches:
               only: main # only deploy when on main
