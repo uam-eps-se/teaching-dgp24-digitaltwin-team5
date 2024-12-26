@@ -36,20 +36,10 @@ jobs:
           command: pnpm lint
 
   deploy:
-    executor: docker/default
+    executor: python/default
     steps:
-      - attach_workspace:
-          at: ~/project
       - run:
-          name: Prepare files for deployment
-          command: |
-            ls ~/project/storm
-      - docker/publish: # build image & publish to Dockerhub
-          image: acervans/storm-api
-          update-description: true
-          dockerfile: Dockerfile
-      - run:
-          name: Redeploy API on Render
+          name: Redeploy Backend API on Render
           command: |
             curl -X POST "https://api.render.com/deploy/srv-ctgr8gjgbbvc738um9v0?key=80u2Lsut3f8"
       - run:
@@ -58,14 +48,23 @@ jobs:
             curl -X POST "https://api.render.com/deploy/srv-ctgr3fij1k6c73a60ufg?key=UhLS7GPU0A0"
 
 workflows:
-  continuous_deployment:
+  lint-test-and-deploy:
     jobs:
       - back-lint-and-test
       - front-lint
-      - deploy:
+      - docker/publish: # build image & publish to Docker Hub
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          update-description: true
+          dockerfile: Dockerfile
           requires:
             - back-lint-and-test
             - front-lint
+          filters:
+            branches:
+              only: main
+      - deploy:
+          requires:
+            - docker/publish
           filters:
             branches:
               only: main # only deploy when on main
