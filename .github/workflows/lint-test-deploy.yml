@@ -11,6 +11,9 @@ on:
 jobs:
   back-lint-and-test:
     runs-on: ubuntu-latest
+    env:
+      DJANGO_DEBUG: True
+      DATABASE_URL: sqlite:////tmp/db.sqlite3
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
