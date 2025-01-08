@@ -3,8 +3,10 @@ name: Lint-Test-and-Deploy
 on:
   push:
     branches:
-      - main
       - dev
+  pull_request:
+    branches:
+      - main
 
 jobs:
   back-lint-and-test:
