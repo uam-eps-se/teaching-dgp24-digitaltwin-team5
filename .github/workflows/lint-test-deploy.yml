@@ -37,7 +37,7 @@ jobs:
           version: 9
           run_install: |
             - cwd: storm-ui
-            - args: [--frozen-lockfile]
+              args: [--frozen-lockfile]
       - name: Lint frontend code (React TS)
         working-directory: storm-ui
         run: pnpm lint
