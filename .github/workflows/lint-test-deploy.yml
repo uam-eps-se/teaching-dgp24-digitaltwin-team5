@@ -11,6 +11,9 @@ on:
 jobs:
   back-lint-and-test:
     runs-on: ubuntu-latest
+    env:
+      DJANGO_DEBUG: True
+      DATABASE_URL: sqlite:////tmp/db.sqlite3
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -47,7 +50,7 @@ jobs:
   docker-publish-back:
     if: github.ref_name == 'main'
     runs-on: ubuntu-latest
-    needs:
+    needs: 
       - back-lint-and-test
       - front-lint
     steps:
