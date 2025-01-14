@@ -34,18 +34,18 @@ python3 manage.py runserver
 
 ### Front-end
 Navigate to `storm-ui/`, and install all packages:
-```
+```bash
 pnpm i
 ```
 
 To run the web-app in developer mode, use:
-```
+```bash
 pnpm dev
 ```
 
 To run STORM as in production, compile the app and run it:
-```
-pnpm build
+```bash
+pnpm build:dev
 pnpm start
 ```
 
