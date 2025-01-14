@@ -49,6 +49,8 @@ pnpm build:dev
 pnpm start
 ```
 
+The Django back-end should now be running at localhost:8000.
+
 ## Testing the Application
 A simple, random metric-generation script can be found at `storm-datagen/`. To run it, use:
 ```
@@ -61,3 +63,5 @@ The script accepts various inputs that change the values sent to the backend:
 - "wc": Injects a co2 value of 801ppm in a random room.
 - "ip": Removes all people from a random room.
 - "restart": Sets the temperature/co2/people of all rooms to 23C/500ppm/5.
+
+The React front-end should now be running at localhost:3000.
