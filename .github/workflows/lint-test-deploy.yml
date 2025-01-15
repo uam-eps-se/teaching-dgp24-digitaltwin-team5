@@ -8,6 +8,9 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - closed
 
 jobs:
   back-lint-and-test:
@@ -57,7 +60,7 @@ jobs:
         run: pnpm lint
 
   docker-publish-back:
-    if: ${{ (github.ref_name == 'main') && (github.event.pull_request.merged == true) }}
+    if: ${{ (github.ref_name == 'main') && (github.event.pull_request.merged) }}
     runs-on: ubuntu-latest
     needs: 
       - back-lint-and-test
@@ -73,7 +76,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/$DOCKER_REPOSITORY:latest
 
   deploy:
-    if: ${{ (github.ref_name == 'main') && (github.event.pull_request.merged == true) }}
+    if: ${{ (github.ref_name == 'main') && (github.event.pull_request.merged) }}
     runs-on: ubuntu-latest
     needs: docker-publish-back
     steps:
