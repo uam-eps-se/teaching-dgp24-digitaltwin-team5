@@ -65,3 +65,7 @@ The script accepts various inputs that change the values sent to the backend:
 - "restart": Sets the temperature/co2/people of all rooms to 23C/500ppm/5.
 
 The React front-end should now be running at localhost:3000.
+
+## User Manual
+
+You can find a basic manual for this application [here](doc/STORM___User_Manual_v1.pdf)
