@@ -5,6 +5,7 @@ su -c "psql -h 0.0.0.0 -p 5432 -c \"CREATE DATABASE storm OWNER test;\" || true"
 
 # Database migrations
 cd /app/storm
+python manage.py makemigrations api
 python manage.py makemigrations
 python manage.py migrate
 
