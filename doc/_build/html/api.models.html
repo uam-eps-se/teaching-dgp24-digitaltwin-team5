@@ -1,0 +1,1445 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>api.models package &mdash; STORM 3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=110ea713"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            STORM
+              <img src="_static/storm-logo-v-dark.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">api.models package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-api.models.base">api.models.base module</a><ul>
+<li><a class="reference internal" href="#api.models.base.Door"><code class="docutils literal notranslate"><span class="pre">Door</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.base.Door.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Door.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Door.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.doorconnectsroom_set"><code class="docutils literal notranslate"><span class="pre">Door.doorconnectsroom_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.dooropen_set"><code class="docutils literal notranslate"><span class="pre">Door.dooropen_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.id"><code class="docutils literal notranslate"><span class="pre">Door.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.name"><code class="docutils literal notranslate"><span class="pre">Door.name</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.objects"><code class="docutils literal notranslate"><span class="pre">Door.objects</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Door.rooms"><code class="docutils literal notranslate"><span class="pre">Door.rooms</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.door"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.door</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.door_id"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.door_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.id"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.objects"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.objects</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.room"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.DoorConnectsRoom.room_id"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.room_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.base.Light"><code class="docutils literal notranslate"><span class="pre">Light</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.base.Light.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Light.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Light.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.id"><code class="docutils literal notranslate"><span class="pre">Light.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.lighton_set"><code class="docutils literal notranslate"><span class="pre">Light.lighton_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.name"><code class="docutils literal notranslate"><span class="pre">Light.name</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.objects"><code class="docutils literal notranslate"><span class="pre">Light.objects</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.room"><code class="docutils literal notranslate"><span class="pre">Light.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Light.room_id"><code class="docutils literal notranslate"><span class="pre">Light.room_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.base.Room"><code class="docutils literal notranslate"><span class="pre">Room</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.base.Room.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Room.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Room.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.alert_set"><code class="docutils literal notranslate"><span class="pre">Room.alert_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.co2inroom_set"><code class="docutils literal notranslate"><span class="pre">Room.co2inroom_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.door_set"><code class="docutils literal notranslate"><span class="pre">Room.door_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.doorconnectsroom_set"><code class="docutils literal notranslate"><span class="pre">Room.doorconnectsroom_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.id"><code class="docutils literal notranslate"><span class="pre">Room.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.light_set"><code class="docutils literal notranslate"><span class="pre">Room.light_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.name"><code class="docutils literal notranslate"><span class="pre">Room.name</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.objects"><code class="docutils literal notranslate"><span class="pre">Room.objects</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.peopleinroom_set"><code class="docutils literal notranslate"><span class="pre">Room.peopleinroom_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.size"><code class="docutils literal notranslate"><span class="pre">Room.size</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.temperatureinroom_set"><code class="docutils literal notranslate"><span class="pre">Room.temperatureinroom_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.ventilator_set"><code class="docutils literal notranslate"><span class="pre">Room.ventilator_set</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Room.window_set"><code class="docutils literal notranslate"><span class="pre">Room.window_set</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.base.Ventilator"><code class="docutils literal notranslate"><span class="pre">Ventilator</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.base.Ventilator.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Ventilator.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Ventilator.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.id"><code class="docutils literal notranslate"><span class="pre">Ventilator.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.name"><code class="docutils literal notranslate"><span class="pre">Ventilator.name</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.objects"><code class="docutils literal notranslate"><span class="pre">Ventilator.objects</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.room"><code class="docutils literal notranslate"><span class="pre">Ventilator.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.room_id"><code class="docutils literal notranslate"><span class="pre">Ventilator.room_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Ventilator.ventilatoron_set"><code class="docutils literal notranslate"><span class="pre">Ventilator.ventilatoron_set</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.base.Window"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.base.Window.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Window.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Window.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.id"><code class="docutils literal notranslate"><span class="pre">Window.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.name"><code class="docutils literal notranslate"><span class="pre">Window.name</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.objects"><code class="docutils literal notranslate"><span class="pre">Window.objects</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.room"><code class="docutils literal notranslate"><span class="pre">Window.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.room_id"><code class="docutils literal notranslate"><span class="pre">Window.room_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.base.Window.windowopen_set"><code class="docutils literal notranslate"><span class="pre">Window.windowopen_set</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.models.events">api.models.events module</a><ul>
+<li><a class="reference internal" href="#api.models.events.DoorOpen"><code class="docutils literal notranslate"><span class="pre">DoorOpen</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">DoorOpen.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">DoorOpen.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.door"><code class="docutils literal notranslate"><span class="pre">DoorOpen.door</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.door_id"><code class="docutils literal notranslate"><span class="pre">DoorOpen.door_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">DoorOpen.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">DoorOpen.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.id"><code class="docutils literal notranslate"><span class="pre">DoorOpen.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.is_open"><code class="docutils literal notranslate"><span class="pre">DoorOpen.is_open</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.DoorOpen.time"><code class="docutils literal notranslate"><span class="pre">DoorOpen.time</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.events.LightOn"><code class="docutils literal notranslate"><span class="pre">LightOn</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.events.LightOn.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">LightOn.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">LightOn.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">LightOn.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">LightOn.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.id"><code class="docutils literal notranslate"><span class="pre">LightOn.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.is_on"><code class="docutils literal notranslate"><span class="pre">LightOn.is_on</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.light"><code class="docutils literal notranslate"><span class="pre">LightOn.light</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.light_id"><code class="docutils literal notranslate"><span class="pre">LightOn.light_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.LightOn.time"><code class="docutils literal notranslate"><span class="pre">LightOn.time</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn"><code class="docutils literal notranslate"><span class="pre">VentilatorOn</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.id"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.is_on"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.is_on</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.time"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.time</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.ventilator"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.ventilator</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.VentilatorOn.ventilator_id"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.ventilator_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen"><code class="docutils literal notranslate"><span class="pre">WindowOpen</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">WindowOpen.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">WindowOpen.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">WindowOpen.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">WindowOpen.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.id"><code class="docutils literal notranslate"><span class="pre">WindowOpen.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.is_open"><code class="docutils literal notranslate"><span class="pre">WindowOpen.is_open</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.time"><code class="docutils literal notranslate"><span class="pre">WindowOpen.time</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.window"><code class="docutils literal notranslate"><span class="pre">WindowOpen.window</span></code></a></li>
+<li><a class="reference internal" href="#api.models.events.WindowOpen.window_id"><code class="docutils literal notranslate"><span class="pre">WindowOpen.window_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.models.metrics">api.models.metrics module</a><ul>
+<li><a class="reference internal" href="#api.models.metrics.Alert"><code class="docutils literal notranslate"><span class="pre">Alert</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.metrics.Alert.AlertType"><code class="docutils literal notranslate"><span class="pre">Alert.AlertType</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.metrics.Alert.AlertType.DANGER"><code class="docutils literal notranslate"><span class="pre">Alert.AlertType.DANGER</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.AlertType.INFO"><code class="docutils literal notranslate"><span class="pre">Alert.AlertType.INFO</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.AlertType.WARNING"><code class="docutils literal notranslate"><span class="pre">Alert.AlertType.WARNING</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Alert.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Alert.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.content"><code class="docutils literal notranslate"><span class="pre">Alert.content</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">Alert.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">Alert.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.get_type_display"><code class="docutils literal notranslate"><span class="pre">Alert.get_type_display()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.id"><code class="docutils literal notranslate"><span class="pre">Alert.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.received"><code class="docutils literal notranslate"><span class="pre">Alert.received</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.room"><code class="docutils literal notranslate"><span class="pre">Alert.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.room_id"><code class="docutils literal notranslate"><span class="pre">Alert.room_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.time"><code class="docutils literal notranslate"><span class="pre">Alert.time</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Alert.type"><code class="docutils literal notranslate"><span class="pre">Alert.type</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom"><code class="docutils literal notranslate"><span class="pre">Co2InRoom</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.co2"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.co2</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.id"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.room"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.room_id"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.room_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.Co2InRoom.time"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.time</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.id"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.no_people_in_room"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.no_people_in_room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.room"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.room_id"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.room_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.PeopleInRoom.time"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.time</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom</span></code></a><ul>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.DoesNotExist</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.MultipleObjectsReturned</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.get_next_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.get_previous_by_time()</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.id"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.room"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.room</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.room_id"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.room_id</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.temp"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.temp</span></code></a></li>
+<li><a class="reference internal" href="#api.models.metrics.TemperatureInRoom.time"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.time</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.models">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">api.models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="api-models-package">
+<h1>api.models package<a class="headerlink" href="#api-models-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-api.models.base">
+<span id="api-models-base-module"></span><h2>api.models.base module<a class="headerlink" href="#module-api.models.base" title="Link to this heading"></a></h2>
+<p>This module defines base models for the database.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.base.Door">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.base.</span></span><span class="sig-name descname"><span class="pre">Door</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/base.html#Door"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.base.Door" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Door table representation.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Door.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.base.Door.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Door.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.base.Door.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Door.doorconnectsroom_set">
+<span class="sig-name descname"><span class="pre">doorconnectsroom_set</span></span><a class="headerlink" href="#api.models.base.Door.doorconnectsroom_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Door.dooropen_set">
+<span class="sig-name descname"><span class="pre">dooropen_set</span></span><a class="headerlink" href="#api.models.base.Door.dooropen_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Door.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.base.Door.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Door.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#api.models.base.Door.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Door.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#api.models.base.Door.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Door.rooms">
+<span class="sig-name descname"><span class="pre">rooms</span></span><a class="headerlink" href="#api.models.base.Door.rooms" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.base.</span></span><span class="sig-name descname"><span class="pre">DoorConnectsRoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/base.html#DoorConnectsRoom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.base.DoorConnectsRoom" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Model representation for a connection between a door and up to two rooms.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.door">
+<span class="sig-name descname"><span class="pre">door</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.door" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.door_id">
+<span class="sig-name descname"><span class="pre">door_id</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.door_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#api.models.base.DoorConnectsRoom.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.DoorConnectsRoom.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.base.DoorConnectsRoom.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.base.Light">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.base.</span></span><span class="sig-name descname"><span class="pre">Light</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/base.html#Light"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.base.Light" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Light table representation.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Light.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.base.Light.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Light.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.base.Light.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Light.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.base.Light.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Light.lighton_set">
+<span class="sig-name descname"><span class="pre">lighton_set</span></span><a class="headerlink" href="#api.models.base.Light.lighton_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Light.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#api.models.base.Light.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Light.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#api.models.base.Light.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Light.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.base.Light.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Light.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.base.Light.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.base.Room">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.base.</span></span><span class="sig-name descname"><span class="pre">Room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/base.html#Room"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.base.Room" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Room table representation.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Room.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.base.Room.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Room.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.base.Room.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.alert_set">
+<span class="sig-name descname"><span class="pre">alert_set</span></span><a class="headerlink" href="#api.models.base.Room.alert_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.co2inroom_set">
+<span class="sig-name descname"><span class="pre">co2inroom_set</span></span><a class="headerlink" href="#api.models.base.Room.co2inroom_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.door_set">
+<span class="sig-name descname"><span class="pre">door_set</span></span><a class="headerlink" href="#api.models.base.Room.door_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.doorconnectsroom_set">
+<span class="sig-name descname"><span class="pre">doorconnectsroom_set</span></span><a class="headerlink" href="#api.models.base.Room.doorconnectsroom_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.base.Room.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.light_set">
+<span class="sig-name descname"><span class="pre">light_set</span></span><a class="headerlink" href="#api.models.base.Room.light_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#api.models.base.Room.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#api.models.base.Room.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.peopleinroom_set">
+<span class="sig-name descname"><span class="pre">peopleinroom_set</span></span><a class="headerlink" href="#api.models.base.Room.peopleinroom_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.size">
+<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#api.models.base.Room.size" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.temperatureinroom_set">
+<span class="sig-name descname"><span class="pre">temperatureinroom_set</span></span><a class="headerlink" href="#api.models.base.Room.temperatureinroom_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.ventilator_set">
+<span class="sig-name descname"><span class="pre">ventilator_set</span></span><a class="headerlink" href="#api.models.base.Room.ventilator_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Room.window_set">
+<span class="sig-name descname"><span class="pre">window_set</span></span><a class="headerlink" href="#api.models.base.Room.window_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.base.Ventilator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.base.</span></span><span class="sig-name descname"><span class="pre">Ventilator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/base.html#Ventilator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.base.Ventilator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Ventilator table representation.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.base.Ventilator.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.base.Ventilator.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.base.Ventilator.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#api.models.base.Ventilator.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#api.models.base.Ventilator.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.base.Ventilator.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.base.Ventilator.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Ventilator.ventilatoron_set">
+<span class="sig-name descname"><span class="pre">ventilatoron_set</span></span><a class="headerlink" href="#api.models.base.Ventilator.ventilatoron_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.base.Window">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.base.</span></span><span class="sig-name descname"><span class="pre">Window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/base.html#Window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.base.Window" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Window table representation.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Window.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.base.Window.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.base.Window.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.base.Window.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Window.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.base.Window.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Window.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#api.models.base.Window.name" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Window.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#api.models.base.Window.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Window.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.base.Window.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Window.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.base.Window.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.base.Window.windowopen_set">
+<span class="sig-name descname"><span class="pre">windowopen_set</span></span><a class="headerlink" href="#api.models.base.Window.windowopen_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.models.events">
+<span id="api-models-events-module"></span><h2>api.models.events module<a class="headerlink" href="#module-api.models.events" title="Link to this heading"></a></h2>
+<p>This module defines models for events related to devices.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.events.</span></span><span class="sig-name descname"><span class="pre">DoorOpen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/events.html#DoorOpen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.events.DoorOpen" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for door events.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.events.DoorOpen.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.events.DoorOpen.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.door">
+<span class="sig-name descname"><span class="pre">door</span></span><a class="headerlink" href="#api.models.events.DoorOpen.door" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.door_id">
+<span class="sig-name descname"><span class="pre">door_id</span></span><a class="headerlink" href="#api.models.events.DoorOpen.door_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.DoorOpen.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.DoorOpen.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.events.DoorOpen.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.is_open">
+<span class="sig-name descname"><span class="pre">is_open</span></span><a class="headerlink" href="#api.models.events.DoorOpen.is_open" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.DoorOpen.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.events.DoorOpen.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.events.LightOn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.events.</span></span><span class="sig-name descname"><span class="pre">LightOn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/events.html#LightOn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.events.LightOn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for light events.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.LightOn.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.events.LightOn.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.LightOn.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.events.LightOn.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.LightOn.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.LightOn.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.LightOn.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.LightOn.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.LightOn.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.events.LightOn.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.LightOn.is_on">
+<span class="sig-name descname"><span class="pre">is_on</span></span><a class="headerlink" href="#api.models.events.LightOn.is_on" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.LightOn.light">
+<span class="sig-name descname"><span class="pre">light</span></span><a class="headerlink" href="#api.models.events.LightOn.light" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.LightOn.light_id">
+<span class="sig-name descname"><span class="pre">light_id</span></span><a class="headerlink" href="#api.models.events.LightOn.light_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.LightOn.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.events.LightOn.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.events.</span></span><span class="sig-name descname"><span class="pre">VentilatorOn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/events.html#VentilatorOn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.events.VentilatorOn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for ventilator events.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.VentilatorOn.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.VentilatorOn.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.is_on">
+<span class="sig-name descname"><span class="pre">is_on</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.is_on" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.ventilator">
+<span class="sig-name descname"><span class="pre">ventilator</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.ventilator" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.VentilatorOn.ventilator_id">
+<span class="sig-name descname"><span class="pre">ventilator_id</span></span><a class="headerlink" href="#api.models.events.VentilatorOn.ventilator_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.events.</span></span><span class="sig-name descname"><span class="pre">WindowOpen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/events.html#WindowOpen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.events.WindowOpen" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for window events.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.events.WindowOpen.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.events.WindowOpen.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.WindowOpen.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.events.WindowOpen.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.events.WindowOpen.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.is_open">
+<span class="sig-name descname"><span class="pre">is_open</span></span><a class="headerlink" href="#api.models.events.WindowOpen.is_open" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.events.WindowOpen.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.window">
+<span class="sig-name descname"><span class="pre">window</span></span><a class="headerlink" href="#api.models.events.WindowOpen.window" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.events.WindowOpen.window_id">
+<span class="sig-name descname"><span class="pre">window_id</span></span><a class="headerlink" href="#api.models.events.WindowOpen.window_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.models.metrics">
+<span id="api-models-metrics-module"></span><h2>api.models.metrics module<a class="headerlink" href="#module-api.models.metrics" title="Link to this heading"></a></h2>
+<p>This module defines models for metrics events related to rooms.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.metrics.Alert">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.metrics.</span></span><span class="sig-name descname"><span class="pre">Alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/metrics.html#Alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.metrics.Alert" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for alerts related to various metrics.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.AlertType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AlertType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/metrics.html#Alert.AlertType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.metrics.Alert.AlertType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerChoices</span></code></p>
+<p>Model to represent alert types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.AlertType.DANGER">
+<span class="sig-name descname"><span class="pre">DANGER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#api.models.metrics.Alert.AlertType.DANGER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.AlertType.INFO">
+<span class="sig-name descname"><span class="pre">INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#api.models.metrics.Alert.AlertType.INFO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.AlertType.WARNING">
+<span class="sig-name descname"><span class="pre">WARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#api.models.metrics.Alert.AlertType.WARNING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.metrics.Alert.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.metrics.Alert.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.content">
+<span class="sig-name descname"><span class="pre">content</span></span><a class="headerlink" href="#api.models.metrics.Alert.content" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.Alert.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.Alert.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.get_type_display">
+<span class="sig-name descname"><span class="pre">get_type_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.IntegerField:</span> <span class="pre">type&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.Alert.get_type_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.metrics.Alert.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.received">
+<span class="sig-name descname"><span class="pre">received</span></span><a class="headerlink" href="#api.models.metrics.Alert.received" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.metrics.Alert.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.metrics.Alert.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.metrics.Alert.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Alert.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#api.models.metrics.Alert.type" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.metrics.</span></span><span class="sig-name descname"><span class="pre">Co2InRoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/metrics.html#Co2InRoom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.metrics.Co2InRoom" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for Co2 metrics in a room.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.co2">
+<span class="sig-name descname"><span class="pre">co2</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.co2" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.Co2InRoom.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.Co2InRoom.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.Co2InRoom.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.metrics.Co2InRoom.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.metrics.</span></span><span class="sig-name descname"><span class="pre">PeopleInRoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/metrics.html#PeopleInRoom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.metrics.PeopleInRoom" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for the people metrics in a room.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.no_people_in_room">
+<span class="sig-name descname"><span class="pre">no_people_in_room</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.no_people_in_room" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.PeopleInRoom.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.metrics.PeopleInRoom.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.models.metrics.</span></span><span class="sig-name descname"><span class="pre">TemperatureInRoom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/models/metrics.html#TemperatureInRoom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.models.metrics.TemperatureInRoom" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TimescaleModel</span></code></p>
+<p>Model representation for temperature metrics in a room.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.get_next_by_time">
+<span class="sig-name descname"><span class="pre">get_next_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.get_next_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.get_previous_by_time">
+<span class="sig-name descname"><span class="pre">get_previous_by_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;timescale.db.models.fields.TimescaleDateTimeField:</span> <span class="pre">time&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.get_previous_by_time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.room">
+<span class="sig-name descname"><span class="pre">room</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.room" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.room_id">
+<span class="sig-name descname"><span class="pre">room_id</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.room_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.temp">
+<span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.temp" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.models.metrics.TemperatureInRoom.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#api.models.metrics.TemperatureInRoom.time" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api.models" title="Link to this heading"></a></h2>
+<p>Intermediate module for exposing models to manage.py</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

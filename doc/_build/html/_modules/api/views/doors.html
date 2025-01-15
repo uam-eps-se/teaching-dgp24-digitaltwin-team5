@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>api.views.doors &#8212; STORM 3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+
+    <script src="../../../_static/documentation_options.js?v=110ea713"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.views.doors</a></li>
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+
+  <h1>Source code for api.views.doors</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines the `v1/doors` endpoint for the API.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># django imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="c1"># restframework imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="c1"># API imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.serializers</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataSerializer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Room</span><span class="p">,</span> <span class="n">Door</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorConnectsRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorOpen</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">api.views.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sse</span>
+
+
+<div class="viewcode-block" id="DoorsAPIView">
+<a class="viewcode-back" href="../../../api.views.html#api.views.doors.DoorsAPIView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DoorsAPIView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines views for all end-points associated to doors, which chan be owned</span>
+<span class="sd">    by up to two rooms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">allowed_methods</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;PATCH&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="DoorsAPIView.get">
+<a class="viewcode-back" href="../../../api.views.html#api.views.doors.DoorsAPIView.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves all doors with less than two rooms. Used on CREATION and</span>
+<span class="sd">        EDITION. This method expects to receive the parameters specified in</span>
+<span class="sd">        `jsons/doors/get.json`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">DataSerializer</span><span class="o">.</span><span class="n">doors</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="DoorsAPIView.post">
+<a class="viewcode-back" href="../../../api.views.html#api.views.doors.DoorsAPIView.post">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new door. Used on EDITION. This method expects to receive the</span>
+<span class="sd">        parameters specified in `jsons/doors/post.json`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request (dict): A JSON-like dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Obtain request parameters</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">room_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;room_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Error Case: Missing Parameters</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">room_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Missing field!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">room</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">room_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Room does not exist</span>
+        <span class="k">if</span> <span class="n">room</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid room id!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">door</span> <span class="o">=</span> <span class="n">Door</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">door</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">droom</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">)</span>
+        <span class="n">droom</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_DEVICES</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">sse</span><span class="o">.</span><span class="n">DOORS</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_SUMMARY</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_ROOM</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Door </span><span class="si">{</span><span class="n">door</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> created successfully!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DoorsAPIView.put">
+<a class="viewcode-back" href="../../../api.views.html#api.views.doors.DoorsAPIView.put">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Connects a door to a room new door. Used on EDITION and CREATION.</span>
+<span class="sd">        This method expects to receive the parameters specified in</span>
+<span class="sd">        `jsons/doors/put.json`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request (dict): A JSON-like dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Obtain request parameters</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">room_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;room_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Error Case: Missing Parameters</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">room_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Missing field!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">room</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">room_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Room does not exist</span>
+        <span class="k">if</span> <span class="n">room</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid room id!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">door</span> <span class="o">=</span> <span class="n">Door</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">identifier</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Invalid door</span>
+        <span class="k">if</span> <span class="n">door</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid door id!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">connected_rooms</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span>
+            <span class="s2">&quot;room&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Error Case: Invalid connections</span>
+        <span class="k">if</span> <span class="n">room_id</span> <span class="ow">in</span> <span class="n">connected_rooms</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Given room id </span><span class="si">{</span><span class="n">room_id</span><span class="si">}</span><span class="s2"> is already connected to this door!&quot;</span><span class="p">,</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_406_NOT_ACCEPTABLE</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">connected_rooms</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Given door id </span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s2"> is connected to two rooms!&quot;</span><span class="p">,</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_406_NOT_ACCEPTABLE</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">droom</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">)</span>
+        <span class="n">droom</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_DEVICES</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">sse</span><span class="o">.</span><span class="n">DOORS</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_SUMMARY</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_ROOM</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Door </span><span class="si">{</span><span class="n">door</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> updated successfully!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DoorsAPIView.delete">
+<a class="viewcode-back" href="../../../api.views.html#api.views.doors.DoorsAPIView.delete">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes a door. Used on EDITION. This method expects to receive the</span>
+<span class="sd">        parameters specified in `jsons/doors/put.json`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request (dict): A JSON-like dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Obtain request parameters</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">room_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;room_id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Error Case: Missing Parameters</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">room_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Missing field!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">room</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">room_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Room does not exist</span>
+        <span class="k">if</span> <span class="n">room</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid room id!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">door</span> <span class="o">=</span> <span class="n">Door</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">identifier</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Invalid door</span>
+        <span class="k">if</span> <span class="n">door</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid door id!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">connected_rooms</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="n">droom</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Not connected door</span>
+        <span class="k">if</span> <span class="n">droom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+                <span class="s2">&quot;Given door is not connected to the room!&quot;</span><span class="p">,</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Delete Door on last connection</span>
+        <span class="k">if</span> <span class="n">connected_rooms</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">door</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">droom</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_DEVICES</span><span class="p">,</span> <span class="n">sse</span><span class="o">.</span><span class="n">DOORS</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_SUMMARY</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">droom</span> <span class="ow">in</span> <span class="n">connected_rooms</span><span class="p">:</span>
+            <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_ROOM</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">droom</span><span class="p">[</span><span class="s1">&#39;room_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Door </span><span class="si">{</span><span class="n">door</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> updated successfully!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DoorsAPIView.patch">
+<a class="viewcode-back" href="../../../api.views.html#api.views.doors.DoorsAPIView.patch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates a door status. Used on CONTROL PANEL.</span>
+
+<span class="sd">        This method expects to receive the parameters specified in</span>
+<span class="sd">        `jsons/doors/patch.json`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request (dict): A JSON-like dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Obtain request parameters</span>
+        <span class="n">identifier</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Error Case: Missing Parameters</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Missing field!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid action!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">door</span> <span class="o">=</span> <span class="n">Door</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">identifier</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="c1"># Error Case: Invalid door</span>
+        <span class="k">if</span> <span class="n">door</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Invalid door id!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">)</span>
+
+        <span class="n">door_open</span> <span class="o">=</span> <span class="n">DoorOpen</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">is_open</span><span class="o">=</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">door_open</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">connected_rooms</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_SUMMARY</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">droom</span> <span class="ow">in</span> <span class="n">connected_rooms</span><span class="p">:</span>
+            <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_ROOM</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">droom</span><span class="p">[</span><span class="s1">&#39;room_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Door </span><span class="si">{</span><span class="n">door</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> assigned the status </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.views.doors</a></li>
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

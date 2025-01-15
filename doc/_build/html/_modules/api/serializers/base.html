@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>api.serializers.base &#8212; STORM 3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+
+    <script src="../../../_static/documentation_options.js?v=110ea713"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.serializers.base</a></li>
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+
+  <h1>Source code for api.serializers.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines a base serializer class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># django imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Count</span><span class="p">,</span> <span class="n">Q</span>
+
+<span class="c1"># API IMPORTS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Room</span><span class="p">,</span> <span class="n">Alert</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Ventilator</span><span class="p">,</span> <span class="n">Door</span><span class="p">,</span> <span class="n">Light</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.serializers.devices</span><span class="w"> </span><span class="kn">import</span> <span class="n">WindowSerializer</span><span class="p">,</span> <span class="n">DoorSerializer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.serializers.devices</span><span class="w"> </span><span class="kn">import</span> <span class="n">VentilatorSerializer</span><span class="p">,</span> <span class="n">LightSerializer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.serializers.room_dashboard</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoomDashboardSerializer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.serializers.room_details</span><span class="w"> </span><span class="kn">import</span> <span class="n">RoomDetailSerializer</span>
+
+
+<span class="n">MAX_ALERTS</span> <span class="o">=</span> <span class="mi">99</span>
+
+
+<div class="viewcode-block" id="DataSerializer">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.base.DataSerializer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataSerializer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper class for serializing functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSerializer.rooms">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.base.DataSerializer.rooms">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rooms</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes all rooms in the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rooms</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">RoomDashboardSerializer</span><span class="p">(</span><span class="n">rooms</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="DataSerializer.room">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.base.DataSerializer.room">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">room</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">identifier</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes a room with the given id.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            identifier (int): Room id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">room</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">identifier</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RoomDetailSerializer</span><span class="p">(</span><span class="n">room</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="DataSerializer.devices">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.base.DataSerializer.devices">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">devices</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes all devices not assigned to a room.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Dictionary with classes and serializers for all devices</span>
+        <span class="n">devmodels</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;windows&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Window</span><span class="p">,</span> <span class="n">WindowSerializer</span><span class="p">),</span>
+            <span class="s2">&quot;ventilators&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Ventilator</span><span class="p">,</span> <span class="n">VentilatorSerializer</span><span class="p">),</span>
+            <span class="s2">&quot;lights&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Light</span><span class="p">,</span> <span class="n">LightSerializer</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Serialize non-associated devices</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">serializer</span><span class="p">)</span> <span class="ow">in</span> <span class="n">devmodels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">devs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">serializer</span><span class="p">(</span><span class="n">devs</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="DataSerializer.doors">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.base.DataSerializer.doors">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">doors</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes all doors connected to less than two rooms.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">doors</span> <span class="o">=</span> <span class="n">Door</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="n">connection_count</span><span class="o">=</span><span class="n">Count</span><span class="p">(</span><span class="s2">&quot;doorconnectsroom&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">connection_count__lt</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">connection_count</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">DoorSerializer</span><span class="p">(</span><span class="n">doors</span><span class="p">,</span> <span class="n">many</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="DataSerializer.context">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.base.DataSerializer.context">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">context</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes context information, which contains unread alerts and</span>
+<span class="sd">        all room names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;rooms&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">}</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()],</span>
+            <span class="s2">&quot;alerts&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">type</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+                    <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+                    <span class="s2">&quot;roomId&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;roomName&quot;</span><span class="p">:</span> <span class="n">a</span><span class="o">.</span><span class="n">room</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">Alert</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">received</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-time&quot;</span><span class="p">)[</span>
+                    <span class="p">:</span><span class="n">MAX_ALERTS</span>
+                <span class="p">]</span>
+            <span class="p">],</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.serializers.base</a></li>
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

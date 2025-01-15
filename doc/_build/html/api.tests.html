@@ -1,0 +1,449 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>api.tests package &mdash; STORM 3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=110ea713"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            STORM
+              <img src="_static/storm-logo-v-dark.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">api.tests package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-api.tests.base">api.tests.base module</a><ul>
+<li><a class="reference internal" href="#api.tests.base.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.base.Base.setUpTestData"><code class="docutils literal notranslate"><span class="pre">Base.setUpTestData()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.context">api.tests.context module</a><ul>
+<li><a class="reference internal" href="#api.tests.context.ContextTest"><code class="docutils literal notranslate"><span class="pre">ContextTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.context.ContextTest.setUpTestData"><code class="docutils literal notranslate"><span class="pre">ContextTest.setUpTestData()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.context.ContextTest.test01_get"><code class="docutils literal notranslate"><span class="pre">ContextTest.test01_get()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.context.ContextTest.test02_put"><code class="docutils literal notranslate"><span class="pre">ContextTest.test02_put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.data">api.tests.data module</a><ul>
+<li><a class="reference internal" href="#api.tests.data.DataTest"><code class="docutils literal notranslate"><span class="pre">DataTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.data.DataTest.test01_get"><code class="docutils literal notranslate"><span class="pre">DataTest.test01_get()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.data.DataTest.test02_post"><code class="docutils literal notranslate"><span class="pre">DataTest.test02_post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.devices">api.tests.devices module</a><ul>
+<li><a class="reference internal" href="#api.tests.devices.DevicesTest"><code class="docutils literal notranslate"><span class="pre">DevicesTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.devices.DevicesTest.test01_get"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test01_get()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.devices.DevicesTest.test02_post"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test02_post()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.devices.DevicesTest.test03_put"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test03_put()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.devices.DevicesTest.test04_delete"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test04_delete()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.devices.DevicesTest.test05_patch"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test05_patch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.doors">api.tests.doors module</a><ul>
+<li><a class="reference internal" href="#api.tests.doors.DoorsTest"><code class="docutils literal notranslate"><span class="pre">DoorsTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.doors.DoorsTest.test01_get"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test01_get()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.doors.DoorsTest.test02_post"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test02_post()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.doors.DoorsTest.test03_put"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test03_put()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.doors.DoorsTest.test04_delete"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test04_delete()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.doors.DoorsTest.test05_patch"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test05_patch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.metrics">api.tests.metrics module</a><ul>
+<li><a class="reference internal" href="#api.tests.metrics.MetricsTest"><code class="docutils literal notranslate"><span class="pre">MetricsTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.metrics.MetricsTest.test01_post"><code class="docutils literal notranslate"><span class="pre">MetricsTest.test01_post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.room_detail">api.tests.room_detail module</a><ul>
+<li><a class="reference internal" href="#api.tests.room_detail.RoomDetailTest"><code class="docutils literal notranslate"><span class="pre">RoomDetailTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.room_detail.RoomDetailTest.test01_get"><code class="docutils literal notranslate"><span class="pre">RoomDetailTest.test01_get()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.room_detail.RoomDetailTest.test02_put"><code class="docutils literal notranslate"><span class="pre">RoomDetailTest.test02_put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests.rooms">api.tests.rooms module</a><ul>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest"><code class="docutils literal notranslate"><span class="pre">RoomsTest</span></code></a><ul>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test01_get"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test01_get()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test02_post_fail"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test02_post_fail()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test03_post_empty"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test03_post_empty()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test04_post_devices_fail"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test04_post_devices_fail()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test05_post_add_doors"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test05_post_add_doors()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test06_post_add_windows"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test06_post_add_windows()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test07_post_add_ventilators"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test07_post_add_ventilators()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test08_post_add_lights"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test08_post_add_lights()</span></code></a></li>
+<li><a class="reference internal" href="#api.tests.rooms.RoomsTest.test09_delete"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test09_delete()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">api.tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="api-tests-package">
+<h1>api.tests package<a class="headerlink" href="#api-tests-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-api.tests.base">
+<span id="api-tests-base-module"></span><h2>api.tests.base module<a class="headerlink" href="#module-api.tests.base" title="Link to this heading"></a></h2>
+<p>This module defines a base class used to populate the teest database.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.base.Base">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.base.</span></span><span class="sig-name descname"><span class="pre">Base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/base.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.base.Base" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APITestCase</span></code></p>
+<p>Base class that sets up a database for test cases</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.base.Base.setUpTestData">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpTestData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/base.html#Base.setUpTestData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.base.Base.setUpTestData" title="Link to this definition"></a></dt>
+<dd><p>Populates the test database.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.context">
+<span id="api-tests-context-module"></span><h2>api.tests.context module<a class="headerlink" href="#module-api.tests.context" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/context</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.context.ContextTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.context.</span></span><span class="sig-name descname"><span class="pre">ContextTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/context.html#ContextTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.context.ContextTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.context.ContextTest.setUpTestData">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setUpTestData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/context.html#ContextTest.setUpTestData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.context.ContextTest.setUpTestData" title="Link to this definition"></a></dt>
+<dd><p>Populates the test database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.context.ContextTest.test01_get">
+<span class="sig-name descname"><span class="pre">test01_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/context.html#ContextTest.test01_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.context.ContextTest.test01_get" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Context GET request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.context.ContextTest.test02_put">
+<span class="sig-name descname"><span class="pre">test02_put</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/context.html#ContextTest.test02_put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.context.ContextTest.test02_put" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Context PUT request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.data">
+<span id="api-tests-data-module"></span><h2>api.tests.data module<a class="headerlink" href="#module-api.tests.data" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/data</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.data.DataTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.data.</span></span><span class="sig-name descname"><span class="pre">DataTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/data.html#DataTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.data.DataTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.data.DataTest.test01_get">
+<span class="sig-name descname"><span class="pre">test01_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/data.html#DataTest.test01_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.data.DataTest.test01_get" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Data GET request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.data.DataTest.test02_post">
+<span class="sig-name descname"><span class="pre">test02_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/data.html#DataTest.test02_post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.data.DataTest.test02_post" title="Link to this definition"></a></dt>
+<dd><p>Test Case 02: Data POST request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.devices">
+<span id="api-tests-devices-module"></span><h2>api.tests.devices module<a class="headerlink" href="#module-api.tests.devices" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/devices</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.devices.DevicesTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.devices.</span></span><span class="sig-name descname"><span class="pre">DevicesTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/devices.html#DevicesTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.devices.DevicesTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.devices.DevicesTest.test01_get">
+<span class="sig-name descname"><span class="pre">test01_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/devices.html#DevicesTest.test01_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.devices.DevicesTest.test01_get" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Devices GET Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.devices.DevicesTest.test02_post">
+<span class="sig-name descname"><span class="pre">test02_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/devices.html#DevicesTest.test02_post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.devices.DevicesTest.test02_post" title="Link to this definition"></a></dt>
+<dd><p>Test Case 02: Devices POST Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.devices.DevicesTest.test03_put">
+<span class="sig-name descname"><span class="pre">test03_put</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/devices.html#DevicesTest.test03_put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.devices.DevicesTest.test03_put" title="Link to this definition"></a></dt>
+<dd><p>Test Case 03: Devices PUT Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.devices.DevicesTest.test04_delete">
+<span class="sig-name descname"><span class="pre">test04_delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/devices.html#DevicesTest.test04_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.devices.DevicesTest.test04_delete" title="Link to this definition"></a></dt>
+<dd><p>Test Case 04: Devices DELETE Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.devices.DevicesTest.test05_patch">
+<span class="sig-name descname"><span class="pre">test05_patch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/devices.html#DevicesTest.test05_patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.devices.DevicesTest.test05_patch" title="Link to this definition"></a></dt>
+<dd><p>Test Case 05: Devices PATCH Request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.doors">
+<span id="api-tests-doors-module"></span><h2>api.tests.doors module<a class="headerlink" href="#module-api.tests.doors" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/doors</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.doors.DoorsTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.doors.</span></span><span class="sig-name descname"><span class="pre">DoorsTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/doors.html#DoorsTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.doors.DoorsTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.doors.DoorsTest.test01_get">
+<span class="sig-name descname"><span class="pre">test01_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/doors.html#DoorsTest.test01_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.doors.DoorsTest.test01_get" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Doors GET Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.doors.DoorsTest.test02_post">
+<span class="sig-name descname"><span class="pre">test02_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/doors.html#DoorsTest.test02_post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.doors.DoorsTest.test02_post" title="Link to this definition"></a></dt>
+<dd><p>Test Case 02: Doors POST Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.doors.DoorsTest.test03_put">
+<span class="sig-name descname"><span class="pre">test03_put</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/doors.html#DoorsTest.test03_put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.doors.DoorsTest.test03_put" title="Link to this definition"></a></dt>
+<dd><p>Test Case 03: Doors PUT Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.doors.DoorsTest.test04_delete">
+<span class="sig-name descname"><span class="pre">test04_delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/doors.html#DoorsTest.test04_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.doors.DoorsTest.test04_delete" title="Link to this definition"></a></dt>
+<dd><p>Test Case 04: Doors DELETE Request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.doors.DoorsTest.test05_patch">
+<span class="sig-name descname"><span class="pre">test05_patch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/doors.html#DoorsTest.test05_patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.doors.DoorsTest.test05_patch" title="Link to this definition"></a></dt>
+<dd><p>Test Case 04: Doors DELETE Request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.metrics">
+<span id="api-tests-metrics-module"></span><h2>api.tests.metrics module<a class="headerlink" href="#module-api.tests.metrics" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/metrics</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.metrics.MetricsTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.metrics.</span></span><span class="sig-name descname"><span class="pre">MetricsTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/metrics.html#MetricsTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.metrics.MetricsTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.metrics.MetricsTest.test01_post">
+<span class="sig-name descname"><span class="pre">test01_post</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/metrics.html#MetricsTest.test01_post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.metrics.MetricsTest.test01_post" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Metrics POST request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.room_detail">
+<span id="api-tests-room-detail-module"></span><h2>api.tests.room_detail module<a class="headerlink" href="#module-api.tests.room_detail" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/room</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.room_detail.RoomDetailTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.room_detail.</span></span><span class="sig-name descname"><span class="pre">RoomDetailTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/room_detail.html#RoomDetailTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.room_detail.RoomDetailTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.room_detail.RoomDetailTest.test01_get">
+<span class="sig-name descname"><span class="pre">test01_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/room_detail.html#RoomDetailTest.test01_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.room_detail.RoomDetailTest.test01_get" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Room GET request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.room_detail.RoomDetailTest.test02_put">
+<span class="sig-name descname"><span class="pre">test02_put</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/room_detail.html#RoomDetailTest.test02_put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.room_detail.RoomDetailTest.test02_put" title="Link to this definition"></a></dt>
+<dd><p>Test Case 02: Room PUT request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests.rooms">
+<span id="api-tests-rooms-module"></span><h2>api.tests.rooms module<a class="headerlink" href="#module-api.tests.rooms" title="Link to this heading"></a></h2>
+<p>This module defines unit tests for the <cite>v1/rooms</cite> endpoint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.tests.rooms.</span></span><span class="sig-name descname"><span class="pre">RoomsTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.tests.base.Base" title="api.tests.base.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Class representation of unit tests to run.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test01_get">
+<span class="sig-name descname"><span class="pre">test01_get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test01_get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test01_get" title="Link to this definition"></a></dt>
+<dd><p>Test Case 01: Rooms GET request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test02_post_fail">
+<span class="sig-name descname"><span class="pre">test02_post_fail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test02_post_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test02_post_fail" title="Link to this definition"></a></dt>
+<dd><p>Test Case 02: Rooms failed POST request</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test03_post_empty">
+<span class="sig-name descname"><span class="pre">test03_post_empty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test03_post_empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test03_post_empty" title="Link to this definition"></a></dt>
+<dd><p>Test Case 03: Rooms POST request with no devices</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test04_post_devices_fail">
+<span class="sig-name descname"><span class="pre">test04_post_devices_fail</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test04_post_devices_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test04_post_devices_fail" title="Link to this definition"></a></dt>
+<dd><p>Test Case 04: Rooms POST request with incorrect device info</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test05_post_add_doors">
+<span class="sig-name descname"><span class="pre">test05_post_add_doors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test05_post_add_doors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test05_post_add_doors" title="Link to this definition"></a></dt>
+<dd><p>Test Case 05: Rooms POST request with doors</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test06_post_add_windows">
+<span class="sig-name descname"><span class="pre">test06_post_add_windows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test06_post_add_windows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test06_post_add_windows" title="Link to this definition"></a></dt>
+<dd><p>Test Case 06: Rooms POST request with windows</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test07_post_add_ventilators">
+<span class="sig-name descname"><span class="pre">test07_post_add_ventilators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test07_post_add_ventilators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test07_post_add_ventilators" title="Link to this definition"></a></dt>
+<dd><p>Test Case 07: Rooms POST request with ventilators</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test08_post_add_lights">
+<span class="sig-name descname"><span class="pre">test08_post_add_lights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test08_post_add_lights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test08_post_add_lights" title="Link to this definition"></a></dt>
+<dd><p>Test Case 08: Rooms POST request with lights</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.tests.rooms.RoomsTest.test09_delete">
+<span class="sig-name descname"><span class="pre">test09_delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/tests/rooms.html#RoomsTest.test09_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.tests.rooms.RoomsTest.test09_delete" title="Link to this definition"></a></dt>
+<dd><p>Test Case 09: Rooms DELETE request</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api.tests" title="Link to this heading"></a></h2>
+<p>This module imports all defined tests for the application contained in this
+directory.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,605 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>api package &mdash; STORM 3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=110ea713"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            STORM
+              <img src="_static/storm-logo-v-dark.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">api package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-api.admin">api.admin module</a></li>
+<li><a class="reference internal" href="#module-api.apps">api.apps module</a><ul>
+<li><a class="reference internal" href="#api.apps.ApiConfig"><code class="docutils literal notranslate"><span class="pre">ApiConfig</span></code></a><ul>
+<li><a class="reference internal" href="#api.apps.ApiConfig.default_auto_field"><code class="docutils literal notranslate"><span class="pre">ApiConfig.default_auto_field</span></code></a></li>
+<li><a class="reference internal" href="#api.apps.ApiConfig.name"><code class="docutils literal notranslate"><span class="pre">ApiConfig.name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">api package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="api-package">
+<h1>api package<a class="headerlink" href="#api-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.migrations.html">api.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.migrations.html#module-api.migrations.0001_initial">api.migrations.0001_initial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.migrations.html#api.migrations.0001_initial.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.migrations.html#api.migrations.0001_initial.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.migrations.html#api.migrations.0001_initial.Migration.initial"><code class="docutils literal notranslate"><span class="pre">Migration.initial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.migrations.html#api.migrations.0001_initial.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.migrations.html#module-api.migrations">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.models.html">api.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.models.html#module-api.models.base">api.models.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.base.Door"><code class="docutils literal notranslate"><span class="pre">Door</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Door.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Door.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.doorconnectsroom_set"><code class="docutils literal notranslate"><span class="pre">Door.doorconnectsroom_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.dooropen_set"><code class="docutils literal notranslate"><span class="pre">Door.dooropen_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.id"><code class="docutils literal notranslate"><span class="pre">Door.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.name"><code class="docutils literal notranslate"><span class="pre">Door.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.objects"><code class="docutils literal notranslate"><span class="pre">Door.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Door.rooms"><code class="docutils literal notranslate"><span class="pre">Door.rooms</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.door"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.door</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.door_id"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.door_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.id"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.objects"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.room"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.DoorConnectsRoom.room_id"><code class="docutils literal notranslate"><span class="pre">DoorConnectsRoom.room_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.base.Light"><code class="docutils literal notranslate"><span class="pre">Light</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Light.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Light.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.id"><code class="docutils literal notranslate"><span class="pre">Light.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.lighton_set"><code class="docutils literal notranslate"><span class="pre">Light.lighton_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.name"><code class="docutils literal notranslate"><span class="pre">Light.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.objects"><code class="docutils literal notranslate"><span class="pre">Light.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.room"><code class="docutils literal notranslate"><span class="pre">Light.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Light.room_id"><code class="docutils literal notranslate"><span class="pre">Light.room_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.base.Room"><code class="docutils literal notranslate"><span class="pre">Room</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Room.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Room.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.alert_set"><code class="docutils literal notranslate"><span class="pre">Room.alert_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.co2inroom_set"><code class="docutils literal notranslate"><span class="pre">Room.co2inroom_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.door_set"><code class="docutils literal notranslate"><span class="pre">Room.door_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.doorconnectsroom_set"><code class="docutils literal notranslate"><span class="pre">Room.doorconnectsroom_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.id"><code class="docutils literal notranslate"><span class="pre">Room.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.light_set"><code class="docutils literal notranslate"><span class="pre">Room.light_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.name"><code class="docutils literal notranslate"><span class="pre">Room.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.objects"><code class="docutils literal notranslate"><span class="pre">Room.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.peopleinroom_set"><code class="docutils literal notranslate"><span class="pre">Room.peopleinroom_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.size"><code class="docutils literal notranslate"><span class="pre">Room.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.temperatureinroom_set"><code class="docutils literal notranslate"><span class="pre">Room.temperatureinroom_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.ventilator_set"><code class="docutils literal notranslate"><span class="pre">Room.ventilator_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Room.window_set"><code class="docutils literal notranslate"><span class="pre">Room.window_set</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.base.Ventilator"><code class="docutils literal notranslate"><span class="pre">Ventilator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Ventilator.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Ventilator.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.id"><code class="docutils literal notranslate"><span class="pre">Ventilator.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.name"><code class="docutils literal notranslate"><span class="pre">Ventilator.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.objects"><code class="docutils literal notranslate"><span class="pre">Ventilator.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.room"><code class="docutils literal notranslate"><span class="pre">Ventilator.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.room_id"><code class="docutils literal notranslate"><span class="pre">Ventilator.room_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Ventilator.ventilatoron_set"><code class="docutils literal notranslate"><span class="pre">Ventilator.ventilatoron_set</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.base.Window"><code class="docutils literal notranslate"><span class="pre">Window</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Window.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Window.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.id"><code class="docutils literal notranslate"><span class="pre">Window.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.name"><code class="docutils literal notranslate"><span class="pre">Window.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.objects"><code class="docutils literal notranslate"><span class="pre">Window.objects</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.room"><code class="docutils literal notranslate"><span class="pre">Window.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.room_id"><code class="docutils literal notranslate"><span class="pre">Window.room_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.base.Window.windowopen_set"><code class="docutils literal notranslate"><span class="pre">Window.windowopen_set</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.models.html#module-api.models.events">api.models.events module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen"><code class="docutils literal notranslate"><span class="pre">DoorOpen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">DoorOpen.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">DoorOpen.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.door"><code class="docutils literal notranslate"><span class="pre">DoorOpen.door</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.door_id"><code class="docutils literal notranslate"><span class="pre">DoorOpen.door_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">DoorOpen.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">DoorOpen.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.id"><code class="docutils literal notranslate"><span class="pre">DoorOpen.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.is_open"><code class="docutils literal notranslate"><span class="pre">DoorOpen.is_open</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.DoorOpen.time"><code class="docutils literal notranslate"><span class="pre">DoorOpen.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.events.LightOn"><code class="docutils literal notranslate"><span class="pre">LightOn</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">LightOn.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">LightOn.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">LightOn.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">LightOn.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.id"><code class="docutils literal notranslate"><span class="pre">LightOn.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.is_on"><code class="docutils literal notranslate"><span class="pre">LightOn.is_on</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.light"><code class="docutils literal notranslate"><span class="pre">LightOn.light</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.light_id"><code class="docutils literal notranslate"><span class="pre">LightOn.light_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.LightOn.time"><code class="docutils literal notranslate"><span class="pre">LightOn.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn"><code class="docutils literal notranslate"><span class="pre">VentilatorOn</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.id"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.is_on"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.is_on</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.time"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.ventilator"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.ventilator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.VentilatorOn.ventilator_id"><code class="docutils literal notranslate"><span class="pre">VentilatorOn.ventilator_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen"><code class="docutils literal notranslate"><span class="pre">WindowOpen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">WindowOpen.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">WindowOpen.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">WindowOpen.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">WindowOpen.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.id"><code class="docutils literal notranslate"><span class="pre">WindowOpen.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.is_open"><code class="docutils literal notranslate"><span class="pre">WindowOpen.is_open</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.time"><code class="docutils literal notranslate"><span class="pre">WindowOpen.time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.window"><code class="docutils literal notranslate"><span class="pre">WindowOpen.window</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.events.WindowOpen.window_id"><code class="docutils literal notranslate"><span class="pre">WindowOpen.window_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.models.html#module-api.models.metrics">api.models.metrics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.metrics.Alert"><code class="docutils literal notranslate"><span class="pre">Alert</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.AlertType"><code class="docutils literal notranslate"><span class="pre">Alert.AlertType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Alert.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Alert.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.content"><code class="docutils literal notranslate"><span class="pre">Alert.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">Alert.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">Alert.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.get_type_display"><code class="docutils literal notranslate"><span class="pre">Alert.get_type_display()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.id"><code class="docutils literal notranslate"><span class="pre">Alert.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.received"><code class="docutils literal notranslate"><span class="pre">Alert.received</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.room"><code class="docutils literal notranslate"><span class="pre">Alert.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.room_id"><code class="docutils literal notranslate"><span class="pre">Alert.room_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.time"><code class="docutils literal notranslate"><span class="pre">Alert.time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Alert.type"><code class="docutils literal notranslate"><span class="pre">Alert.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom"><code class="docutils literal notranslate"><span class="pre">Co2InRoom</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.co2"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.co2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.id"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.room"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.room_id"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.room_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom.time"><code class="docutils literal notranslate"><span class="pre">Co2InRoom.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.id"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.no_people_in_room"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.no_people_in_room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.room"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.room_id"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.room_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom.time"><code class="docutils literal notranslate"><span class="pre">PeopleInRoom.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.DoesNotExist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.get_next_by_time"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.get_next_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.get_previous_by_time"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.get_previous_by_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.id"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.room"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.room</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.room_id"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.room_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.temp"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.temp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom.time"><code class="docutils literal notranslate"><span class="pre">TemperatureInRoom.time</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.models.html#module-api.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.serializers.html">api.serializers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#module-api.serializers.base">api.serializers.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.base.DataSerializer"><code class="docutils literal notranslate"><span class="pre">DataSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.base.DataSerializer.context"><code class="docutils literal notranslate"><span class="pre">DataSerializer.context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.base.DataSerializer.devices"><code class="docutils literal notranslate"><span class="pre">DataSerializer.devices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.base.DataSerializer.doors"><code class="docutils literal notranslate"><span class="pre">DataSerializer.doors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.base.DataSerializer.room"><code class="docutils literal notranslate"><span class="pre">DataSerializer.room()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.base.DataSerializer.rooms"><code class="docutils literal notranslate"><span class="pre">DataSerializer.rooms()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#module-api.serializers.devices">api.serializers.devices module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.devices.DoorSerializer"><code class="docutils literal notranslate"><span class="pre">DoorSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.devices.DoorSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">DoorSerializer.Meta</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.devices.LightSerializer"><code class="docutils literal notranslate"><span class="pre">LightSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.devices.LightSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">LightSerializer.Meta</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.devices.VentilatorSerializer"><code class="docutils literal notranslate"><span class="pre">VentilatorSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.devices.VentilatorSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">VentilatorSerializer.Meta</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.devices.WindowSerializer"><code class="docutils literal notranslate"><span class="pre">WindowSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.devices.WindowSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">WindowSerializer.Meta</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#module-api.serializers.room_base">api.serializers.room_base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.DeviceMeta"><code class="docutils literal notranslate"><span class="pre">DeviceMeta</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.DeviceMeta.attr"><code class="docutils literal notranslate"><span class="pre">DeviceMeta.attr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.DeviceMeta.event"><code class="docutils literal notranslate"><span class="pre">DeviceMeta.event</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.DeviceMeta.model"><code class="docutils literal notranslate"><span class="pre">DeviceMeta.model</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.MetricMeta"><code class="docutils literal notranslate"><span class="pre">MetricMeta</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.MetricMeta.attr"><code class="docutils literal notranslate"><span class="pre">MetricMeta.attr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.MetricMeta.metric"><code class="docutils literal notranslate"><span class="pre">MetricMeta.metric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.RoomSerializer"><code class="docutils literal notranslate"><span class="pre">RoomSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.RoomSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.Meta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.RoomSerializer.get_co2_status"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.get_co2_status()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_base.RoomSerializer.get_temperature_status"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.get_temperature_status()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#module-api.serializers.room_dashboard">api.serializers.room_dashboard module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.room_dashboard.RoomDashboardSerializer"><code class="docutils literal notranslate"><span class="pre">RoomDashboardSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_dashboard.RoomDashboardSerializer.get_devices"><code class="docutils literal notranslate"><span class="pre">RoomDashboardSerializer.get_devices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_dashboard.RoomDashboardSerializer.get_metrics"><code class="docutils literal notranslate"><span class="pre">RoomDashboardSerializer.get_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#module-api.serializers.room_details">api.serializers.room_details module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.serializers.html#api.serializers.room_details.RoomDetailSerializer"><code class="docutils literal notranslate"><span class="pre">RoomDetailSerializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_details.RoomDetailSerializer.get_devices"><code class="docutils literal notranslate"><span class="pre">RoomDetailSerializer.get_devices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.serializers.html#api.serializers.room_details.RoomDetailSerializer.get_metrics"><code class="docutils literal notranslate"><span class="pre">RoomDetailSerializer.get_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.serializers.html#module-api.serializers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.tests.html">api.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.base">api.tests.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.base.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.base.Base.setUpTestData"><code class="docutils literal notranslate"><span class="pre">Base.setUpTestData()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.context">api.tests.context module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.context.ContextTest"><code class="docutils literal notranslate"><span class="pre">ContextTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.context.ContextTest.setUpTestData"><code class="docutils literal notranslate"><span class="pre">ContextTest.setUpTestData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.context.ContextTest.test01_get"><code class="docutils literal notranslate"><span class="pre">ContextTest.test01_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.context.ContextTest.test02_put"><code class="docutils literal notranslate"><span class="pre">ContextTest.test02_put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.data">api.tests.data module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.data.DataTest"><code class="docutils literal notranslate"><span class="pre">DataTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.data.DataTest.test01_get"><code class="docutils literal notranslate"><span class="pre">DataTest.test01_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.data.DataTest.test02_post"><code class="docutils literal notranslate"><span class="pre">DataTest.test02_post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.devices">api.tests.devices module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.devices.DevicesTest"><code class="docutils literal notranslate"><span class="pre">DevicesTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.devices.DevicesTest.test01_get"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test01_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.devices.DevicesTest.test02_post"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test02_post()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.devices.DevicesTest.test03_put"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test03_put()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.devices.DevicesTest.test04_delete"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test04_delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.devices.DevicesTest.test05_patch"><code class="docutils literal notranslate"><span class="pre">DevicesTest.test05_patch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.doors">api.tests.doors module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.doors.DoorsTest"><code class="docutils literal notranslate"><span class="pre">DoorsTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.doors.DoorsTest.test01_get"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test01_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.doors.DoorsTest.test02_post"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test02_post()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.doors.DoorsTest.test03_put"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test03_put()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.doors.DoorsTest.test04_delete"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test04_delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.doors.DoorsTest.test05_patch"><code class="docutils literal notranslate"><span class="pre">DoorsTest.test05_patch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.metrics">api.tests.metrics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.metrics.MetricsTest"><code class="docutils literal notranslate"><span class="pre">MetricsTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.metrics.MetricsTest.test01_post"><code class="docutils literal notranslate"><span class="pre">MetricsTest.test01_post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.room_detail">api.tests.room_detail module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.room_detail.RoomDetailTest"><code class="docutils literal notranslate"><span class="pre">RoomDetailTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.room_detail.RoomDetailTest.test01_get"><code class="docutils literal notranslate"><span class="pre">RoomDetailTest.test01_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.room_detail.RoomDetailTest.test02_put"><code class="docutils literal notranslate"><span class="pre">RoomDetailTest.test02_put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests.rooms">api.tests.rooms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest"><code class="docutils literal notranslate"><span class="pre">RoomsTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test01_get"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test01_get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test02_post_fail"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test02_post_fail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test03_post_empty"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test03_post_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test04_post_devices_fail"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test04_post_devices_fail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test05_post_add_doors"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test05_post_add_doors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test06_post_add_windows"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test06_post_add_windows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test07_post_add_ventilators"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test07_post_add_ventilators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test08_post_add_lights"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test08_post_add_lights()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.tests.html#api.tests.rooms.RoomsTest.test09_delete"><code class="docutils literal notranslate"><span class="pre">RoomsTest.test09_delete()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.tests.html#module-api.tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.views.html">api.views package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.context">api.views.context module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.context.ContextAPIView"><code class="docutils literal notranslate"><span class="pre">ContextAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.context.ContextAPIView.allowed_devices"><code class="docutils literal notranslate"><span class="pre">ContextAPIView.allowed_devices</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.context.ContextAPIView.get"><code class="docutils literal notranslate"><span class="pre">ContextAPIView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.context.ContextAPIView.put"><code class="docutils literal notranslate"><span class="pre">ContextAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.data">api.views.data module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView"><code class="docutils literal notranslate"><span class="pre">DataAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.get"><code class="docutils literal notranslate"><span class="pre">DataAPIView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.import_doors"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_doors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.import_people"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_people()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.import_rooms"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_rooms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.import_ventilators"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_ventilators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.import_windows"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_windows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.data.DataAPIView.post"><code class="docutils literal notranslate"><span class="pre">DataAPIView.post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.devices">api.views.devices module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView.allowed_devices"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.allowed_devices</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView.delete"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView.get"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView.patch"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.patch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView.post"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.post()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.devices.DevicesAPIView.put"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.doors">api.views.doors module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.allowed_methods</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView.delete"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView.get"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView.patch"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.patch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView.post"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.post()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.doors.DoorsAPIView.put"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.metrics">api.views.metrics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.metrics.MetricMetadata"><code class="docutils literal notranslate"><span class="pre">MetricMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricMetadata.action"><code class="docutils literal notranslate"><span class="pre">MetricMetadata.action</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricMetadata.attr"><code class="docutils literal notranslate"><span class="pre">MetricMetadata.attr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricMetadata.model"><code class="docutils literal notranslate"><span class="pre">MetricMetadata.model</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.metrics.MetricsAPIView"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricsAPIView.air_quality_control"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.air_quality_control()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricsAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.allowed_methods</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricsAPIView.energy_efficiency_control"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.energy_efficiency_control()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricsAPIView.post"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.post()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.metrics.MetricsAPIView.safety_control"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.safety_control()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.room_detail">api.views.room_detail module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.room_detail.RoomDetailAPIView"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.room_detail.RoomDetailAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.allowed_methods</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.room_detail.RoomDetailAPIView.get"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.room_detail.RoomDetailAPIView.get_object"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.get_object()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.room_detail.RoomDetailAPIView.put"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.rooms">api.views.rooms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.rooms.RoomsAPIView"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.rooms.RoomsAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.allowed_methods</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.rooms.RoomsAPIView.delete"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.rooms.RoomsAPIView.get"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.rooms.RoomsAPIView.get_object"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.get_object()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api.views.html#api.views.rooms.RoomsAPIView.post"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views.utils">api.views.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.utils.get_listeners"><code class="docutils literal notranslate"><span class="pre">get_listeners()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.views.html#api.views.utils.send"><code class="docutils literal notranslate"><span class="pre">send()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.views.html#module-api.views">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-api.admin">
+<span id="api-admin-module"></span><h2>api.admin module<a class="headerlink" href="#module-api.admin" title="Link to this heading"></a></h2>
+<p>This module handles which models are added to the django administration page.</p>
+</section>
+<section id="module-api.apps">
+<span id="api-apps-module"></span><h2>api.apps module<a class="headerlink" href="#module-api.apps" title="Link to this heading"></a></h2>
+<p>This module handles the initialization of the REST API and starts a thread for
+automatic event and metric generation every five seconds.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.apps.ApiConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.apps.</span></span><span class="sig-name descname"><span class="pre">ApiConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/apps.html#ApiConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.apps.ApiConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<p>This class specifies the configuration of storm’s REST API.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.apps.ApiConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#api.apps.ApiConfig.default_auto_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.apps.ApiConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'api'</span></em><a class="headerlink" href="#api.apps.ApiConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

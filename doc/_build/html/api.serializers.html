@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>api.serializers package &mdash; STORM 3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=110ea713"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            STORM
+              <img src="_static/storm-logo-v-dark.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">api.serializers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-api.serializers.base">api.serializers.base module</a><ul>
+<li><a class="reference internal" href="#api.serializers.base.DataSerializer"><code class="docutils literal notranslate"><span class="pre">DataSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.base.DataSerializer.context"><code class="docutils literal notranslate"><span class="pre">DataSerializer.context()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.base.DataSerializer.devices"><code class="docutils literal notranslate"><span class="pre">DataSerializer.devices()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.base.DataSerializer.doors"><code class="docutils literal notranslate"><span class="pre">DataSerializer.doors()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.base.DataSerializer.room"><code class="docutils literal notranslate"><span class="pre">DataSerializer.room()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.base.DataSerializer.rooms"><code class="docutils literal notranslate"><span class="pre">DataSerializer.rooms()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.serializers.devices">api.serializers.devices module</a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.DoorSerializer"><code class="docutils literal notranslate"><span class="pre">DoorSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.DoorSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">DoorSerializer.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.DoorSerializer.Meta.fields"><code class="docutils literal notranslate"><span class="pre">DoorSerializer.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.devices.DoorSerializer.Meta.model"><code class="docutils literal notranslate"><span class="pre">DoorSerializer.Meta.model</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.serializers.devices.LightSerializer"><code class="docutils literal notranslate"><span class="pre">LightSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.LightSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">LightSerializer.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.LightSerializer.Meta.fields"><code class="docutils literal notranslate"><span class="pre">LightSerializer.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.devices.LightSerializer.Meta.model"><code class="docutils literal notranslate"><span class="pre">LightSerializer.Meta.model</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.serializers.devices.VentilatorSerializer"><code class="docutils literal notranslate"><span class="pre">VentilatorSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.VentilatorSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">VentilatorSerializer.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.VentilatorSerializer.Meta.fields"><code class="docutils literal notranslate"><span class="pre">VentilatorSerializer.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.devices.VentilatorSerializer.Meta.model"><code class="docutils literal notranslate"><span class="pre">VentilatorSerializer.Meta.model</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.serializers.devices.WindowSerializer"><code class="docutils literal notranslate"><span class="pre">WindowSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.WindowSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">WindowSerializer.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.devices.WindowSerializer.Meta.fields"><code class="docutils literal notranslate"><span class="pre">WindowSerializer.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.devices.WindowSerializer.Meta.model"><code class="docutils literal notranslate"><span class="pre">WindowSerializer.Meta.model</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.serializers.room_base">api.serializers.room_base module</a><ul>
+<li><a class="reference internal" href="#api.serializers.room_base.DeviceMeta"><code class="docutils literal notranslate"><span class="pre">DeviceMeta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.room_base.DeviceMeta.attr"><code class="docutils literal notranslate"><span class="pre">DeviceMeta.attr</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_base.DeviceMeta.event"><code class="docutils literal notranslate"><span class="pre">DeviceMeta.event</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_base.DeviceMeta.model"><code class="docutils literal notranslate"><span class="pre">DeviceMeta.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.serializers.room_base.MetricMeta"><code class="docutils literal notranslate"><span class="pre">MetricMeta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.room_base.MetricMeta.attr"><code class="docutils literal notranslate"><span class="pre">MetricMeta.attr</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_base.MetricMeta.metric"><code class="docutils literal notranslate"><span class="pre">MetricMeta.metric</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer"><code class="docutils literal notranslate"><span class="pre">RoomSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer.Meta"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.Meta</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer.Meta.abstract"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.Meta.abstract</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer.Meta.fields"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.Meta.fields</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer.Meta.model"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.Meta.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer.get_co2_status"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.get_co2_status()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_base.RoomSerializer.get_temperature_status"><code class="docutils literal notranslate"><span class="pre">RoomSerializer.get_temperature_status()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.serializers.room_dashboard">api.serializers.room_dashboard module</a><ul>
+<li><a class="reference internal" href="#api.serializers.room_dashboard.RoomDashboardSerializer"><code class="docutils literal notranslate"><span class="pre">RoomDashboardSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.room_dashboard.RoomDashboardSerializer.get_devices"><code class="docutils literal notranslate"><span class="pre">RoomDashboardSerializer.get_devices()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_dashboard.RoomDashboardSerializer.get_metrics"><code class="docutils literal notranslate"><span class="pre">RoomDashboardSerializer.get_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.serializers.room_details">api.serializers.room_details module</a><ul>
+<li><a class="reference internal" href="#api.serializers.room_details.RoomDetailSerializer"><code class="docutils literal notranslate"><span class="pre">RoomDetailSerializer</span></code></a><ul>
+<li><a class="reference internal" href="#api.serializers.room_details.RoomDetailSerializer.get_devices"><code class="docutils literal notranslate"><span class="pre">RoomDetailSerializer.get_devices()</span></code></a></li>
+<li><a class="reference internal" href="#api.serializers.room_details.RoomDetailSerializer.get_metrics"><code class="docutils literal notranslate"><span class="pre">RoomDetailSerializer.get_metrics()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.serializers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">api.serializers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.serializers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="api-serializers-package">
+<h1>api.serializers package<a class="headerlink" href="#api-serializers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-api.serializers.base">
+<span id="api-serializers-base-module"></span><h2>api.serializers.base module<a class="headerlink" href="#module-api.serializers.base" title="Link to this heading"></a></h2>
+<p>This module defines a base serializer class.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.base.DataSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.base.</span></span><span class="sig-name descname"><span class="pre">DataSerializer</span></span><a class="reference internal" href="_modules/api/serializers/base.html#DataSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.base.DataSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wrapper class for serializing functions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.base.DataSerializer.context">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/base.html#DataSerializer.context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.base.DataSerializer.context" title="Link to this definition"></a></dt>
+<dd><p>Serializes context information, which contains unread alerts and
+all room names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.base.DataSerializer.devices">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">devices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/base.html#DataSerializer.devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.base.DataSerializer.devices" title="Link to this definition"></a></dt>
+<dd><p>Serializes all devices not assigned to a room.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.base.DataSerializer.doors">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">doors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/base.html#DataSerializer.doors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.base.DataSerializer.doors" title="Link to this definition"></a></dt>
+<dd><p>Serializes all doors connected to less than two rooms.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.base.DataSerializer.room">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/base.html#DataSerializer.room"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.base.DataSerializer.room" title="Link to this definition"></a></dt>
+<dd><p>Serializes a room with the given id.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>identifier (int): Room id.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.base.DataSerializer.rooms">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rooms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/base.html#DataSerializer.rooms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.base.DataSerializer.rooms" title="Link to this definition"></a></dt>
+<dd><p>Serializes all rooms in the database.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.serializers.devices">
+<span id="api-serializers-devices-module"></span><h2>api.serializers.devices module<a class="headerlink" href="#module-api.serializers.devices" title="Link to this heading"></a></h2>
+<p>This module defines the serialized representation of devices.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.DoorSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.devices.</span></span><span class="sig-name descname"><span class="pre">DoorSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/devices.html#DoorSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.DoorSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serializes door database records.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.DoorSerializer.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/api/serializers/devices.html#DoorSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.DoorSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.DoorSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'name',</span> <span class="pre">'rooms']</span></em><a class="headerlink" href="#api.serializers.devices.DoorSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.DoorSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#api.serializers.devices.DoorSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="api.models.html#api.models.base.Door" title="api.models.base.Door"><code class="xref py py-class docutils literal notranslate"><span class="pre">Door</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.LightSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.devices.</span></span><span class="sig-name descname"><span class="pre">LightSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/devices.html#LightSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.LightSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serializes light database records.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.LightSerializer.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/api/serializers/devices.html#LightSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.LightSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.LightSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'name']</span></em><a class="headerlink" href="#api.serializers.devices.LightSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.LightSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#api.serializers.devices.LightSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="api.models.html#api.models.base.Light" title="api.models.base.Light"><code class="xref py py-class docutils literal notranslate"><span class="pre">Light</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.VentilatorSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.devices.</span></span><span class="sig-name descname"><span class="pre">VentilatorSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/devices.html#VentilatorSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.VentilatorSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serializes ventilator database records.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.VentilatorSerializer.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/api/serializers/devices.html#VentilatorSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.VentilatorSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.VentilatorSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'name']</span></em><a class="headerlink" href="#api.serializers.devices.VentilatorSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.VentilatorSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#api.serializers.devices.VentilatorSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="api.models.html#api.models.base.Ventilator" title="api.models.base.Ventilator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Ventilator</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.WindowSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.devices.</span></span><span class="sig-name descname"><span class="pre">WindowSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/devices.html#WindowSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.WindowSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serializes window database records.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.devices.WindowSerializer.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/api/serializers/devices.html#WindowSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.devices.WindowSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.WindowSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'name']</span></em><a class="headerlink" href="#api.serializers.devices.WindowSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.devices.WindowSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#api.serializers.devices.WindowSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="api.models.html#api.models.base.Window" title="api.models.base.Window"><code class="xref py py-class docutils literal notranslate"><span class="pre">Window</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.serializers.room_base">
+<span id="api-serializers-room-base-module"></span><h2>api.serializers.room_base module<a class="headerlink" href="#module-api.serializers.room_base" title="Link to this heading"></a></h2>
+<p>This module defines a parent abstract class for room serialization.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.room_base.DeviceMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.room_base.</span></span><span class="sig-name descname"><span class="pre">DeviceMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TimescaleModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_base.html#DeviceMeta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_base.DeviceMeta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Defines required metadata for handling device serialization.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.DeviceMeta.attr">
+<span class="sig-name descname"><span class="pre">attr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#api.serializers.room_base.DeviceMeta.attr" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.DeviceMeta.event">
+<span class="sig-name descname"><span class="pre">event</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TimescaleModel</span></em><a class="headerlink" href="#api.serializers.room_base.DeviceMeta.event" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.DeviceMeta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Model</span></em><a class="headerlink" href="#api.serializers.room_base.DeviceMeta.model" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.room_base.MetricMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.room_base.</span></span><span class="sig-name descname"><span class="pre">MetricMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TimescaleModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_base.html#MetricMeta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_base.MetricMeta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Defines required metadata for handling metric serialization.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.MetricMeta.attr">
+<span class="sig-name descname"><span class="pre">attr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#api.serializers.room_base.MetricMeta.attr" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.MetricMeta.metric">
+<span class="sig-name descname"><span class="pre">metric</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TimescaleModel</span></em><a class="headerlink" href="#api.serializers.room_base.MetricMeta.metric" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.room_base.</span></span><span class="sig-name descname"><span class="pre">RoomSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_base.html#RoomSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_base.RoomSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>This class serializes generic room information to be shown in the dashboard
+at the root url.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/api/serializers/room_base.html#RoomSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_base.RoomSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer.Meta.abstract">
+<span class="sig-name descname"><span class="pre">abstract</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#api.serializers.room_base.RoomSerializer.Meta.abstract" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['id',</span> <span class="pre">'name',</span> <span class="pre">'size',</span> <span class="pre">'temperature_status',</span> <span class="pre">'co2_status',</span> <span class="pre">'devices',</span> <span class="pre">'metrics']</span></em><a class="headerlink" href="#api.serializers.room_base.RoomSerializer.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#api.serializers.room_base.RoomSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><code class="xref py py-class docutils literal notranslate"><span class="pre">Room</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer.get_co2_status">
+<span class="sig-name descname"><span class="pre">get_co2_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_base.html#RoomSerializer.get_co2_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_base.RoomSerializer.get_co2_status" title="Link to this definition"></a></dt>
+<dd><p>Obtains the last co2 status for this rooom.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.room_base.RoomSerializer.get_temperature_status">
+<span class="sig-name descname"><span class="pre">get_temperature_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_base.html#RoomSerializer.get_temperature_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_base.RoomSerializer.get_temperature_status" title="Link to this definition"></a></dt>
+<dd><p>Obtains the last temperature status for this rooom.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.serializers.room_dashboard">
+<span id="api-serializers-room-dashboard-module"></span><h2>api.serializers.room_dashboard module<a class="headerlink" href="#module-api.serializers.room_dashboard" title="Link to this heading"></a></h2>
+<p>This module defines the serialized representation of the room dashboard.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.room_dashboard.RoomDashboardSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.room_dashboard.</span></span><span class="sig-name descname"><span class="pre">RoomDashboardSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_dashboard.html#RoomDashboardSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_dashboard.RoomDashboardSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.serializers.room_base.RoomSerializer" title="api.serializers.room_base.RoomSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoomSerializer</span></code></a></p>
+<p>This class serializes generic room information to be shown in the dashboard
+at the root url.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.room_dashboard.RoomDashboardSerializer.get_devices">
+<span class="sig-name descname"><span class="pre">get_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_dashboard.html#RoomDashboardSerializer.get_devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_dashboard.RoomDashboardSerializer.get_devices" title="Link to this definition"></a></dt>
+<dd><p>Obtains generic device information for a room.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj (Room): Room from where information is extracted</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: json-like dictionary with device information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.room_dashboard.RoomDashboardSerializer.get_metrics">
+<span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_dashboard.html#RoomDashboardSerializer.get_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_dashboard.RoomDashboardSerializer.get_metrics" title="Link to this definition"></a></dt>
+<dd><p>Obtains last real-time metrics for a room.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj (Room): Room from where information is extracted</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: json-like dictionary with metric information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.serializers.room_details">
+<span id="api-serializers-room-details-module"></span><h2>api.serializers.room_details module<a class="headerlink" href="#module-api.serializers.room_details" title="Link to this heading"></a></h2>
+<p>This module defines the serialized representation of a room.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.serializers.room_details.RoomDetailSerializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.serializers.room_details.</span></span><span class="sig-name descname"><span class="pre">RoomDetailSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_details.html#RoomDetailSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_details.RoomDetailSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#api.serializers.room_base.RoomSerializer" title="api.serializers.room_base.RoomSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoomSerializer</span></code></a></p>
+<p>This class serializes real-time room information to be shown in the room
+details url.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.room_details.RoomDetailSerializer.get_devices">
+<span class="sig-name descname"><span class="pre">get_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_details.html#RoomDetailSerializer.get_devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_details.RoomDetailSerializer.get_devices" title="Link to this definition"></a></dt>
+<dd><p>Obtains specific device information for a room.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj (Room): Room from where information is extracted.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: json-like dictionary with device information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.serializers.room_details.RoomDetailSerializer.get_metrics">
+<span class="sig-name descname"><span class="pre">get_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/serializers/room_details.html#RoomDetailSerializer.get_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.serializers.room_details.RoomDetailSerializer.get_metrics" title="Link to this definition"></a></dt>
+<dd><p>Obtains detailed real-time metrics for a room.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj (Room): Room from where information is extracted</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: json-like dictionary with metric information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.serializers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api.serializers" title="Link to this heading"></a></h2>
+<p>Imports all required classes to be used outside the scope
+of this directory.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

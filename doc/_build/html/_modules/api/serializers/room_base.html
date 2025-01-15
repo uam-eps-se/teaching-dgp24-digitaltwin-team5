@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>api.serializers.room_base &#8212; STORM 3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+
+    <script src="../../../_static/documentation_options.js?v=110ea713"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.serializers.room_base</a></li>
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+
+  <h1>Source code for api.serializers.room_base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines a parent abstract class for room serialization.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># regular imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="c1"># django imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">timescale.db.models.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimescaleModel</span>
+
+<span class="c1"># restframework imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">serializers</span>
+
+<span class="c1"># API imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Room</span><span class="p">,</span> <span class="n">Ventilator</span><span class="p">,</span> <span class="n">Light</span><span class="p">,</span> <span class="n">Window</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorConnectsRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">PeopleInRoom</span><span class="p">,</span> <span class="n">Co2InRoom</span><span class="p">,</span> <span class="n">TemperatureInRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorOpen</span><span class="p">,</span> <span class="n">VentilatorOn</span><span class="p">,</span> <span class="n">LightOn</span><span class="p">,</span> <span class="n">WindowOpen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alert</span>
+
+
+<div class="viewcode-block" id="DeviceMeta">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.room_base.DeviceMeta">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DeviceMeta</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines required metadata for handling device serialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">model</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span>
+    <span class="n">event</span><span class="p">:</span> <span class="n">TimescaleModel</span>
+    <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="MetricMeta">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.room_base.MetricMeta">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MetricMeta</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines required metadata for handling metric serialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">metric</span><span class="p">:</span> <span class="n">TimescaleModel</span>
+    <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="RoomSerializer">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.room_base.RoomSerializer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RoomSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class serializes generic room information to be shown in the dashboard</span>
+<span class="sd">    at the root url.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">devices</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+    <span class="n">temperature_status</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+    <span class="n">co2_status</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+
+<div class="viewcode-block" id="RoomSerializer.Meta">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.room_base.RoomSerializer.Meta">[docs]</a>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Room</span>
+        <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;temperature_status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;co2_status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;devices&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metrics&quot;</span><span class="p">,</span>
+        <span class="p">]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor method for this class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceMeta</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;doors&quot;</span><span class="p">:</span> <span class="n">DeviceMeta</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">DoorConnectsRoom</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">DoorOpen</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;is_open&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;windows&quot;</span><span class="p">:</span> <span class="n">DeviceMeta</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">Window</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">WindowOpen</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;is_open&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;ventilators&quot;</span><span class="p">:</span> <span class="n">DeviceMeta</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">Ventilator</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">VentilatorOn</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;is_on&quot;</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;lights&quot;</span><span class="p">:</span> <span class="n">DeviceMeta</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">Light</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="n">LightOn</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;is_on&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceMeta</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;people&quot;</span><span class="p">:</span> <span class="n">MetricMeta</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">PeopleInRoom</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;no_people_in_room&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;co2&quot;</span><span class="p">:</span> <span class="n">MetricMeta</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">Co2InRoom</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;co2&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">MetricMeta</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">TemperatureInRoom</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;temp&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RoomSerializer.get_temperature_status">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.room_base.RoomSerializer.get_temperature_status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_temperature_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Room</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtains the last temperature status for this rooom.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">TemperatureInRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">INFO</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_</span><span class="o">.</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">(</span>
+                <span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">WARNING</span> <span class="k">if</span> <span class="mi">40</span> <span class="o">&lt;=</span> <span class="n">_</span><span class="o">.</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="mi">70</span> <span class="k">else</span> <span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">DANGER</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RoomSerializer.get_co2_status">
+<a class="viewcode-back" href="../../../api.serializers.html#api.serializers.room_base.RoomSerializer.get_co2_status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_co2_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Room</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtains the last co2 status for this rooom.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">Co2InRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">INFO</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_</span><span class="o">.</span><span class="n">co2</span> <span class="o">&lt;</span> <span class="mi">800</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">(</span>
+                <span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">WARNING</span>
+                <span class="k">if</span> <span class="mi">800</span> <span class="o">&lt;</span> <span class="n">_</span><span class="o">.</span><span class="n">co2</span> <span class="o">&lt;=</span> <span class="mi">1000</span>
+                <span class="k">else</span> <span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">DANGER</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.serializers.room_base</a></li>
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>
