@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { useEffectOnce, useInterval } from 'react-use'
+import { useEffectOnce } from 'react-use'
 
 import { Alert, Box, Chip, Fab } from '@mui/material'
 
@@ -24,6 +24,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 
 import { useDebouncedCallback } from 'use-debounce'
 
+import { useEventSource } from '@core/hooks/useEventSource'
 import { fetchRoom } from '@core/utils/data'
 import { SensorStatus, type RoomDetailData } from '@core/types'
 
@@ -34,28 +35,30 @@ import RoomDetailButtons from '@components/actionButtons/RoomDetailButtons'
 
 export default function RoomDetail(props: { roomId: string }) {
   const [room, setRoom] = useState<RoomDetailData>()
+  const { addEventHandler } = useEventSource([`room-${props.roomId}`])
+
   const [titleChanged, setTitleChanged] = useState<boolean>(false)
   const [tab, setTab] = useState('0')
+
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const intervalDelay = process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000
 
-  const updateRoomData = async () => {
-    return fetchRoom(props.roomId).then(r => {
-      if (!r.detail) {
-        r.temperatureStatus = r.temperature_status
-        r.co2Status = r.co2_status
-        delete r.temperature_status, r.co2_status
+  const updateRoomData = async (newRoomData?: any) => {
+    const r = newRoomData || (await fetchRoom(props.roomId))
 
-        setRoom(r)
-      }
+    if (!r.detail) {
+      r.temperatureStatus = r.temperature_status
+      r.co2Status = r.co2_status
+      delete r.temperature_status, r.co2_status
 
-      if (!titleChanged && r.name) {
-        setTitleChanged(true)
-        document.title = document.title.replace(`Room ${props.roomId}`, r.name)
-      }
-    })
+      setRoom(r)
+    }
+
+    if (!titleChanged && r.name) {
+      setTitleChanged(true)
+      document.title = document.title.replace(`Room ${props.roomId}`, r.name)
+    }
   }
 
   const getAlertContent = (status: SensorStatus, isCo2: boolean) => {
@@ -74,10 +77,9 @@ export default function RoomDetail(props: { roomId: string }) {
       const routeTab = searchParams.get('tab')
 
       if (routeTab) setTab(routeTab)
+      addEventHandler('message', msgEvent => updateRoomData(msgEvent.data))
     })
   })
-
-  useInterval(() => updateRoomData(), intervalDelay as number)
 
   const setTabParam = useDebouncedCallback((tab: string) => {
     router.push(`${pathname}?tab=${tab}`)

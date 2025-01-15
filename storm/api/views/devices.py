@@ -13,10 +13,11 @@ from rest_framework import status
 from rest_framework.request import Request
 
 # API imports
-from api.serializers.devices import WindowSerializer
-from api.serializers.devices import VentilatorSerializer, LightSerializer
+from api.serializers import DataSerializer
 from api.models import Room, Ventilator, Light, Window
 from api.models import VentilatorOn, LightOn, WindowOpen
+
+import api.views.utils as sse
 
 
 class DevicesAPIView(APIView):
@@ -34,21 +35,7 @@ class DevicesAPIView(APIView):
 
         Used on room CREATION and EDITION.
         """
-
-        # Dictionary with classes and serializers for all devices
-        dmodels = {
-            "windows": (Window, WindowSerializer),
-            "ventilators": (Ventilator, VentilatorSerializer),
-            "lights": (Light, LightSerializer),
-        }
-        data = {}
-
-        # Serialize non-associated devices
-        for key, (model, serializer) in dmodels.items():
-            devs = model.objects.filter(room=None)
-            data[key] = serializer(devs, many=True).data
-
-        return Response(data)
+        return Response(DataSerializer.devices())
 
     def post(self, request: Request):
         """
@@ -94,6 +81,8 @@ class DevicesAPIView(APIView):
         dev = dtypes[dtype](name=name, room=room)
         dev.save()
 
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
         return Response(f"Device {name} for room {room.name} succesfully created!")
 
     def put(self, request: Request):
@@ -151,6 +140,9 @@ class DevicesAPIView(APIView):
         dev.room = room
         dev.save()
 
+        sse.send(sse.CHANNEL_DEVICES, event=sse.DEVS)
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room.id}")
         return Response(f"Device {dev.name} assigned to room {room.name}!")
 
     def delete(self, request: Request):
@@ -192,8 +184,11 @@ class DevicesAPIView(APIView):
         if dev is None:
             return Response("Invalid device id!", status=status.HTTP_400_BAD_REQUEST)
 
+        room_id = dev.room.id
         dev.delete()
 
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{room_id}")
         return Response("Device succesfully removed!")
 
     def patch(self, request: Request):
@@ -256,4 +251,7 @@ class DevicesAPIView(APIView):
         setattr(ds, dtype, dev)
         setattr(ds, dactions[dtype], action)
         ds.save()
+
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(f"{sse.CHANNEL_ROOM}-{dev.room.id}")
         return Response(f"Device {dev.name} assigned the status {action}!")

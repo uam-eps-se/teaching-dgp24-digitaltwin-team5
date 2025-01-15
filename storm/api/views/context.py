@@ -9,7 +9,8 @@ from rest_framework.request import Request
 from rest_framework import status
 
 # API imports
-from api.models import Room, Alert
+from api.models import Alert
+from api.serializers import DataSerializer
 
 
 class ContextAPIView(APIView):
@@ -25,24 +26,7 @@ class ContextAPIView(APIView):
         Retrieves base room information and unread alerts.
 
         """
-        return Response(
-            {
-                "rooms": [
-                    {"id": room.id, "name": room.name} for room in Room.objects.all()
-                ],
-                "alerts": [
-                    {
-                        "id": a.id,
-                        "type": a.type,
-                        "content": a.content,
-                        "time": a.time.timestamp(),
-                        "roomId": a.room.id,
-                        "roomName": a.room.name,
-                    }
-                    for a in Alert.objects.filter(received=False)
-                ],
-            }
-        )
+        return Response(DataSerializer.context())
 
     def put(self, request: Request):
         """

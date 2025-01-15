@@ -10,7 +10,7 @@ import { mdiDoorOpen, mdiFan, mdiLightbulbOn, mdiTrashCan, mdiWindowClosedVarian
 
 import Icon from '@mdi/react'
 
-import { useEffectOnce, useInterval } from 'react-use'
+import { useEffectOnce } from 'react-use'
 
 import { z } from 'zod'
 
@@ -22,8 +22,8 @@ import { fetchFreeDevices, fetchFreeDoors } from '@core/utils/data'
 
 import { assignDevice, createDevice, createRoom, deleteDevice, deleteDoor, editRoom } from '@core/utils/actions'
 import { RoomsContext } from '@core/contexts/roomsContext'
+import { useEventSource } from '@core/hooks/useEventSource'
 import DeleteRoomModal from '@components/actionButtons/DeleteRoomModal'
-import { LayoutContext } from '@core/contexts/layoutContext'
 
 const RoomFormSchema = z.object({
   name: z.string().min(1, 'Room name is required'),
@@ -49,8 +49,8 @@ function RoomForm(props: { room?: RoomDetailData }) {
   const [inputLights, setInputLights] = useState<Array<Device>>([])
   const [inputVentilators, setInputVentilators] = useState<Array<Device>>([])
 
-  const { rooms, updateRooms } = useContext(RoomsContext)
-  const { updateContext } = useContext(LayoutContext)
+  const { rooms } = useContext(RoomsContext)
+  const { addEventHandler } = useEventSource(['devices'])
 
   const [newDevices, setNewDevices] = useState<{
     doors: Array<Door>
@@ -76,26 +76,22 @@ function RoomForm(props: { room?: RoomDetailData }) {
     ventilators: []
   })
 
-  const intervalDelay = 10000
+  const sortFreeDevices = (x: Device, y: Device) => Number(y.id) - Number(x.id)
 
-  const sortFreeDevices = (x: Device, y: Device) => (y.id as number) - (x.id as number)
-
-  const updateDoorsData = async () => {
-    const doors: Array<Door> = await fetchFreeDoors()
+  const updateDoorsData = async (freeDoors?: Array<Door>) => {
+    const doors: Array<Door> = freeDoors || (await fetchFreeDoors())
 
     if (doors) setDoors(doors.toSorted(sortFreeDevices))
   }
 
-  const updateDevicesData = async () => {
-    const devices: AvailableDevices = await fetchFreeDevices()
+  const updateDevicesData = async (freeDevices?: AvailableDevices) => {
+    const devices: AvailableDevices = freeDevices || (await fetchFreeDevices())
 
     if (devices) {
       if (devices.windows) setWindows(devices.windows.toSorted(sortFreeDevices))
       if (devices.lights) setLights(devices.lights.toSorted(sortFreeDevices))
       if (devices.ventilators) setVentilators(devices.ventilators.toSorted(sortFreeDevices))
     }
-
-    updateDoorsData()
   }
 
   const getDeviceData = (devices: Record<number, RoomDevice>) => {
@@ -108,7 +104,7 @@ function RoomForm(props: { room?: RoomDetailData }) {
   }
 
   useEffectOnce(() => {
-    updateDevicesData().then(() => {
+    Promise.all([updateDevicesData(), updateDoorsData()]).then(() => {
       if (isEdit) {
         const r = props.room as RoomDetailData
 
@@ -139,10 +135,11 @@ function RoomForm(props: { room?: RoomDetailData }) {
         setInputLights(oldLights)
         setInputVentilators(oldVentilators)
       }
+
+      addEventHandler('devices', msgEvent => updateDevicesData(msgEvent.data))
+      addEventHandler('doors', msgEvent => updateDoorsData(msgEvent.data))
     })
   })
-
-  useInterval(() => updateDevicesData(), intervalDelay)
 
   const handleCreateDevice = (name: string, type: string) => {
     const finalType = type === 'cooling device' ? 'ventilator' : type
@@ -268,8 +265,6 @@ function RoomForm(props: { room?: RoomDetailData }) {
 
           if ('error' in res) console.error(res.error)
           else {
-            updateContext()
-            await updateRooms()
             if (isEdit) router.back()
             else router.push('/rooms')
           }
@@ -395,7 +390,6 @@ function RoomForm(props: { room?: RoomDetailData }) {
                           tempDevices.doors.splice(oldIdx, 1)
                           setOldDevices(tempDevices)
                           await deleteDoor(v.id as number, props.room.id)
-                          updateDoorsData()
                         }
                       }}
                       className='m-0.5'

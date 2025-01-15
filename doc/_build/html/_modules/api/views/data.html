@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>api.views.data &#8212; STORM 3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+
+    <script src="../../../_static/documentation_options.js?v=110ea713"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.views.data</a></li>
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+
+  <h1>Source code for api.views.data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines the `v1/data` endpoint for the API.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># regular imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># django imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+
+<span class="c1"># restframework imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework</span><span class="w"> </span><span class="kn">import</span> <span class="n">status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="c1"># API imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Room</span><span class="p">,</span> <span class="n">Door</span><span class="p">,</span> <span class="n">Ventilator</span><span class="p">,</span> <span class="n">Light</span><span class="p">,</span> <span class="n">Window</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorConnectsRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">PeopleInRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorOpen</span><span class="p">,</span> <span class="n">VentilatorOn</span><span class="p">,</span> <span class="n">WindowOpen</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">api.views.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sse</span>
+
+
+<div class="viewcode-block" id="DataAPIView">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataAPIView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines views for all end-points associated to database import and export</span>
+<span class="sd">    operations done by the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataAPIView.get">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exports the database as an Excel file with existent rooms, door and</span>
+<span class="sd">        devices. Metrics and events are not exported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mods</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Room</span><span class="p">,</span>
+            <span class="n">Window</span><span class="p">,</span>
+            <span class="n">Ventilator</span><span class="p">,</span>
+            <span class="n">Light</span><span class="p">,</span>
+            <span class="n">Door</span><span class="p">,</span>
+            <span class="n">DoorConnectsRoom</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;application/vnd.ms-excel&quot;</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">[</span><span class="s2">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;attachment;filename=database.xlsx&quot;</span>
+
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+
+<div class="viewcode-block" id="DataAPIView.post">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.post">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Imports database entries from a given xlsx file. Expects to receive</span>
+<span class="sd">        rooms, devices, doors, events and people metrics.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request (Request): _description_</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            _type_: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;database&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">xls</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">room_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">import_rooms</span><span class="p">(</span><span class="n">xls</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_windows</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_ventilators</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_doors</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_people</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">)</span>
+
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_SUMMARY</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_CONTEXT</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Import database finished!&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataAPIView.import_rooms">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.import_rooms">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">import_rooms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xls</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import rooms from an excel worksheet in the database. All &#39;id&#39; fields are</span>
+<span class="sd">        discarded, as this worksheet will be appended to an existent database.</span>
+
+<span class="sd">        This method expects the worksheet to be called &#39;Room&#39;, which should contain</span>
+<span class="sd">        two fields &#39;name&#39; and &#39;size (m2)&#39;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xls (pd.ExcelFile): Excel File.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A dictionary with the previous room ids.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">room_ids</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Read worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;Room&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">room</span> <span class="o">=</span> <span class="n">Room</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;size (m2)&quot;</span><span class="p">])</span>
+            <span class="n">room</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c1"># Map ids for future dependencies</span>
+            <span class="n">room_ids</span><span class="p">[</span><span class="n">room</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">room</span>
+
+        <span class="k">return</span> <span class="n">room_ids</span></div>
+
+
+<div class="viewcode-block" id="DataAPIView.import_ventilators">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.import_ventilators">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">import_ventilators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xls</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import ventilators from an excel worksheet in the database. All &#39;id&#39; fields are</span>
+<span class="sd">        repurposed as names, as this worksheet will be appended to an existent database.</span>
+
+<span class="sd">        This method expects to use the worksheets &#39;Ventilator&#39; and &#39;VentilatorOn&#39;, which</span>
+<span class="sd">        should contain the following fields:</span>
+
+<span class="sd">        - Ventilator: ID, Room_Id</span>
+<span class="sd">        - VentilatorOn: Timestamp, Ventilator_Id, isOn</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            xls (pd.ExcelFile): Excel File.</span>
+<span class="sd">            room_ids (dict): Previous room ids in the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vent_ids</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Read ventilator worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;Ventilator&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">vent</span> <span class="o">=</span> <span class="n">Ventilator</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Ventilator </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Room_Id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+            <span class="p">)</span>
+            <span class="n">vent</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c1"># Map ids for ventilator-on dependencies</span>
+            <span class="n">vent_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">vent</span>
+
+        <span class="c1"># Read ventilator-on worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;VentilatorOn&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">vent_on</span> <span class="o">=</span> <span class="n">VentilatorOn</span><span class="p">(</span>
+                <span class="n">ventilator</span><span class="o">=</span><span class="n">vent_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;VentilatorId&quot;</span><span class="p">]],</span>
+                <span class="n">is_on</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;isOn&quot;</span><span class="p">],</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">vent_on</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAPIView.import_windows">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.import_windows">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">import_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xls</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import windows from an excel worksheet in the database. All &#39;id&#39; fields are</span>
+<span class="sd">        repurposed as names, as this worksheet will be appended to an existent database.</span>
+
+<span class="sd">        This method expects to use the worksheets &#39;Window&#39; and &#39;WindowOpen&#39;, which</span>
+<span class="sd">        should contain the following fields:</span>
+
+<span class="sd">        - Window: ID, Room_Id</span>
+<span class="sd">        - WindowOpen: Timestamp, Window_ID, isOpen</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xls (pd.ExcelFile): Excel File.</span>
+<span class="sd">            room_ids (dict): Previous room ids in the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">win_ids</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Read window worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;Window&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">win</span> <span class="o">=</span> <span class="n">Window</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Window </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Room_Id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+            <span class="p">)</span>
+            <span class="n">win</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c1"># Map ids for window-open dependencies</span>
+            <span class="n">win_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">win</span>
+
+        <span class="c1"># Read window-open worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;WindowOpen&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">win_open</span> <span class="o">=</span> <span class="n">WindowOpen</span><span class="p">(</span>
+                <span class="n">window</span><span class="o">=</span><span class="n">win_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Window_ID&quot;</span><span class="p">]],</span>
+                <span class="n">is_open</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;isOpen&quot;</span><span class="p">],</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">win_open</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAPIView.import_doors">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.import_doors">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">import_doors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xls</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import doors from an excel worksheet in the database. All &#39;id&#39; fields are</span>
+<span class="sd">        repurposed as names, as this worksheet will be appended to an existent database.</span>
+
+<span class="sd">        This method expects to use the worksheets &#39;Door&#39;, &#39;DoorOpen&#39; and</span>
+<span class="sd">        &#39;Door_Connects_Room&#39;, which should contain the following fields:</span>
+
+<span class="sd">        - Door: ID, Room_Id.</span>
+<span class="sd">        - DoorOpen: Timestamp, Window_ID, isOpen.</span>
+<span class="sd">        - Door_Connects_Room: Door_ID, Room_ID.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xls (pd.ExcelFile): Excel File.</span>
+<span class="sd">            room_ids (dict): Previous room ids in the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">door_ids</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Read door worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;Door&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">door</span> <span class="o">=</span> <span class="n">Door</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Door </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">door</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c1"># Map ids for door-open dependencies</span>
+            <span class="n">door_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">door</span>
+
+        <span class="c1"># Read door-open worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;DoorOpen&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">door_open</span> <span class="o">=</span> <span class="n">DoorOpen</span><span class="p">(</span>
+                <span class="n">door</span><span class="o">=</span><span class="n">door_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Door_Id&quot;</span><span class="p">]],</span>
+                <span class="n">is_open</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;isOpen&quot;</span><span class="p">],</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">door_open</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="c1"># Read door-connections worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;Door_Connects_Room&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">door_connection</span> <span class="o">=</span> <span class="n">DoorConnectsRoom</span><span class="p">(</span>
+                <span class="n">door</span><span class="o">=</span><span class="n">door_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Door_ID&quot;</span><span class="p">]],</span> <span class="n">room</span><span class="o">=</span><span class="n">room_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Room_ID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+            <span class="p">)</span>
+            <span class="n">door_connection</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAPIView.import_people">
+<a class="viewcode-back" href="../../../api.views.html#api.views.data.DataAPIView.import_people">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">import_people</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xls</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">,</span> <span class="n">room_ids</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import people metrics from an excel worksheet in the database. All &#39;id&#39;</span>
+<span class="sd">        fields are repurposed as names, as this worksheet will be appended to</span>
+<span class="sd">        an existent database.</span>
+
+<span class="sd">        This method expects to use the &#39;PeopleInRoom&#39;, which contains the</span>
+<span class="sd">        fields &quot;Timestamp&quot;, &quot;Room_Id&quot; and &quot;NOPeopleInRoom&quot;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xls (pd.ExcelFile): Excel File.</span>
+<span class="sd">            room_ids (dict): Previous room ids in the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Read people worksheet</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s2">&quot;PeopleInRoom&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># Add rows to the database</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">np</span> <span class="o">=</span> <span class="n">PeopleInRoom</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span><span class="p">),</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room_ids</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Room_Id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()],</span>
+                <span class="n">no_people_in_room</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;NOPeopleInRoom&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.views.data</a></li>
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

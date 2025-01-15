@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>api.views.metrics &#8212; STORM 3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+
+    <script src="../../../_static/documentation_options.js?v=110ea713"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.views.metrics</a></li>
+      </ul>
+    </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+
+  <h1>Source code for api.views.metrics</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines the `v1/doors` endpoint for the API.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># regular imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="c1"># django imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">timescale.db.models.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimescaleModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="c1"># restframework imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
+
+<span class="c1"># API imports</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">PeopleInRoom</span><span class="p">,</span> <span class="n">TemperatureInRoom</span><span class="p">,</span> <span class="n">Co2InRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alert</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Room</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Ventilator</span><span class="p">,</span> <span class="n">Light</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DoorConnectsRoom</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">WindowOpen</span><span class="p">,</span> <span class="n">VentilatorOn</span><span class="p">,</span> <span class="n">LightOn</span><span class="p">,</span> <span class="n">DoorOpen</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">api.views.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sse</span>
+
+
+<div class="viewcode-block" id="MetricMetadata">
+<a class="viewcode-back" href="../../../api.views.html#api.views.metrics.MetricMetadata">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MetricMetadata</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines type hints for models and callables for the `v1/metrics` endpoint.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">model</span><span class="p">:</span> <span class="n">TimescaleModel</span>
+    <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">action</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Room</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">TimescaleModel</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="MetricsAPIView">
+<a class="viewcode-back" href="../../../api.views.html#api.views.metrics.MetricsAPIView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MetricsAPIView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines views for all end-points associated to sensor generated metrics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">allowed_methods</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="MetricsAPIView.air_quality_control">
+<a class="viewcode-back" href="../../../api.views.html#api.views.metrics.MetricsAPIView.air_quality_control">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">air_quality_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">Room</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">previous</span><span class="p">:</span> <span class="n">Co2InRoom</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Triggers actions for air quality control when co2 goes over safe</span>
+<span class="sd">        levels.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            room (Room): Room with unusual co2 readings.</span>
+<span class="sd">            value (int): Current co2 reading.</span>
+<span class="sd">            previous (Co2InRoom): Old co2 value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="n">warn</span> <span class="o">=</span> <span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">co2</span> <span class="o">&lt;</span> <span class="mi">800</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">co2</span> <span class="o">&gt;</span> <span class="mi">1000</span>
+        <span class="n">danger</span> <span class="o">=</span> <span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">co2</span> <span class="o">&lt;=</span> <span class="mi">1000</span>
+        <span class="k">if</span> <span class="mi">800</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">1000</span> <span class="ow">and</span> <span class="n">warn</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Co2 levels are nearing dangerous ppm values&quot;</span>
+            <span class="n">Alert</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">1000</span> <span class="ow">and</span> <span class="n">danger</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Co2 levels too high, opening windows and turning on cooling devices&quot;</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">window</span> <span class="ow">in</span> <span class="n">Window</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">WindowOpen</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">last</span> <span class="ow">or</span> <span class="n">last</span><span class="o">.</span><span class="n">is_open</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">WindowOpen</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">is_open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">ventilator</span> <span class="ow">in</span> <span class="n">Ventilator</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">VentilatorOn</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ventilator</span><span class="o">=</span><span class="n">ventilator</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">last</span> <span class="ow">or</span> <span class="n">last</span><span class="o">.</span><span class="n">is_on</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">VentilatorOn</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">ventilator</span><span class="o">=</span><span class="n">ventilator</span><span class="p">,</span> <span class="n">is_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">Alert</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">DANGER</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="MetricsAPIView.energy_efficiency_control">
+<a class="viewcode-back" href="../../../api.views.html#api.views.metrics.MetricsAPIView.energy_efficiency_control">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">energy_efficiency_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">Room</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">previous</span><span class="p">:</span> <span class="n">PeopleInRoom</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Triggers actions for energy efficiency control when the number of</span>
+<span class="sd">        people inside the room change.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            room (Room): Room to trigger changes.</span>
+<span class="sd">            value (int): Current number of people.</span>
+<span class="sd">            previous (Co2InRoom): Old number of people.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Room is now empty</span>
+        <span class="n">turn_off</span> <span class="o">=</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">no_people_in_room</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Room is no longer empty</span>
+        <span class="n">turn_on</span> <span class="o">=</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">no_people_in_room</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">now</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">turn_on</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;People have entered the room. Turning lights on&quot;</span>
+            <span class="k">for</span> <span class="n">light</span> <span class="ow">in</span> <span class="n">Light</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">LightOn</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">light</span><span class="o">=</span><span class="n">light</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">last</span> <span class="ow">or</span> <span class="n">last</span><span class="o">.</span><span class="n">is_on</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">LightOn</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">light</span><span class="o">=</span><span class="n">light</span><span class="p">,</span> <span class="n">is_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">Alert</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">turn_off</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;Room is empty. Lights and Cooling devices turned off&quot;</span>
+            <span class="k">for</span> <span class="n">light</span> <span class="ow">in</span> <span class="n">Light</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">LightOn</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">light</span><span class="o">=</span><span class="n">light</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">last</span> <span class="ow">or</span> <span class="n">last</span><span class="o">.</span><span class="n">is_on</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">LightOn</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">light</span><span class="o">=</span><span class="n">light</span><span class="p">,</span> <span class="n">is_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">ventilator</span> <span class="ow">in</span> <span class="n">Ventilator</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">VentilatorOn</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ventilator</span><span class="o">=</span><span class="n">ventilator</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">last</span> <span class="ow">or</span> <span class="n">last</span><span class="o">.</span><span class="n">is_on</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">VentilatorOn</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">ventilator</span><span class="o">=</span><span class="n">ventilator</span><span class="p">,</span> <span class="n">is_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">Alert</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="MetricsAPIView.safety_control">
+<a class="viewcode-back" href="../../../api.views.html#api.views.metrics.MetricsAPIView.safety_control">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">safety_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">:</span> <span class="n">Room</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">previous</span><span class="p">:</span> <span class="n">TemperatureInRoom</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Triggers actions for safety control when temperature goes over safe</span>
+<span class="sd">        levels.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            room (Room): Room with unusual co2 readings.</span>
+<span class="sd">            value (int): Current co2 reading.</span>
+<span class="sd">            previous (Co2InRoom): Old co2 value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">warn</span> <span class="o">=</span> <span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">temp</span> <span class="o">&gt;=</span> <span class="mi">70</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">temp</span> <span class="o">&lt;</span> <span class="mi">40</span>
+        <span class="n">danger</span> <span class="o">=</span> <span class="n">previous</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">previous</span><span class="o">.</span><span class="n">temp</span> <span class="o">&lt;=</span> <span class="mi">70</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="mi">40</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">70</span> <span class="ow">and</span> <span class="n">warn</span><span class="p">:</span>
+            <span class="n">Alert</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Temperature levels are nearing dangerous values&quot;</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">70</span> <span class="ow">and</span> <span class="n">danger</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">door</span> <span class="ow">in</span> <span class="n">DoorConnectsRoom</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">DoorOpen</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="o">.</span><span class="n">door</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">last</span> <span class="ow">or</span> <span class="n">last</span><span class="o">.</span><span class="n">is_open</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">DoorOpen</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">door</span><span class="o">=</span><span class="n">door</span><span class="o">.</span><span class="n">door</span><span class="p">,</span> <span class="n">is_open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">Alert</span><span class="p">(</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">now</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">Alert</span><span class="o">.</span><span class="n">AlertType</span><span class="o">.</span><span class="n">DANGER</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Temperature levels too high, opening doors&quot;</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="MetricsAPIView.post">
+<a class="viewcode-back" href="../../../api.views.html#api.views.metrics.MetricsAPIView.post">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates new metrics for rooms. This method expects to receive the</span>
+<span class="sd">        parameters specified in `jsons/metrics/post.json`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            request (dict): A JSON-like dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mets</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MetricMetadata</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;people&quot;</span><span class="p">:</span> <span class="n">MetricMetadata</span><span class="p">(</span>
+                <span class="n">PeopleInRoom</span><span class="p">,</span> <span class="s2">&quot;no_people_in_room&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_efficiency_control</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;co2&quot;</span><span class="p">:</span> <span class="n">MetricMetadata</span><span class="p">(</span><span class="n">Co2InRoom</span><span class="p">,</span> <span class="s2">&quot;co2&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">air_quality_control</span><span class="p">),</span>
+            <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">MetricMetadata</span><span class="p">(</span>
+                <span class="n">TemperatureInRoom</span><span class="p">,</span> <span class="s2">&quot;temp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">safety_control</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">new_alerts</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">metrics</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">room</span> <span class="o">=</span> <span class="n">Room</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">))</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">mets</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">)</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+
+                <span class="n">model</span><span class="p">(</span>
+                    <span class="o">**</span><span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="s2">&quot;room&quot;</span><span class="p">:</span> <span class="n">room</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]}</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">new_alerts</span> <span class="o">|=</span> <span class="n">action</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span> <span class="n">last</span><span class="p">)</span>
+
+            <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_ROOM</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">new_alerts</span><span class="p">:</span>
+            <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_CONTEXT</span><span class="p">)</span>
+        <span class="n">sse</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sse</span><span class="o">.</span><span class="n">CHANNEL_SUMMARY</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="s2">&quot;Metrics updated successfully!&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">STORM 3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">api.views.metrics</a></li>
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+  </body>
+</html>

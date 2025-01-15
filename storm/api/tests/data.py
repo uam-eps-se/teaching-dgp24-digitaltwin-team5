@@ -2,9 +2,14 @@
 This module defines unit tests for the `v1/data` endpoint.
 """
 
+# regular imports
 from io import BytesIO
 import pandas as pd
+
+# restframework imports
 from rest_framework import status
+
+# API imports
 from api.tests.base import Base, ROOMS, DEVS_PER_ROOM
 
 

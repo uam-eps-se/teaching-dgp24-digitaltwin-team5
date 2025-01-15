@@ -1,0 +1,736 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>api.views package &mdash; STORM 3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=110ea713"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+          <a href="index.html" class="icon icon-home">
+            STORM
+              <img src="_static/storm-logo-v-dark.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">api.views package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-api.views.context">api.views.context module</a><ul>
+<li><a class="reference internal" href="#api.views.context.ContextAPIView"><code class="docutils literal notranslate"><span class="pre">ContextAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.context.ContextAPIView.allowed_devices"><code class="docutils literal notranslate"><span class="pre">ContextAPIView.allowed_devices</span></code></a></li>
+<li><a class="reference internal" href="#api.views.context.ContextAPIView.get"><code class="docutils literal notranslate"><span class="pre">ContextAPIView.get()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.context.ContextAPIView.put"><code class="docutils literal notranslate"><span class="pre">ContextAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.data">api.views.data module</a><ul>
+<li><a class="reference internal" href="#api.views.data.DataAPIView"><code class="docutils literal notranslate"><span class="pre">DataAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.get"><code class="docutils literal notranslate"><span class="pre">DataAPIView.get()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.import_doors"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_doors()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.import_people"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_people()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.import_rooms"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_rooms()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.import_ventilators"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_ventilators()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.import_windows"><code class="docutils literal notranslate"><span class="pre">DataAPIView.import_windows()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.data.DataAPIView.post"><code class="docutils literal notranslate"><span class="pre">DataAPIView.post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.devices">api.views.devices module</a><ul>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView.allowed_devices"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.allowed_devices</span></code></a></li>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView.delete"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.delete()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView.get"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.get()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView.patch"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.patch()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView.post"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.post()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.devices.DevicesAPIView.put"><code class="docutils literal notranslate"><span class="pre">DevicesAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.doors">api.views.doors module</a><ul>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.allowed_methods</span></code></a></li>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView.delete"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.delete()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView.get"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.get()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView.patch"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.patch()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView.post"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.post()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.doors.DoorsAPIView.put"><code class="docutils literal notranslate"><span class="pre">DoorsAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.metrics">api.views.metrics module</a><ul>
+<li><a class="reference internal" href="#api.views.metrics.MetricMetadata"><code class="docutils literal notranslate"><span class="pre">MetricMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.metrics.MetricMetadata.action"><code class="docutils literal notranslate"><span class="pre">MetricMetadata.action</span></code></a></li>
+<li><a class="reference internal" href="#api.views.metrics.MetricMetadata.attr"><code class="docutils literal notranslate"><span class="pre">MetricMetadata.attr</span></code></a></li>
+<li><a class="reference internal" href="#api.views.metrics.MetricMetadata.model"><code class="docutils literal notranslate"><span class="pre">MetricMetadata.model</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api.views.metrics.MetricsAPIView"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.metrics.MetricsAPIView.air_quality_control"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.air_quality_control()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.metrics.MetricsAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.allowed_methods</span></code></a></li>
+<li><a class="reference internal" href="#api.views.metrics.MetricsAPIView.energy_efficiency_control"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.energy_efficiency_control()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.metrics.MetricsAPIView.post"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.post()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.metrics.MetricsAPIView.safety_control"><code class="docutils literal notranslate"><span class="pre">MetricsAPIView.safety_control()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.room_detail">api.views.room_detail module</a><ul>
+<li><a class="reference internal" href="#api.views.room_detail.RoomDetailAPIView"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.room_detail.RoomDetailAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.allowed_methods</span></code></a></li>
+<li><a class="reference internal" href="#api.views.room_detail.RoomDetailAPIView.get"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.get()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.room_detail.RoomDetailAPIView.get_object"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.get_object()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.room_detail.RoomDetailAPIView.put"><code class="docutils literal notranslate"><span class="pre">RoomDetailAPIView.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.rooms">api.views.rooms module</a><ul>
+<li><a class="reference internal" href="#api.views.rooms.RoomsAPIView"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView</span></code></a><ul>
+<li><a class="reference internal" href="#api.views.rooms.RoomsAPIView.allowed_methods"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.allowed_methods</span></code></a></li>
+<li><a class="reference internal" href="#api.views.rooms.RoomsAPIView.delete"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.delete()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.rooms.RoomsAPIView.get"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.get()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.rooms.RoomsAPIView.get_object"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.get_object()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.rooms.RoomsAPIView.post"><code class="docutils literal notranslate"><span class="pre">RoomsAPIView.post()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views.utils">api.views.utils module</a><ul>
+<li><a class="reference internal" href="#api.views.utils.get_listeners"><code class="docutils literal notranslate"><span class="pre">get_listeners()</span></code></a></li>
+<li><a class="reference internal" href="#api.views.utils.send"><code class="docutils literal notranslate"><span class="pre">send()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-api.views">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">api.views package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.views.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <section id="api-views-package">
+<h1>api.views package<a class="headerlink" href="#api-views-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-api.views.context">
+<span id="api-views-context-module"></span><h2>api.views.context module<a class="headerlink" href="#module-api.views.context" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/devices</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.context.ContextAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.context.</span></span><span class="sig-name descname"><span class="pre">ContextAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/context.html#ContextAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.context.ContextAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to room context extraction,
+usually for alerts of various kinds.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.context.ContextAPIView.allowed_devices">
+<span class="sig-name descname"><span class="pre">allowed_devices</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['GET',</span> <span class="pre">'PUT']</span></em><a class="headerlink" href="#api.views.context.ContextAPIView.allowed_devices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.context.ContextAPIView.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/context.html#ContextAPIView.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.context.ContextAPIView.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves base room information and unread alerts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.context.ContextAPIView.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/context.html#ContextAPIView.put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.context.ContextAPIView.put" title="Link to this definition"></a></dt>
+<dd><p>Marks a set of alerts as received. This method expects to receive the
+parameters specified in`jsons/context/put.json`.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.data">
+<span id="api-views-data-module"></span><h2>api.views.data module<a class="headerlink" href="#module-api.views.data" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/data</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.data.</span></span><span class="sig-name descname"><span class="pre">DataAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to database import and export
+operations done by the user.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.get" title="Link to this definition"></a></dt>
+<dd><p>Exports the database as an Excel file with existent rooms, door and
+devices. Metrics and events are not exported.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.import_doors">
+<span class="sig-name descname"><span class="pre">import_doors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExcelFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">room_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.import_doors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.import_doors" title="Link to this definition"></a></dt>
+<dd><p>Import doors from an excel worksheet in the database. All ‘id’ fields are
+repurposed as names, as this worksheet will be appended to an existent database.</p>
+<p>This method expects to use the worksheets ‘Door’, ‘DoorOpen’ and
+‘Door_Connects_Room’, which should contain the following fields:</p>
+<ul class="simple">
+<li><p>Door: ID, Room_Id.</p></li>
+<li><p>DoorOpen: Timestamp, Window_ID, isOpen.</p></li>
+<li><p>Door_Connects_Room: Door_ID, Room_ID.</p></li>
+</ul>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xls (pd.ExcelFile): Excel File.
+room_ids (dict): Previous room ids in the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.import_people">
+<span class="sig-name descname"><span class="pre">import_people</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExcelFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">room_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.import_people"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.import_people" title="Link to this definition"></a></dt>
+<dd><p>Import people metrics from an excel worksheet in the database. All ‘id’
+fields are repurposed as names, as this worksheet will be appended to
+an existent database.</p>
+<p>This method expects to use the ‘PeopleInRoom’, which contains the
+fields “Timestamp”, “Room_Id” and “NOPeopleInRoom”.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xls (pd.ExcelFile): Excel File.
+room_ids (dict): Previous room ids in the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.import_rooms">
+<span class="sig-name descname"><span class="pre">import_rooms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExcelFile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.import_rooms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.import_rooms" title="Link to this definition"></a></dt>
+<dd><p>Import rooms from an excel worksheet in the database. All ‘id’ fields are
+discarded, as this worksheet will be appended to an existent database.</p>
+<p>This method expects the worksheet to be called ‘Room’, which should contain
+two fields ‘name’ and ‘size (m2)’.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xls (pd.ExcelFile): Excel File.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A dictionary with the previous room ids.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.import_ventilators">
+<span class="sig-name descname"><span class="pre">import_ventilators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExcelFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">room_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.import_ventilators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.import_ventilators" title="Link to this definition"></a></dt>
+<dd><p>Import ventilators from an excel worksheet in the database. All ‘id’ fields are
+repurposed as names, as this worksheet will be appended to an existent database.</p>
+<p>This method expects to use the worksheets ‘Ventilator’ and ‘VentilatorOn’, which
+should contain the following fields:</p>
+<ul class="simple">
+<li><p>Ventilator: ID, Room_Id</p></li>
+<li><p>VentilatorOn: Timestamp, Ventilator_Id, isOn</p></li>
+</ul>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xls (pd.ExcelFile): Excel File.
+room_ids (dict): Previous room ids in the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.import_windows">
+<span class="sig-name descname"><span class="pre">import_windows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExcelFile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">room_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.import_windows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.import_windows" title="Link to this definition"></a></dt>
+<dd><p>Import windows from an excel worksheet in the database. All ‘id’ fields are
+repurposed as names, as this worksheet will be appended to an existent database.</p>
+<p>This method expects to use the worksheets ‘Window’ and ‘WindowOpen’, which
+should contain the following fields:</p>
+<ul class="simple">
+<li><p>Window: ID, Room_Id</p></li>
+<li><p>WindowOpen: Timestamp, Window_ID, isOpen</p></li>
+</ul>
+<dl class="simple">
+<dt>Args:</dt><dd><p>xls (pd.ExcelFile): Excel File.
+room_ids (dict): Previous room ids in the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.data.DataAPIView.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/data.html#DataAPIView.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.data.DataAPIView.post" title="Link to this definition"></a></dt>
+<dd><p>Imports database entries from a given xlsx file. Expects to receive
+rooms, devices, doors, events and people metrics.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (Request): _description_</p>
+</dd>
+<dt>Returns:</dt><dd><p>_type_: _description_</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.devices">
+<span id="api-views-devices-module"></span><h2>api.views.devices module<a class="headerlink" href="#module-api.views.devices" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/devices</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.devices.</span></span><span class="sig-name descname"><span class="pre">DevicesAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/devices.html#DevicesAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.devices.DevicesAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to <cite>individual</cite> devices,
+which are only owned by one room.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView.allowed_devices">
+<span class="sig-name descname"><span class="pre">allowed_devices</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['GET',</span> <span class="pre">'POST',</span> <span class="pre">'DELETE',</span> <span class="pre">'PUT',</span> <span class="pre">'PATCH']</span></em><a class="headerlink" href="#api.views.devices.DevicesAPIView.allowed_devices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/devices.html#DevicesAPIView.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.devices.DevicesAPIView.delete" title="Link to this definition"></a></dt>
+<dd><p>Deletes a new device of a given type. Used on EDITION.</p>
+<p>This method expects to receive the parameters specified in
+<cite>jsons/devices/delete.json</cite>, where “type” can be either “window”,
+“ventilator” or “light”.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/devices.html#DevicesAPIView.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.devices.DevicesAPIView.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves all <cite>individual</cite> devices not owned by empty room.
+A non-associated device is the product of a non-empty room deletion.</p>
+<p>Used on room CREATION and EDITION.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView.patch">
+<span class="sig-name descname"><span class="pre">patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/devices.html#DevicesAPIView.patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.devices.DevicesAPIView.patch" title="Link to this definition"></a></dt>
+<dd><p>Updates a device status. Used on CONTROL PANEL.</p>
+<p>This method expects to receive the parameters specified in
+<cite>jsons/devices/patch.json</cite>, where “type” can be either “window”,
+“ventilator” or “light”.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/devices.html#DevicesAPIView.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.devices.DevicesAPIView.post" title="Link to this definition"></a></dt>
+<dd><p>Creates a new device of a given type. Used on EDITION.</p>
+<p>This method expects to receive the parameters specified in
+<cite>jsons/devices/post.json</cite>, where “type” can be either “window”,
+“ventilator” or “light”.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.devices.DevicesAPIView.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/devices.html#DevicesAPIView.put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.devices.DevicesAPIView.put" title="Link to this definition"></a></dt>
+<dd><p>Assigns a device to a room. Used on CREATION and EDITION.</p>
+<p>This method expects to receive the parameters specified in
+<cite>jsons/devices/put.json</cite>, where “type” can be either “window”,
+“ventilator” or “light”.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.doors">
+<span id="api-views-doors-module"></span><h2>api.views.doors module<a class="headerlink" href="#module-api.views.doors" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/doors</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.doors.</span></span><span class="sig-name descname"><span class="pre">DoorsAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/doors.html#DoorsAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.doors.DoorsAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to doors, which chan be owned
+by up to two rooms.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView.allowed_methods">
+<span class="sig-name descname"><span class="pre">allowed_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['GET',</span> <span class="pre">'PUT',</span> <span class="pre">'POST',</span> <span class="pre">'DELETE',</span> <span class="pre">'PATCH']</span></em><a class="headerlink" href="#api.views.doors.DoorsAPIView.allowed_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/doors.html#DoorsAPIView.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.doors.DoorsAPIView.delete" title="Link to this definition"></a></dt>
+<dd><p>Deletes a door. Used on EDITION. This method expects to receive the
+parameters specified in <cite>jsons/doors/put.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/doors.html#DoorsAPIView.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.doors.DoorsAPIView.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves all doors with less than two rooms. Used on CREATION and
+EDITION. This method expects to receive the parameters specified in
+<cite>jsons/doors/get.json</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView.patch">
+<span class="sig-name descname"><span class="pre">patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/doors.html#DoorsAPIView.patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.doors.DoorsAPIView.patch" title="Link to this definition"></a></dt>
+<dd><p>Updates a door status. Used on CONTROL PANEL.</p>
+<p>This method expects to receive the parameters specified in
+<cite>jsons/doors/patch.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/doors.html#DoorsAPIView.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.doors.DoorsAPIView.post" title="Link to this definition"></a></dt>
+<dd><p>Creates a new door. Used on EDITION. This method expects to receive the
+parameters specified in <cite>jsons/doors/post.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.doors.DoorsAPIView.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/doors.html#DoorsAPIView.put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.doors.DoorsAPIView.put" title="Link to this definition"></a></dt>
+<dd><p>Connects a door to a room new door. Used on EDITION and CREATION.
+This method expects to receive the parameters specified in
+<cite>jsons/doors/put.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.metrics">
+<span id="api-views-metrics-module"></span><h2>api.views.metrics module<a class="headerlink" href="#module-api.views.metrics" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/doors</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.metrics.MetricMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.metrics.</span></span><span class="sig-name descname"><span class="pre">MetricMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TimescaleModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TimescaleModel</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/metrics.html#MetricMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.metrics.MetricMetadata" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Defines type hints for models and callables for the <cite>v1/metrics</cite> endpoint.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.metrics.MetricMetadata.action">
+<span class="sig-name descname"><span class="pre">action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TimescaleModel</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#api.views.metrics.MetricMetadata.action" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.metrics.MetricMetadata.attr">
+<span class="sig-name descname"><span class="pre">attr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#api.views.metrics.MetricMetadata.attr" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.metrics.MetricMetadata.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TimescaleModel</span></em><a class="headerlink" href="#api.views.metrics.MetricMetadata.model" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.metrics.MetricsAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.metrics.</span></span><span class="sig-name descname"><span class="pre">MetricsAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/metrics.html#MetricsAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.metrics.MetricsAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to sensor generated metrics.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.metrics.MetricsAPIView.air_quality_control">
+<span class="sig-name descname"><span class="pre">air_quality_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.metrics.Co2InRoom" title="api.models.metrics.Co2InRoom"><span class="pre">Co2InRoom</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/metrics.html#MetricsAPIView.air_quality_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.metrics.MetricsAPIView.air_quality_control" title="Link to this definition"></a></dt>
+<dd><p>Triggers actions for air quality control when co2 goes over safe
+levels.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>room (Room): Room with unusual co2 readings.
+value (int): Current co2 reading.
+previous (Co2InRoom): Old co2 value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.metrics.MetricsAPIView.allowed_methods">
+<span class="sig-name descname"><span class="pre">allowed_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['POST',</span> <span class="pre">'POST']</span></em><a class="headerlink" href="#api.views.metrics.MetricsAPIView.allowed_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.metrics.MetricsAPIView.energy_efficiency_control">
+<span class="sig-name descname"><span class="pre">energy_efficiency_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.metrics.PeopleInRoom" title="api.models.metrics.PeopleInRoom"><span class="pre">PeopleInRoom</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/metrics.html#MetricsAPIView.energy_efficiency_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.metrics.MetricsAPIView.energy_efficiency_control" title="Link to this definition"></a></dt>
+<dd><p>Triggers actions for energy efficiency control when the number of
+people inside the room change.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>room (Room): Room to trigger changes.
+value (int): Current number of people.
+previous (Co2InRoom): Old number of people.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.metrics.MetricsAPIView.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/metrics.html#MetricsAPIView.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.metrics.MetricsAPIView.post" title="Link to this definition"></a></dt>
+<dd><p>Creates new metrics for rooms. This method expects to receive the
+parameters specified in <cite>jsons/metrics/post.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.metrics.MetricsAPIView.safety_control">
+<span class="sig-name descname"><span class="pre">safety_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.base.Room" title="api.models.base.Room"><span class="pre">Room</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="api.models.html#api.models.metrics.TemperatureInRoom" title="api.models.metrics.TemperatureInRoom"><span class="pre">TemperatureInRoom</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/metrics.html#MetricsAPIView.safety_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.metrics.MetricsAPIView.safety_control" title="Link to this definition"></a></dt>
+<dd><p>Triggers actions for safety control when temperature goes over safe
+levels.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>room (Room): Room with unusual co2 readings.
+value (int): Current co2 reading.
+previous (Co2InRoom): Old co2 value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.room_detail">
+<span id="api-views-room-detail-module"></span><h2>api.views.room_detail module<a class="headerlink" href="#module-api.views.room_detail" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/room</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.room_detail.RoomDetailAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.room_detail.</span></span><span class="sig-name descname"><span class="pre">RoomDetailAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/room_detail.html#RoomDetailAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.room_detail.RoomDetailAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to real-time room information
+that is shown on the room details page.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.room_detail.RoomDetailAPIView.allowed_methods">
+<span class="sig-name descname"><span class="pre">allowed_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['GET',</span> <span class="pre">'PUT']</span></em><a class="headerlink" href="#api.views.room_detail.RoomDetailAPIView.allowed_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.room_detail.RoomDetailAPIView.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/room_detail.html#RoomDetailAPIView.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.room_detail.RoomDetailAPIView.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieve detailed room information.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>identifier (int): Room identifier.</p>
+</dd>
+<dt>Raises:</dt><dd><p>Http404: Room does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.room_detail.RoomDetailAPIView.get_object">
+<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/room_detail.html#RoomDetailAPIView.get_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.room_detail.RoomDetailAPIView.get_object" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a room with the given pk.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk (int): Room identifier.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.room_detail.RoomDetailAPIView.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/room_detail.html#RoomDetailAPIView.put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.room_detail.RoomDetailAPIView.put" title="Link to this definition"></a></dt>
+<dd><p>Updates room information. Used on EDITION. This method expects to
+receive the parameters specified in <cite>jsons/rooms/put.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.rooms">
+<span id="api-views-rooms-module"></span><h2>api.views.rooms module<a class="headerlink" href="#module-api.views.rooms" title="Link to this heading"></a></h2>
+<p>This module defines the <cite>v1/rooms</cite> endpoint for the API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="api.views.rooms.RoomsAPIView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">api.views.rooms.</span></span><span class="sig-name descname"><span class="pre">RoomsAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/rooms.html#RoomsAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.rooms.RoomsAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIView</span></code></p>
+<p>Defines views for all end-points associated to generic room information
+that is shown on the dashboard.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="api.views.rooms.RoomsAPIView.allowed_methods">
+<span class="sig-name descname"><span class="pre">allowed_methods</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['GET',</span> <span class="pre">'POST',</span> <span class="pre">'DELETE']</span></em><a class="headerlink" href="#api.views.rooms.RoomsAPIView.allowed_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.rooms.RoomsAPIView.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/rooms.html#RoomsAPIView.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.rooms.RoomsAPIView.delete" title="Link to this definition"></a></dt>
+<dd><p>Removes a room from the database. This method expects to receive
+the parameters specified in <cite>jsons/rooms/delete.json</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.rooms.RoomsAPIView.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/rooms.html#RoomsAPIView.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.rooms.RoomsAPIView.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a list of all existent rooms for the main dashboard.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.rooms.RoomsAPIView.get_object">
+<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/rooms.html#RoomsAPIView.get_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.rooms.RoomsAPIView.get_object" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a room with the given pk.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pk (int): Room identifier.</p>
+</dd>
+<dt>Raises:</dt><dd><p>Http404: Room does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="api.views.rooms.RoomsAPIView.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/rooms.html#RoomsAPIView.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.rooms.RoomsAPIView.post" title="Link to this definition"></a></dt>
+<dd><p>Creates a new room from the given request. Used on CREATION.</p>
+<p>This method expects to receive the parameters specified in
+<cite>jsons/rooms/post.json</cite>. Devices sent via this endpoint can be either
+of the following:</p>
+<p>“devices”: [“type”: [{“name”: str}, {“id”: int}, …], …]</p>
+<p>An entry with the “name” field signifies the creation of a new
+device, and an entry with the “id” field signifies the association of
+an existent device with the room. For “type”, it can be “windows”,
+“ventilators”, “lights” or “doors”.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request (dict): A JSON-like dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-api.views.utils">
+<span id="api-views-utils-module"></span><h2>api.views.utils module<a class="headerlink" href="#module-api.views.utils" title="Link to this heading"></a></h2>
+<p>This module defines utilities shared amongst views.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="api.views.utils.get_listeners">
+<span class="sig-prename descclassname"><span class="pre">api.views.utils.</span></span><span class="sig-name descname"><span class="pre">get_listeners</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/api/views/utils.html#get_listeners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.utils.get_listeners" title="Link to this definition"></a></dt>
+<dd><p>Gets listeners from a given <cite>channel</cite></p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>channel (str): Channel to get listeners from</p>
+</dd>
+<dt>Returns:</dt><dd><p>set | bool: Set of unique listeners or False if channel doesn’t exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="api.views.utils.send">
+<span class="sig-prename descclassname"><span class="pre">api.views.utils.</span></span><span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/api/views/utils.html#send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#api.views.utils.send" title="Link to this definition"></a></dt>
+<dd><p>Sends an SSE event to a channel, only if it has listeners</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>channel (str): Channel to which the event is sent
+event (int): Event type, only used on channels with more
+than one event.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-api.views">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api.views" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Tomás Daniel Expósito Torre, Javier Wang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

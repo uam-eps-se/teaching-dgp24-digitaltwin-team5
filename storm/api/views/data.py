@@ -23,6 +23,8 @@ from api.models import DoorConnectsRoom
 from api.models import PeopleInRoom
 from api.models import DoorOpen, VentilatorOn, WindowOpen
 
+import api.views.utils as sse
+
 
 class DataAPIView(APIView):
     """
@@ -76,6 +78,8 @@ class DataAPIView(APIView):
         self.import_doors(xls, room_ids)
         self.import_people(xls, room_ids)
 
+        sse.send(sse.CHANNEL_SUMMARY)
+        sse.send(sse.CHANNEL_CONTEXT)
         return Response("Import database finished!", status=status.HTTP_202_ACCEPTED)
 
     def import_rooms(self, xls: pd.ExcelFile):

@@ -1,7 +1,6 @@
 // MUI Imports
 import { useContext, useEffect, useState } from 'react'
 
-import Chip from '@mui/material/Chip'
 import { useTheme, alpha } from '@mui/material/styles'
 
 // Third-party Imports
@@ -13,9 +12,9 @@ import Icon from '@mdi/react'
 import { mdiDotsHorizontal, mdiHomePlus } from '@mdi/js'
 
 import type { SnackbarCloseReason } from '@mui/material'
-import { Paper, Snackbar } from '@mui/material'
+import { Chip, Paper, Snackbar } from '@mui/material'
 
-import { useEffectOnce, useInterval } from 'react-use'
+import { useEffectOnce } from 'react-use'
 
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
@@ -34,9 +33,12 @@ import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
 import StormAlert from '@components/StormAlert'
 
-import { AlertType, type Alert } from '@core/types'
+import type { Alert } from '@core/types'
+import { AlertType } from '@core/types'
 
 import { LayoutContext } from '@core/contexts/layoutContext'
+import { useEventSource } from '@core/hooks/useEventSource'
+import { confirmAlerts } from '@core/utils/actions'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -55,20 +57,18 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
   const theme = useTheme()
   const { isBreakpointReached, transitionDuration } = useVerticalNav()
 
-  const { context, storedAlerts, setStoredAlerts, updateContext, setAlerts } = useContext(LayoutContext)
+  const { context, storedAlerts, setStoredAlerts, setContext, updateContext, setAlerts } = useContext(LayoutContext)
+  const { addEventHandler } = useEventSource(['context'])
+
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
   const [currentAlert, setCurrentAlert] = useState<Alert>()
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
-  const intervalDelay = Number(process.env.NEXT_PUBLIC_POLL_DELAY_MS || 2000)
 
   const showNextAlert = () => {
     if (context.alerts.length) {
       setCurrentAlert(context.alerts[0])
       setOpenSnackbar(true)
-
-      // Remove current alert from queue
-      if (context.alerts.length) setAlerts(context.alerts.slice(1))
     } else setCurrentAlert(undefined)
   }
 
@@ -76,24 +76,33 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
     if (!ignoredReasons.includes(reason)) {
       setOpenSnackbar(false)
 
-      // Cycle through alerts
-      setTimeout(() => showNextAlert(), 500)
+      // Remove current alert from queue
+      if (context.alerts.length) setAlerts(context.alerts.slice(1))
     }
   }
 
   useEffectOnce(() => {
-    updateContext()
+    const pendingAlerts: Alert[] = JSON.parse(localStorage.getItem('pending-alerts') || '[]')
+
+    setContext(prevContext => ({
+      rooms: prevContext.rooms,
+      alerts: pendingAlerts
+    }))
+    updateContext().then(() => {
+      addEventHandler('message', msgEvent => updateContext(msgEvent.data))
+    })
   })
 
   useEffect(() => {
-    // Show new alerts
-    if (!currentAlert) showNextAlert()
+    // Cycle through alerts
+    if (!openSnackbar && context.alerts.length) {
+      setTimeout(() => showNextAlert(), 500)
+    }
+
+    // Store pending alerts
+    localStorage.setItem('pending-alerts', JSON.stringify(context.alerts))
     // eslint-disable-next-line
   }, [context.alerts])
-
-  useInterval(() => {
-    updateContext()
-  }, intervalDelay)
 
   return (
     // eslint-disable-next-line lines-around-comment
@@ -145,7 +154,7 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
         <MenuItem href='/rooms/create' prefix={<Icon path={mdiHomePlus} size={1} />}>
           Create Room
         </MenuItem>
-        {currentAlert && (
+        {!currentAlert || (
           <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             open={openSnackbar}
@@ -167,8 +176,9 @@ const VerticalMenu = ({ scrollMenu }: { scrollMenu: (container: any, isPerfectSc
                 alert={currentAlert}
                 showTime={false}
                 onDeleteAlert={() => {
-                  if (currentAlert) {
-                    setStoredAlerts(storedAlerts?.filter(alert => alert.id !== currentAlert.id))
+                  if (currentAlert && storedAlerts?.length) {
+                    setStoredAlerts(storedAlerts.filter(alert => alert.id !== currentAlert.id))
+                    confirmAlerts([currentAlert.id])
                   }
 
                   handleCloseSnackbar('timeout')
