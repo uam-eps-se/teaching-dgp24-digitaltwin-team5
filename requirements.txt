@@ -16,15 +16,13 @@ distlib==0.3.9
 dj-database-url==2.3.0
 Django==5.1.2
 django-cors-headers==4.5.0
-django-eventstream==5.3.1
-django-grip==3.5.1
+django-eventstream[drf]==5.3.1
 django-model-utils==5.0.0
 django-timescaledb==0.2.13
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
 et-xmlfile==1.1.0
 filelock==3.16.1
-gripcontrol==4.2.0
 hyperlink==21.0.0
 identify==2.6.2
 idna==3.10
@@ -39,6 +37,7 @@ pandas==2.2.3
 platformdirs==4.3.6
 pre_commit==4.0.1
 psycopg==3.2.3
+psycopg-binary==3.2.3
 pubcontrol==3.5.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
