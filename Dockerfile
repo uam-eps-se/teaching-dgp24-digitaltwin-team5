@@ -41,7 +41,7 @@ VOLUME ["/var/lib/postgresql/data"]
 # Expose port
 EXPOSE 8000
 
-# Entry script
+# Add entry script
 ADD ./entrypoint.sh /app/
 
 # Initialize servers
