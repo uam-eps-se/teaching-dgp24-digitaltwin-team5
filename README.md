@@ -27,10 +27,13 @@ pip3 install -r requirements.txt
 
 Then fill out the credentials required for the application database, copying the template from `storm/storm/.env.template` using 'postgres' as the `ENGINE`. Finally, apply migrations and run the server from `storm/`:
 ```bash
+python3 manage.py makemigrations api
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py runserver
 ```
+
+The Django back-end should now be running at localhost:8000.
 
 ### Front-end
 Navigate to `storm-ui/`, and install all packages:
@@ -49,7 +52,7 @@ pnpm build:dev
 pnpm start
 ```
 
-The Django back-end should now be running at localhost:8000.
+The Next.js front-end should now be running at localhost:3000.
 
 ## Testing the Application
 A simple, random metric-generation script can be found at `storm-datagen/`. To run it, use:
@@ -63,8 +66,6 @@ The script accepts various inputs that change the values sent to the backend:
 - "wc": Injects a co2 value of 801ppm in a random room.
 - "ip": Removes all people from a random room.
 - "restart": Sets the temperature/co2/people of all rooms to 23C/500ppm/5.
-
-The React front-end should now be running at localhost:3000.
 
 ## User Manual
 
